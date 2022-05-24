@@ -1,32 +1,37 @@
-import { StatusBar } from 'expo-status-bar';
+import React, { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
 import { Button, Paragraph } from 'react-native-paper';
+import { backgroundColor } from '../../styles/colors';
 
 export default function Registracion2Screen({ navigation, route }) {
-
   function onLoginClick() {
-    navigation.navigate("Login");
+    navigation.navigate('Login');
   }
 
   return (
     <View style={styles.container}>
-      <Paragraph>Revisá tu correo, {route.params.alias}! Tu experiencia SuperCook ya empezó</Paragraph>
+      <Paragraph>
+        Revisá tu correo,
+        {' '}
+        {route.params.alias}
+        ! Tu experiencia SuperCook ya empezó
+      </Paragraph>
       <Button
         style={styles.button}
-        mode='contained'
+        mode="contained"
         onPress={onLoginClick}
       >
         Acceder
       </Button>
-      <StatusBar style="auto" />
+      <StatusBar />
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor,
     justifyContent: 'center',
     padding: 16,
   },

@@ -1,36 +1,40 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
-import { Button, HelperText, Paragraph, TextInput } from 'react-native-paper';
+import {
+  Button, HelperText, Paragraph, TextInput,
+} from 'react-native-paper';
+import { backgroundColor } from '../../styles/colors';
 
-export default function Registracion4Screen({ navigation, route }) {
-
+export default function Recupero3Screen({ navigation, route }) {
   const [password, setPassword] = useState('');
   const [confirmationPassword, setConfirmationPassword] = useState('');
   const [confirmationTouched, setConfirmationTouched] = useState(false);
 
-  function onFinalizarButtonClick() {
-    navigation.navigate("Login", {recienRegistrado: true});
+  function onCambiarPasswordClick() {
+    navigation.navigate('Recupero4', {
+      email: route.params.email,
+    });
   }
 
   function onConfirmationPasswordChange(newText) {
-    if(!confirmationTouched) {
+    if (!confirmationTouched) {
       setConfirmationTouched(true);
     }
-    setConfirmationPassword(newText)
-
+    setConfirmationPassword(newText);
   }
 
   return (
     <View style={styles.container}>
+      <Paragraph>Ingrese la nueva contraseña</Paragraph>
       <TextInput
         style={styles.textInput}
-        mode='outlined'
-        label="Contraseña"
-        onChangeText={newText => setPassword(newText)}
+        mode="outlined"
+        label="Nueva contraseña"
+        onChangeText={(newText) => setPassword(newText)}
         defaultValue={password}
         secureTextEntry
-        textContentType='newPassword'
+        textContentType="newPassword"
       />
       <View>
         <TextInput
@@ -40,10 +44,10 @@ export default function Registracion4Screen({ navigation, route }) {
           onChangeText={onConfirmationPasswordChange}
           defaultValue={confirmationPassword}
           secureTextEntry
-          textContentType='password'
+          textContentType="password"
         />
         <HelperText
-          type='error'
+          type="error"
           visible={confirmationTouched && password !== confirmationPassword}
         >
           Las contraseñas no coinciden
@@ -54,19 +58,19 @@ export default function Registracion4Screen({ navigation, route }) {
         style={styles.button}
         mode="contained"
         disabled={password === '' || password !== confirmationPassword}
-        onPress={onFinalizarButtonClick}
+        onPress={onCambiarPasswordClick}
       >
-        Finalizar registro
+        Enviar
       </Button>
-      <StatusBar style="auto" />
+      <StatusBar />
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor,
     justifyContent: 'center',
     padding: 16,
   },

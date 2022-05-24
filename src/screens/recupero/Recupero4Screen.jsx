@@ -1,32 +1,36 @@
-import { StatusBar } from 'expo-status-bar';
+import React, { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
 import { Button, Paragraph } from 'react-native-paper';
+import { backgroundColor } from '../../styles/colors';
 
 export default function Recupero4Screen({ navigation, route }) {
-
   function onLoginClick() {
-    navigation.navigate("Login");
+    navigation.navigate('Login');
   }
 
   return (
     <View style={styles.container}>
-      <Paragraph>¡La contraseña para el e-mail {route.params.email} fue cambiada correctamente!</Paragraph>
+      <Paragraph>
+        ¡La contraseña para el e-mail
+        {` ${route.params.email} `}
+        fue cambiada correctamente!
+      </Paragraph>
       <Button
         style={styles.button}
-        mode='contained'
+        mode="contained"
         onPress={onLoginClick}
       >
         Acceder
       </Button>
-      <StatusBar style="auto" />
+      <StatusBar />
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor,
     justifyContent: 'center',
     padding: 16,
   },

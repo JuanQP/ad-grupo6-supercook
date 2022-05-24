@@ -1,10 +1,15 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Button, Checkbox, Snackbar, Text, TextInput } from 'react-native-paper';
-import { Alert, View, StyleSheet } from 'react-native';
+import {
+  Button,
+  Checkbox,
+  Text,
+  TextInput,
+} from 'react-native-paper';
+import { View, StyleSheet } from 'react-native';
+import { backgroundColor } from '../../styles/colors';
 
 export default function LoginScreen({ navigation }) {
-
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
   const [recordarme, setRecordarme] = useState(false);
@@ -14,66 +19,67 @@ export default function LoginScreen({ navigation }) {
   }
 
   function onRegistrateButtonClick() {
-    navigation.navigate("Registracion1");
+    navigation.navigate('Registracion1');
   }
 
   function onLoginButtonClick() {
-    if(user === "nuevo") {
-      navigation.navigate("Registracion3", { user });
+    if (user === 'nuevo') {
+      navigation.navigate('Registracion3', { user });
       return;
     }
-    navigation.navigate("Home", { user });
+    navigation.navigate('Home', { user });
   }
 
   function onRecuperoButtonClick() {
-    navigation.navigate("Recupero1");
+    navigation.navigate('Recupero1');
   }
 
   return (
     <View style={styles.container}>
-      <View style={{flex: 3, justifyContent: 'center'}}>
+      <View style={styles.formView}>
         <TextInput
-          mode='outlined'
+          mode="outlined"
           label="Usuario"
-          onChangeText={newText => setUser(newText)}
+          onChangeText={(newText) => setUser(newText)}
           defaultValue={user}
-          textContentType='nickname'
+          textContentType="nickname"
+          style={styles.textInput}
         />
         <TextInput
-          mode='outlined'
+          mode="outlined"
           label="Contraseña"
-          onChangeText={newText => setPassword(newText)}
+          onChangeText={(newText) => setPassword(newText)}
           defaultValue={password}
-          style={{marginTop: 20}}
+          style={styles.textInput}
           secureTextEntry
-          textContentType='password'
+          textContentType="password"
         />
         {/* Checkbox */}
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View style={styles.checkbox}>
           <Checkbox
             status={recordarme ? 'checked' : 'unchecked'}
             onPress={onRecordarmeCheckboxClick}
           />
-          <Text style={{fontWeight: 'bold'}}>Recordarme</Text>
+          <Text style={{ fontWeight: 'bold' }}>Recordarme</Text>
         </View>
-        <View style={{flexDirection: 'column', justifyContent: 'space-between'}}>
+        <View style={{ flexDirection: 'column', justifyContent: 'space-between' }}>
           <Button
-            mode='contained'
+            mode="contained"
             onPress={onLoginButtonClick}
-            style={{marginTop: 20}}
+            style={{ marginTop: 20 }}
           >
             Login
           </Button>
           <Button
             mode="text"
             onPress={onRecuperoButtonClick}
-            style={{alignSelf: 'flex-end', marginTop: 20}}
+            style={{ alignSelf: 'flex-end', marginTop: 20 }}
           >
             Olvidaste tu contraseña?
           </Button>
         </View>
       </View>
-      <View style={{flexDirection: 'column', justifyContent: 'center', flex: 1}}>
+      <View style={styles.registerView}>
         <Button
           mode="text"
           onPress={onRegistrateButtonClick}
@@ -81,16 +87,32 @@ export default function LoginScreen({ navigation }) {
           No tenés una cuenta? Registrate
         </Button>
       </View>
-      <StatusBar style="auto" />
+      <StatusBar />
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor,
     justifyContent: 'center',
     padding: 16,
+  },
+  formView: {
+    flex: 3,
+    justifyContent: 'center',
+  },
+  checkbox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  registerView: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    flex: 1,
+  },
+  textInput: {
+    marginVertical: 10,
   },
 });

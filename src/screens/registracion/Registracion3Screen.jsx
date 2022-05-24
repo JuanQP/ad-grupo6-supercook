@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet,  View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 import MaskInput from 'react-native-mask-input';
+import { backgroundColor } from '../../styles/colors';
 
 export default function Registracion3Screen({ navigation }) {
-
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
   const [fechaNacimiento, setFechaNacimiento] = useState('');
@@ -24,29 +24,29 @@ export default function Registracion3Screen({ navigation }) {
   }
 
   function onSiguienteButtonClick() {
-    navigation.navigate("Registracion4");
+    navigation.navigate('Registracion4');
   }
 
   return (
     <View style={styles.container}>
       <TextInput
-        mode='outlined'
+        mode="outlined"
         style={styles.textInput}
         label="Nombre/s"
-        onChangeText={newText => setNombre(newText)}
+        onChangeText={(newText) => setNombre(newText)}
         defaultValue={nombre}
-        textContentType='name'
+        textContentType="name"
       />
       <TextInput
-        mode='outlined'
+        mode="outlined"
         style={styles.textInput}
         label="Apellido/s"
-        onChangeText={newText => setApellido(newText)}
+        onChangeText={(newText) => setApellido(newText)}
         defaultValue={apellido}
-        textContentType='familyName'
+        textContentType="familyName"
       />
       <TextInput
-        mode='outlined'
+        mode="outlined"
         style={styles.textInput}
         keyboardType="number-pad"
         label="Fecha de Nacimiento"
@@ -54,41 +54,41 @@ export default function Registracion3Screen({ navigation }) {
         value={fechaNacimiento}
         onChangeText={onFechaNacimientoChange}
         placeholder="DD/MM/YYYY"
-        render={props =>
+        render={(props) => (
           <MaskInput
             {...props}
-            onChangeText={(masked, unmasked) => props.onChangeText(masked)}
+            onChangeText={(masked) => props.onChangeText(masked)}
             mask={[/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/]}
           />
-        }
+        )}
       />
       <TextInput
-        mode='outlined'
+        mode="outlined"
         style={styles.textInput}
         keyboardType="phone-pad"
         label="Teléfono"
         onChangeText={onTelefonoChange}
         defaultValue={telefono}
-        textContentType='telephoneNumber'
+        textContentType="telephoneNumber"
         maxLength={10}
       />
       <Button
-        mode='contained'
+        mode="contained"
         style={styles.button}
         onPress={onSiguienteButtonClick}
         disabled={nombre === '' || apellido === '' || !fechaNacimientoValido || !telefonoValido}
       >
         Siguiente
       </Button>
-      <StatusBar style="auto" />
+      <StatusBar />
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor,
     justifyContent: 'center',
     padding: 16,
   },

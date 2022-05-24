@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet,  View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Button, HelperText, TextInput } from 'react-native-paper';
+import { backgroundColor } from '../../styles/colors';
 
 export default function Registracion1Screen({ navigation }) {
-
   const [email, setEmail] = useState('');
   const [alias, setAlias] = useState('');
   const [isValidEmail, setIsValidEmail] = useState(false);
@@ -33,15 +33,15 @@ export default function Registracion1Screen({ navigation }) {
       setIsEmailDisponible(emailDisponible);
       setIsAliasDisponible(aliasDisponible);
 
-      if(!emailDisponible) {
+      if (!emailDisponible) {
         setEmailNoDisponible(email);
       }
-      if(!aliasDisponible) {
+      if (!aliasDisponible) {
         setAliasNoDisponible(alias);
       }
 
-      if(emailDisponible && aliasDisponible) {
-        navigation.navigate("Registracion2", { email, alias });
+      if (emailDisponible && aliasDisponible) {
+        navigation.navigate('Registracion2', { email, alias });
       }
     }, 3000);
   }
@@ -49,37 +49,45 @@ export default function Registracion1Screen({ navigation }) {
   return (
     <View style={styles.container}>
       <TextInput
-        mode='outlined'
+        mode="outlined"
         style={styles.textInput}
         label="E-mail"
-        keyboardType='email-address'
+        keyboardType="email-address"
         onChangeText={onEmailTextInputChange}
         defaultValue={email}
         error={!isEmailDisponible}
-        textContentType='emailAddress'
+        textContentType="emailAddress"
       />
       <HelperText
-        type='error'
+        type="error"
         visible={!isEmailDisponible}
       >
-        El e-mail {emailNoDisponible} no está disponible
+        El e-mail
+        {' '}
+        {emailNoDisponible}
+        {' '}
+        no está disponible
       </HelperText>
       <TextInput
-        mode='outlined'
+        mode="outlined"
         style={styles.textInput}
         label="Alias"
         onChangeText={onAliasTextInputChange}
         defaultValue={alias}
-        textContentType='nickname'
+        textContentType="nickname"
       />
       <HelperText
-        type='error'
+        type="error"
         visible={!isAliasDisponible}
       >
-        El alias {aliasNoDisponible} no está disponible
+        El alias
+        {' '}
+        {aliasNoDisponible}
+        {' '}
+        no está disponible
       </HelperText>
       <Button
-        mode='contained'
+        mode="contained"
         style={styles.button}
         onPress={onValidarButtonClick}
         disabled={!isValidEmail || alias === '' || esperandoValidacion}
@@ -87,15 +95,15 @@ export default function Registracion1Screen({ navigation }) {
       >
         Validar
       </Button>
-      <StatusBar style="auto" />
+      <StatusBar />
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor,
     justifyContent: 'center',
     padding: 16,
   },

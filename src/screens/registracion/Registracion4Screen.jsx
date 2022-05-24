@@ -1,39 +1,35 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
-import { Button, HelperText, Paragraph, TextInput } from 'react-native-paper';
+import { Button, HelperText, TextInput } from 'react-native-paper';
+import { backgroundColor } from '../../styles/colors';
 
-export default function Recupero3Screen({ navigation, route }) {
-
+export default function Registracion4Screen({ navigation }) {
   const [password, setPassword] = useState('');
   const [confirmationPassword, setConfirmationPassword] = useState('');
   const [confirmationTouched, setConfirmationTouched] = useState(false);
 
-  function onCambiarPasswordClick() {
-    navigation.navigate("Recupero4", {
-      email: route.params.email,
-    });
+  function onFinalizarButtonClick() {
+    navigation.navigate('Login', { recienRegistrado: true });
   }
 
   function onConfirmationPasswordChange(newText) {
-    if(!confirmationTouched) {
+    if (!confirmationTouched) {
       setConfirmationTouched(true);
     }
-    setConfirmationPassword(newText)
-
+    setConfirmationPassword(newText);
   }
 
   return (
     <View style={styles.container}>
-      <Paragraph>Ingrese la nueva contraseña</Paragraph>
       <TextInput
         style={styles.textInput}
-        mode='outlined'
-        label="Nueva contraseña"
-        onChangeText={newText => setPassword(newText)}
+        mode="outlined"
+        label="Contraseña"
+        onChangeText={(newText) => setPassword(newText)}
         defaultValue={password}
         secureTextEntry
-        textContentType='newPassword'
+        textContentType="newPassword"
       />
       <View>
         <TextInput
@@ -43,10 +39,10 @@ export default function Recupero3Screen({ navigation, route }) {
           onChangeText={onConfirmationPasswordChange}
           defaultValue={confirmationPassword}
           secureTextEntry
-          textContentType='password'
+          textContentType="password"
         />
         <HelperText
-          type='error'
+          type="error"
           visible={confirmationTouched && password !== confirmationPassword}
         >
           Las contraseñas no coinciden
@@ -57,19 +53,19 @@ export default function Recupero3Screen({ navigation, route }) {
         style={styles.button}
         mode="contained"
         disabled={password === '' || password !== confirmationPassword}
-        onPress={onCambiarPasswordClick}
+        onPress={onFinalizarButtonClick}
       >
-        Enviar
+        Finalizar registro
       </Button>
-      <StatusBar style="auto" />
+      <StatusBar />
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor,
     justifyContent: 'center',
     padding: 16,
   },

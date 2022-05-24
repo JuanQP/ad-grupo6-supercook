@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet,  View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Button, Paragraph, TextInput } from 'react-native-paper';
+import { backgroundColor } from '../../styles/colors';
 
 export default function Recupero1Screen({ navigation }) {
-
   const [email, setEmail] = useState('');
   const [isValidEmail, setIsValidEmail] = useState(false);
 
@@ -15,7 +15,7 @@ export default function Recupero1Screen({ navigation }) {
   }
 
   function onObtenerCodigoButtonClick() {
-    navigation.navigate("Recupero2", { email });
+    navigation.navigate('Recupero2', { email });
   }
 
   return (
@@ -24,31 +24,31 @@ export default function Recupero1Screen({ navigation }) {
         Se enviará el código de verificación al siguiente e-mail
       </Paragraph>
       <TextInput
-        mode='outlined'
+        mode="outlined"
         style={styles.textInput}
         label="E-mail"
-        keyboardType='email-address'
+        keyboardType="email-address"
         onChangeText={onEmailTextInputChange}
         defaultValue={email}
         textContentType="emailAddress"
       />
       <Button
-        mode='contained'
+        mode="contained"
         style={styles.button}
         onPress={onObtenerCodigoButtonClick}
         disabled={!isValidEmail}
       >
         Obtener código
       </Button>
-      <StatusBar style="auto" />
+      <StatusBar />
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor,
     justifyContent: 'center',
     padding: 16,
   },
