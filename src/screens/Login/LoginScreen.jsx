@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import {
   Button,
@@ -28,6 +28,7 @@ const initialValues = {
 export default function LoginScreen({ navigation }) {
   const { colors } = useTheme();
   const [recordarme, setRecordarme] = useState(false);
+  const passwordTextInput = useRef();
 
   const { mutate, isLoading } = useMutation(loginApi.login, {
     onSuccess: (data) => {
@@ -79,6 +80,9 @@ export default function LoginScreen({ navigation }) {
                 style={styles.textInput}
                 textContentType="emailAddress"
                 keyboardType="email-address"
+                onSubmitEditing={() => passwordTextInput.current.focus()}
+                blurOnSubmit={false}
+                returnKeyType="next"
                 onBlur={handleBlur('email')}
                 error={touched.email && errors.email}
                 value={values.email}
@@ -90,6 +94,8 @@ export default function LoginScreen({ navigation }) {
                 style={styles.textInput}
                 secureTextEntry
                 textContentType="password"
+                ref={passwordTextInput}
+                onSubmitEditing={handleSubmit}
                 onBlur={handleBlur('password')}
                 error={touched.password && errors.password}
                 value={values.password}
