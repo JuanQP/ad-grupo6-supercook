@@ -1,7 +1,7 @@
 import React, { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
 import { Button, Paragraph } from 'react-native-paper';
-import { backgroundColor } from '../../styles/colors';
+import { surface } from '../../styles/colors';
 
 export default function Recupero4Screen({ navigation, route }) {
   function onLoginClick() {
@@ -30,7 +30,7 @@ export default function Recupero4Screen({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor,
+    surface,
     justifyContent: 'center',
     padding: 16,
   },

@@ -29,22 +29,22 @@ export default function App() {
       <Stack.Screen
         name="Recupero1"
         component={Recupero1Screen}
-        options={{ title: 'E-mail de recuperación' }}
+        options={{ title: 'E-mail de recuperación', headerShown: false }}
       />
       <Stack.Screen
         name="Recupero2"
         component={Recupero2Screen}
-        options={{ title: 'Código de recuperación' }}
+        options={{ title: 'Código de recuperación', headerShown: false }}
       />
       <Stack.Screen
         name="Recupero3"
         component={Recupero3Screen}
-        options={{ title: 'Nueva password' }}
+        options={{ title: 'Nueva password', headerShown: false }}
       />
       <Stack.Screen
         name="Recupero4"
         component={Recupero4Screen}
-        options={{ title: '¡Password cambiada!' }}
+        options={{ title: '¡Password cambiada!', headerShown: false }}
       />
       <Stack.Screen
         name="Registracion1"

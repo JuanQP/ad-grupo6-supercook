@@ -14,7 +14,7 @@ import { Formik } from 'formik';
 import * as yup from 'yup';
 import { useMutation } from 'react-query';
 import { surface } from '../../styles/colors';
-import * as loginApi from '../../helpers/login';
+import * as loginApi from '../../api/login';
 
 const reviewSchema = yup.object({
   email: yup.string().email().required(),
@@ -35,7 +35,7 @@ export default function LoginScreen({ navigation }) {
       navigation.navigate('Home', data);
     },
     onError: (error) => {
-      Alert.alert('😞', error.response?.data?.errors?.[0] ?? 'Algo salió mal');
+      Alert.alert('😞', error.response?.data?.message ?? 'Algo salió mal');
     },
   });
 

@@ -1,67 +1,95 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 import {
   Button, HelperText, Paragraph, TextInput,
 } from 'react-native-paper';
-import { backgroundColor } from '../../styles/colors';
+import { Formik } from 'formik';
+import * as yup from 'yup';
+import { useMutation } from 'react-query';
+import { surface } from '../../styles/colors';
+import * as userApi from '../../api/user';
+
+const reviewSchema = yup.object({
+  password: yup.string().length(6).required(),
+  repeatPassword: yup.string().length(6).oneOf([yup.ref('password'), null], 'Las contraseñas no coinciden').required(),
+});
+const initialValues = {
+  codigo: '',
+};
 
 export default function Recupero3Screen({ navigation, route }) {
-  const [password, setPassword] = useState('');
-  const [confirmationPassword, setConfirmationPassword] = useState('');
-  const [confirmationTouched, setConfirmationTouched] = useState(false);
+  const { mutate, isLoading } = useMutation(userApi.cambioPassword, {
+    onSuccess: () => {
+      navigation.navigate('Recupero4', {
+        email: route.params.email,
+      });
+    },
+    onError: (error) => {
+      Alert.alert('😞', error.response?.data?.message ?? 'Algo salió mal');
+    },
+  });
 
-  function onCambiarPasswordClick() {
-    navigation.navigate('Recupero4', {
+  function handleFormikSubmit(values) {
+    mutate({
       email: route.params.email,
+      password: values.password,
     });
-  }
-
-  function onConfirmationPasswordChange(newText) {
-    if (!confirmationTouched) {
-      setConfirmationTouched(true);
-    }
-    setConfirmationPassword(newText);
   }
 
   return (
     <View style={styles.container}>
       <Paragraph>Ingrese la nueva contraseña</Paragraph>
-      <TextInput
-        style={styles.textInput}
-        mode="outlined"
-        label="Nueva contraseña"
-        onChangeText={(newText) => setPassword(newText)}
-        defaultValue={password}
-        secureTextEntry
-        textContentType="newPassword"
-      />
-      <View>
-        <TextInput
-          style={styles.textInput}
-          mode="outlined"
-          label="Repetir contraseña"
-          onChangeText={onConfirmationPasswordChange}
-          defaultValue={confirmationPassword}
-          secureTextEntry
-          textContentType="password"
-        />
-        <HelperText
-          type="error"
-          visible={confirmationTouched && password !== confirmationPassword}
-        >
-          Las contraseñas no coinciden
-        </HelperText>
-      </View>
-
-      <Button
-        style={styles.button}
-        mode="contained"
-        disabled={password === '' || password !== confirmationPassword}
-        onPress={onCambiarPasswordClick}
+      <Formik
+        initialValues={initialValues}
+        validationSchema={reviewSchema}
+        onSubmit={handleFormikSubmit}
       >
-        Enviar
-      </Button>
+        {({
+          handleChange, handleBlur, handleSubmit, isValid, errors, touched, values,
+        }) => (
+          <>
+            <TextInput
+              style={styles.textInput}
+              mode="outlined"
+              label="Nueva contraseña"
+              secureTextEntry
+              textContentType="newPassword"
+              onBlur={handleBlur('password')}
+              error={touched.password && errors.password}
+              value={values.password}
+              onChangeText={handleChange('password')}
+            />
+            <View>
+              <TextInput
+                style={styles.textInput}
+                mode="outlined"
+                label="Repetir contraseña"
+                secureTextEntry
+                textContentType="password"
+                onBlur={handleBlur('repeatPassword')}
+                error={touched.repeatPassword && errors.repeatPassword}
+                value={values.repeatPassword}
+                onChangeText={handleChange('repeatPassword')}
+              />
+              <HelperText
+                type="error"
+                visible={errors.repeatPassword}
+              >
+                {errors.repeatPassword}
+              </HelperText>
+            </View>
+            <Button
+              style={styles.button}
+              mode="contained"
+              disabled={!isValid || isLoading}
+              onPress={handleSubmit}
+            >
+              Enviar
+            </Button>
+          </>
+        )}
+      </Formik>
       <StatusBar />
     </View>
   );
@@ -70,7 +98,7 @@ export default function Recupero3Screen({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor,
+    surface,
     justifyContent: 'center',
     padding: 16,
   },

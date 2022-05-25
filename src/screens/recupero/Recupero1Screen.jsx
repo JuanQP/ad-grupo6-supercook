@@ -1,21 +1,32 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 import { Button, Paragraph, TextInput } from 'react-native-paper';
-import { backgroundColor } from '../../styles/colors';
+import { Formik } from 'formik';
+import * as yup from 'yup';
+import { useMutation } from 'react-query';
+import { surface } from '../../styles/colors';
+import * as userApi from '../../api/user';
+
+const reviewSchema = yup.object({
+  email: yup.string().email().required(),
+});
+const initialValues = {
+  email: '',
+};
 
 export default function Recupero1Screen({ navigation }) {
-  const [email, setEmail] = useState('');
-  const [isValidEmail, setIsValidEmail] = useState(false);
+  const { mutate, isLoading } = useMutation(userApi.recuperarPassword, {
+    onSuccess: (data) => {
+      navigation.navigate('Recupero2', { email: data.email });
+    },
+    onError: (error) => {
+      Alert.alert('😞', error.response?.data?.message ?? 'Algo salió mal');
+    },
+  });
 
-  function onEmailTextInputChange(newText) {
-    setEmail(newText);
-    const emailValido = /^(\w|\d)(\w|\d|\.)+@(\w|\d)+(\.(\w|\d)+)+$/.test(newText);
-    setIsValidEmail(emailValido);
-  }
-
-  function onObtenerCodigoButtonClick() {
-    navigation.navigate('Recupero2', { email });
+  function handleFormikSubmit(values) {
+    mutate(values);
   }
 
   return (
@@ -23,23 +34,38 @@ export default function Recupero1Screen({ navigation }) {
       <Paragraph>
         Se enviará el código de verificación al siguiente e-mail
       </Paragraph>
-      <TextInput
-        mode="outlined"
-        style={styles.textInput}
-        label="E-mail"
-        keyboardType="email-address"
-        onChangeText={onEmailTextInputChange}
-        defaultValue={email}
-        textContentType="emailAddress"
-      />
-      <Button
-        mode="contained"
-        style={styles.button}
-        onPress={onObtenerCodigoButtonClick}
-        disabled={!isValidEmail}
+      <Formik
+        initialValues={initialValues}
+        validationSchema={reviewSchema}
+        onSubmit={handleFormikSubmit}
       >
-        Obtener código
-      </Button>
+        {({
+          handleChange, handleBlur, handleSubmit, isValid, errors, touched, values,
+        }) => (
+          <>
+            <TextInput
+              mode="outlined"
+              style={styles.textInput}
+              label="E-mail"
+              keyboardType="email-address"
+              textContentType="emailAddress"
+              onBlur={handleBlur('email')}
+              error={touched.email && errors.email}
+              value={values.email}
+              onChangeText={handleChange('email')}
+              onSubmitEditing={handleSubmit}
+            />
+            <Button
+              mode="contained"
+              style={styles.button}
+              onPress={handleSubmit}
+              disabled={!isValid || isLoading}
+            >
+              Obtener código
+            </Button>
+          </>
+        )}
+      </Formik>
       <StatusBar />
     </View>
   );
@@ -48,7 +74,7 @@ export default function Recupero1Screen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor,
+    surface,
     justifyContent: 'center',
     padding: 16,
   },
