@@ -8,7 +8,7 @@ export default function HomeScreen({ route }) {
   return (
     <View style={styles.container}>
       <Paragraph style={styles.paragraph}>
-        {`Bienvenido usuario ${route.params.user}!`}
+        {`Bienvenido usuario ${route.params.name}!`}
       </Paragraph>
       <StatusBar />
     </View>

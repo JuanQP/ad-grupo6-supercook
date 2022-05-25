@@ -5,14 +5,42 @@ import {
   Checkbox,
   Text,
   TextInput,
+  useTheme,
 } from 'react-native-paper';
-import { View, StyleSheet } from 'react-native';
-import { backgroundColor } from '../../styles/colors';
+import {
+  Alert, ScrollView, StyleSheet, View,
+} from 'react-native';
+import { Formik } from 'formik';
+import * as yup from 'yup';
+import { surface } from '../../styles/colors';
+import * as apiService from '../../helpers/api';
+
+const reviewSchema = yup.object({
+  email: yup.string().email().required(),
+  password: yup.string().required(),
+});
+const initialValues = {
+  email: '',
+  password: '',
+};
 
 export default function LoginScreen({ navigation }) {
-  const [user, setUser] = useState('');
-  const [password, setPassword] = useState('');
+  const { colors } = useTheme();
   const [recordarme, setRecordarme] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  async function handleFormikSubmit(values, actions) {
+    setLoading(true);
+    try {
+      const user = await apiService.login(values);
+      navigation.navigate('Home', user);
+    } catch (error) {
+      Alert.alert('😞', error.response?.data?.errors?.[0] ?? 'Algo salió mal');
+    } finally {
+      actions.setFieldValue('password', '');
+      setLoading(false);
+    }
+  }
 
   function onRecordarmeCheckboxClick() {
     setRecordarme(!recordarme);
@@ -22,97 +50,119 @@ export default function LoginScreen({ navigation }) {
     navigation.navigate('Registracion1');
   }
 
-  function onLoginButtonClick() {
-    if (user === 'nuevo') {
-      navigation.navigate('Registracion3', { user });
-      return;
-    }
-    navigation.navigate('Home', { user });
-  }
-
   function onRecuperoButtonClick() {
     navigation.navigate('Recupero1');
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container} contentContainerStyle={{ flexGrow: 1 }}>
       <View style={styles.formView}>
-        <TextInput
-          mode="outlined"
-          label="Usuario"
-          onChangeText={(newText) => setUser(newText)}
-          defaultValue={user}
-          textContentType="nickname"
-          style={styles.textInput}
-        />
-        <TextInput
-          mode="outlined"
-          label="Contraseña"
-          onChangeText={(newText) => setPassword(newText)}
-          defaultValue={password}
-          style={styles.textInput}
-          secureTextEntry
-          textContentType="password"
-        />
-        {/* Checkbox */}
-        <View style={styles.checkbox}>
-          <Checkbox
-            status={recordarme ? 'checked' : 'unchecked'}
-            onPress={onRecordarmeCheckboxClick}
-          />
-          <Text style={{ fontWeight: 'bold' }}>Recordarme</Text>
-        </View>
-        <View style={{ flexDirection: 'column', justifyContent: 'space-between' }}>
-          <Button
-            mode="contained"
-            onPress={onLoginButtonClick}
-            style={{ marginTop: 20 }}
-          >
-            Login
-          </Button>
+        <Text style={{ fontSize: 18, marginBottom: 18 }}>
+          Supercook 🍕
+        </Text>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={reviewSchema}
+          onSubmit={handleFormikSubmit}
+        >
+          {({
+            handleChange, handleBlur, handleSubmit, isValid, errors, touched, values,
+          }) => (
+            <>
+              <TextInput
+                mode="flat"
+                label="Email"
+                style={styles.textInput}
+                textContentType="emailAddress"
+                keyboardType="email-address"
+                onBlur={handleBlur('email')}
+                error={touched.email && errors.email}
+                value={values.email}
+                onChangeText={handleChange('email')}
+              />
+              <TextInput
+                mode="flat"
+                label="Contraseña"
+                style={styles.textInput}
+                secureTextEntry
+                textContentType="password"
+                onBlur={handleBlur('password')}
+                error={touched.password && errors.password}
+                value={values.password}
+                onChangeText={handleChange('password')}
+              />
+              {/* Checkbox */}
+              <View style={styles.checkbox}>
+                <Checkbox
+                  status={recordarme ? 'checked' : 'unchecked'}
+                  onPress={onRecordarmeCheckboxClick}
+                />
+                <Text style={{ fontWeight: 'bold' }}>Recordarme</Text>
+              </View>
+              <View style={{ flexDirection: 'column', alignSelf: 'stretch' }}>
+                <Button
+                  mode="contained"
+                  onPress={handleSubmit}
+                  style={{ marginTop: 20, alignSelf: 'stretch' }}
+                  disabled={!isValid || loading}
+                  loading={loading}
+                >
+                  Login
+                </Button>
+              </View>
+            </>
+          )}
+        </Formik>
+        <View style={styles.registerView}>
           <Button
             mode="text"
             onPress={onRecuperoButtonClick}
-            style={{ alignSelf: 'flex-end', marginTop: 20 }}
+            style={{ marginTop: 20, alignSelf: 'flex-end' }}
+            uppercase={false}
+            color={colors.text}
+            compact
           >
             Olvidaste tu contraseña?
           </Button>
+          <Button
+            mode="text"
+            onPress={onRegistrateButtonClick}
+            uppercase={false}
+            color={colors.text}
+            compact
+          >
+            No tenés una cuenta? Registrate
+          </Button>
         </View>
       </View>
-      <View style={styles.registerView}>
-        <Button
-          mode="text"
-          onPress={onRegistrateButtonClick}
-        >
-          No tenés una cuenta? Registrate
-        </Button>
-      </View>
       <StatusBar />
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor,
-    justifyContent: 'center',
-    padding: 16,
+    surface,
   },
   formView: {
-    flex: 3,
+    flex: 1,
+    padding: 32,
+    flexDirection: 'column',
+    alignItems: 'center',
     justifyContent: 'center',
   },
   checkbox: {
     flexDirection: 'row',
     alignItems: 'center',
+    alignSelf: 'flex-end',
   },
   registerView: {
     flexDirection: 'column',
-    justifyContent: 'center',
-    flex: 1,
+    marginTop: 20,
   },
   textInput: {
-    marginVertical: 10,
+    marginVertical: 5,
+    width: '100%',
   },
 });

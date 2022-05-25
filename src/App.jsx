@@ -19,7 +19,7 @@ export default function App() {
       <Stack.Screen
         name="Login"
         component={LoginScreen}
-        options={{ title: 'SuperCook 🍕' }}
+        options={{ title: 'SuperCook 🍕', headerShown: false }}
       />
       <Stack.Screen
         name="Home"
