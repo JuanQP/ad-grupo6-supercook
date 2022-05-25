@@ -1,9 +1,15 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import axios from 'axios';
 import App from './src/App';
 import { backgroundColor, primary, surface } from './src/styles/colors';
 import crearServer from './src/fake-server';
+
+axios.defaults.baseURL = '/api';
+
+const queryClient = new QueryClient();
 
 window.server = crearServer();
 
@@ -21,9 +27,11 @@ const theme = {
 export default function Main() {
   return (
     <PaperProvider theme={theme}>
-      <NavigationContainer>
-        <App />
-      </NavigationContainer>
+      <QueryClientProvider client={queryClient}>
+        <NavigationContainer>
+          <App />
+        </NavigationContainer>
+      </QueryClientProvider>
     </PaperProvider>
   );
 }

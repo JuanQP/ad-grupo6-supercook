@@ -1,6 +1,4 @@
-const axios = require('axios').default;
-
-axios.defaults.baseURL = '/api';
+import axios from 'axios';
 
 export async function test() {
   const response = await axios.get('/');

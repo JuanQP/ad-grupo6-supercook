@@ -12,8 +12,9 @@ import {
 } from 'react-native';
 import { Formik } from 'formik';
 import * as yup from 'yup';
+import { useMutation } from 'react-query';
 import { surface } from '../../styles/colors';
-import * as apiService from '../../helpers/api';
+import * as loginApi from '../../helpers/login';
 
 const reviewSchema = yup.object({
   email: yup.string().email().required(),
@@ -27,19 +28,22 @@ const initialValues = {
 export default function LoginScreen({ navigation }) {
   const { colors } = useTheme();
   const [recordarme, setRecordarme] = useState(false);
-  const [loading, setLoading] = useState(false);
+
+  const { mutate, isLoading } = useMutation(loginApi.login, {
+    onSuccess: (data) => {
+      navigation.navigate('Home', data);
+    },
+    onError: (error) => {
+      Alert.alert('😞', error.response?.data?.errors?.[0] ?? 'Algo salió mal');
+    },
+  });
 
   async function handleFormikSubmit(values, actions) {
-    setLoading(true);
-    try {
-      const user = await apiService.login(values);
-      navigation.navigate('Home', user);
-    } catch (error) {
-      Alert.alert('😞', error.response?.data?.errors?.[0] ?? 'Algo salió mal');
-    } finally {
-      actions.setFieldValue('password', '');
-      setLoading(false);
+    actions.setFieldValue('password', '');
+    if (!recordarme) {
+      actions.setFieldValue('email', '');
     }
+    mutate(values);
   }
 
   function onRecordarmeCheckboxClick() {
@@ -104,8 +108,8 @@ export default function LoginScreen({ navigation }) {
                   mode="contained"
                   onPress={handleSubmit}
                   style={{ marginTop: 20, alignSelf: 'stretch' }}
-                  disabled={!isValid || loading}
-                  loading={loading}
+                  disabled={!isValid || isLoading}
+                  loading={isLoading}
                 >
                   Login
                 </Button>
