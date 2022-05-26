@@ -7,6 +7,18 @@ if (window.server) {
 
 const CODIGO_RECUPERAR_PASSWORD = '123456';
 
+function middleware(request) {
+  try {
+    const token = request.requestHeaders.Authorization.split(' ')[1];
+    if (Number.isNaN(token)) {
+      throw new Error('No autorizado');
+    }
+    return token;
+  } catch (error) {
+    return null;
+  }
+}
+
 const crearServer = () => createServer({
   models: {
     user: Model,
@@ -15,7 +27,10 @@ const crearServer = () => createServer({
   routes() {
     this.namespace = 'api';
 
-    this.get('/', () => ({ message: 'Hola mundo' }));
+    this.get('/', (schema, request) => {
+      const userId = middleware(request);
+      return schema.users.find(userId);
+    });
 
     this.post('/login', (schema, request) => {
       const credentials = JSON.parse(request.requestBody);
@@ -26,10 +41,13 @@ const crearServer = () => createServer({
       if (!user) {
         return new Response(401, {}, { message: 'Usuario o contraseña incorrectas' });
       }
+      const token = user.id;
       return new Response(200, {}, {
-        name: user.name,
+        nombre: user.nombre,
         email: user.email,
-        token: 'token',
+        alias: user.alias,
+        token,
+        registrado: user.registrado,
       });
     });
 
@@ -67,38 +85,91 @@ const crearServer = () => createServer({
       user.recuperandoPassword = false;
       user.password = data.password;
       user.save();
-      return new Response(200, { message: 'Contraseña modificada exitosamente' });
+      return new Response(200, {}, { message: 'Contraseña modificada exitosamente' });
+    });
+
+    this.post('/signup', (schema, request) => {
+      const data = JSON.parse(request.requestBody);
+      const userAlias = schema.users.findBy({
+        alias: data.alias,
+      });
+      const userEmail = schema.users.findBy({
+        email: data.email,
+      });
+      const aliasDisponible = !userAlias;
+      const emailDisponible = !userEmail;
+      if (!aliasDisponible || !emailDisponible) {
+        return new Response(400, {}, {
+          aliasDisponible,
+          emailDisponible,
+          message: 'No es posible registrarse con estos datos.',
+        });
+      }
+      schema.create('user', {
+        nombre: '',
+        apellido: '',
+        email: data.email,
+        password: 'registracion',
+        recuperandoPassword: false,
+        alias: data.alias,
+        registrado: false,
+      });
+      return new Response(200, {}, {
+        email: data.email,
+        alias: data.alias,
+      });
+    });
+
+    this.patch('yo', (schema, request) => {
+      const data = JSON.parse(request.requestBody);
+      const userId = middleware(request);
+      const user = schema.users.find(userId);
+      return user.update({
+        ...data,
+      });
     });
   },
 
   seeds(server) {
     server.create('user', {
-      name: 'Juan Quinteros',
+      nombre: 'Juan',
+      apellido: 'Quinteros',
       email: 'juanquinteros@uade.edu.ar',
       password: 'test',
       recuperandoPassword: false,
       alias: 'juanquinteros',
+      registrado: false,
+      fechaNacimiento: new Date(),
     });
     server.create('user', {
-      name: 'Ezequiel Grillo',
+      nombre: 'Ezequiel',
+      apellido: 'Grillo',
       email: 'egrillo@uade.edu.ar',
       password: 'test',
       recuperandoPassword: false,
       alias: 'egrillo',
+      registrado: true,
+      fechaNacimiento: new Date(),
     });
     server.create('user', {
-      name: 'María Laura Severiens',
+      nombre: 'María Laura',
+      apellido: 'Severiens',
       email: 'mseveriens@uade.edu.ar',
       password: 'test',
       recuperandoPassword: false,
       alias: 'mseveriens',
+      registrado: true,
+      fechaNacimiento: new Date(),
     });
     server.create('user', {
-      name: 'Diego García',
+      nombre: 'Diego',
+      apellido: 'García',
       email: 'diegofegarcia@uade.edu.ar',
       password: 'test',
       recuperandoPassword: false,
       alias: 'diegofegarcia',
+      registrado: true,
+      fechaNacimiento: new Date(),
     });
   },
 });

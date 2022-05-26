@@ -13,6 +13,7 @@ import {
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import { useMutation } from 'react-query';
+import axios from 'axios';
 import { surface } from '../../styles/colors';
 import * as loginApi from '../../api/login';
 
@@ -32,7 +33,12 @@ export default function LoginScreen({ navigation }) {
 
   const { mutate, isLoading } = useMutation(loginApi.login, {
     onSuccess: (data) => {
-      navigation.navigate('Home', data);
+      axios.defaults.headers.common.Authorization = `Bearer ${data.token}`;
+      if (!data.registrado) {
+        navigation.navigate('Registracion3', data);
+      } else {
+        navigation.navigate('Home', data);
+      }
     },
     onError: (error) => {
       Alert.alert('😞', error.response?.data?.message ?? 'Algo salió mal');

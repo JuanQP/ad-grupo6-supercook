@@ -1,85 +1,112 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
-import MaskInput from 'react-native-mask-input';
-import { backgroundColor } from '../../styles/colors';
+import { Formik } from 'formik';
+import * as yup from 'yup';
+import { useMutation } from 'react-query';
+import { surface } from '../../styles/colors';
+import * as userApi from '../../api/user';
+import FechaPicker from '../../components/FechaPicker';
+
+const reviewSchema = yup.object({
+  nombre: yup.string().required(),
+  apellido: yup.string().required(),
+  fechaNacimiento: yup.date().required(),
+  telefono: yup.string().matches(/[0-9]/).min(8).max(10)
+    .required(),
+});
+const initialValues = {
+  nombre: '',
+  apellido: '',
+  fechaNacimiento: new Date(),
+  telefono: '',
+};
 
 export default function Registracion3Screen({ navigation }) {
-  const [nombre, setNombre] = useState('');
-  const [apellido, setApellido] = useState('');
-  const [fechaNacimiento, setFechaNacimiento] = useState('');
-  const [telefono, setTelefono] = useState('');
-  const [fechaNacimientoValido, setFechaNacimientoValido] = useState(false);
-  const [telefonoValido, setTelefonoValido] = useState(false);
+  const apellidoTextInput = useRef();
+  const { mutate, isLoading } = useMutation(userApi.patchUser, {
+    onSuccess: () => {
+      navigation.navigate('Registracion4');
+    },
+    onError: (error) => {
+      Alert.alert('😞', error.response?.data?.message ?? 'Algo salió mal');
+    },
+  });
 
-  function onFechaNacimientoChange(newFecha) {
-    setFechaNacimiento(newFecha);
-    setFechaNacimientoValido(/\d{2}\/\d{2}\/\d{4}/.test(newFecha));
-  }
-
-  function onTelefonoChange(newTelefono) {
-    setTelefono(newTelefono);
-    setTelefonoValido(/\d{10}/.test(newTelefono));
-  }
-
-  function onSiguienteButtonClick() {
-    navigation.navigate('Registracion4');
+  function handleFormikSubmit(values) {
+    mutate(values);
   }
 
   return (
     <View style={styles.container}>
-      <TextInput
-        mode="outlined"
-        style={styles.textInput}
-        label="Nombre/s"
-        onChangeText={(newText) => setNombre(newText)}
-        defaultValue={nombre}
-        textContentType="name"
-      />
-      <TextInput
-        mode="outlined"
-        style={styles.textInput}
-        label="Apellido/s"
-        onChangeText={(newText) => setApellido(newText)}
-        defaultValue={apellido}
-        textContentType="familyName"
-      />
-      <TextInput
-        mode="outlined"
-        style={styles.textInput}
-        keyboardType="number-pad"
-        label="Fecha de Nacimiento"
-        maxLength={10}
-        value={fechaNacimiento}
-        onChangeText={onFechaNacimientoChange}
-        placeholder="DD/MM/YYYY"
-        render={(props) => (
-          <MaskInput
-            {...props}
-            onChangeText={(masked) => props.onChangeText(masked)}
-            mask={[/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/]}
-          />
-        )}
-      />
-      <TextInput
-        mode="outlined"
-        style={styles.textInput}
-        keyboardType="phone-pad"
-        label="Teléfono"
-        onChangeText={onTelefonoChange}
-        defaultValue={telefono}
-        textContentType="telephoneNumber"
-        maxLength={10}
-      />
-      <Button
-        mode="contained"
-        style={styles.button}
-        onPress={onSiguienteButtonClick}
-        disabled={nombre === '' || apellido === '' || !fechaNacimientoValido || !telefonoValido}
+      <Formik
+        initialValues={initialValues}
+        validationSchema={reviewSchema}
+        onSubmit={handleFormikSubmit}
       >
-        Siguiente
-      </Button>
+        {({
+          handleChange, handleBlur, handleSubmit, setFieldValue, isValid, errors, touched, values,
+        }) => (
+          <>
+            <TextInput
+              mode="outlined"
+              style={styles.textInput}
+              label="Nombre/s"
+              textContentType="name"
+              returnKeyType="next"
+              onBlur={handleBlur('nombre')}
+              error={touched.nombre && errors.nombre}
+              value={values.nombre}
+              onChangeText={handleChange('nombre')}
+              onSubmitEditing={() => apellidoTextInput.current.focus()}
+              blurOnSubmit={false}
+            />
+            <TextInput
+              mode="outlined"
+              style={styles.textInput}
+              label="Apellido/s"
+              textContentType="familyName"
+              returnKeyType="next"
+              onBlur={handleBlur('apellido')}
+              error={touched.apellido && errors.apellido}
+              value={values.apellido}
+              onChangeText={handleChange('apellido')}
+              ref={apellidoTextInput}
+            />
+            <FechaPicker
+              style={styles.textInput}
+              label="Fecha de Nacimiento"
+              value={values.fechaNacimiento}
+              mode="date"
+              placeholder="DD/MM/YYYY"
+              onChangeDate={(date) => setFieldValue('fechaNacimiento', date)}
+            />
+            <TextInput
+              mode="outlined"
+              style={styles.textInput}
+              keyboardType="phone-pad"
+              label="Teléfono"
+              textContentType="telephoneNumber"
+              returnKeyType="send"
+              maxLength={10}
+              onBlur={handleBlur('telefono')}
+              error={touched.telefono && errors.telefono}
+              value={values.telefono}
+              onChangeText={handleChange('telefono')}
+              onSubmitEditing={handleSubmit}
+            />
+            <Button
+              mode="contained"
+              style={styles.button}
+              onPress={handleSubmit}
+              disabled={!isValid || isLoading}
+            >
+              Siguiente
+            </Button>
+          </>
+        )}
+      </Formik>
       <StatusBar />
     </View>
   );
@@ -88,7 +115,7 @@ export default function Registracion3Screen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor,
+    surface,
     justifyContent: 'center',
     padding: 16,
   },

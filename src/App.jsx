@@ -49,22 +49,22 @@ export default function App() {
       <Stack.Screen
         name="Registracion1"
         component={Registracion1Screen}
-        options={{ title: 'Nuevo usuario' }}
+        options={{ title: 'Nuevo usuario', headerShown: false }}
       />
       <Stack.Screen
         name="Registracion2"
         component={Registracion2Screen}
-        options={{ title: 'Usuario creado' }}
+        options={{ title: 'Usuario creado', headerShown: false }}
       />
       <Stack.Screen
         name="Registracion3"
         component={Registracion3Screen}
-        options={{ title: 'Completar datos' }}
+        options={{ title: 'Completar datos', headerShown: false }}
       />
       <Stack.Screen
         name="Registracion4"
         component={Registracion4Screen}
-        options={{ title: 'Generar contraseña' }}
+        options={{ title: 'Generar contraseña', headerShown: false }}
       />
     </Stack.Navigator>
   );

@@ -1,14 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
 import { Paragraph } from 'react-native-paper';
 import { backgroundColor } from '../../styles/colors';
+import { test } from '../../api/user';
 
-export default function HomeScreen({ route }) {
+export default function HomeScreen() {
+  const [nombre, setNombre] = useState('');
+  useEffect(() => {
+    test().then((data) => {
+      setNombre(data.user.nombre);
+    });
+  });
+
   return (
     <View style={styles.container}>
       <Paragraph style={styles.paragraph}>
-        {`Bienvenido usuario ${route.params.name}!`}
+        {`Bienvenido ${nombre}!`}
       </Paragraph>
       <StatusBar />
     </View>

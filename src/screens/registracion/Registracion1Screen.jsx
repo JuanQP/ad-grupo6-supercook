@@ -1,100 +1,95 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 import { Button, HelperText, TextInput } from 'react-native-paper';
+import { Formik } from 'formik';
+import { useMutation } from 'react-query';
+import * as yup from 'yup';
+import * as userApi from '../../api/user';
 import { backgroundColor } from '../../styles/colors';
 
+const reviewSchema = yup.object({
+  alias: yup.string().required(),
+  email: yup.string().email().required(),
+});
+const initialValues = {
+  alias: '',
+  email: '',
+};
+
 export default function Registracion1Screen({ navigation }) {
-  const [email, setEmail] = useState('');
-  const [alias, setAlias] = useState('');
-  const [isValidEmail, setIsValidEmail] = useState(false);
-  const [isAliasDisponible, setIsAliasDisponible] = useState(true);
-  const [isEmailDisponible, setIsEmailDisponible] = useState(true);
-  const [esperandoValidacion, setEsperandoValidacion] = useState(false);
-  const [emailNoDisponible, setEmailNoDisponible] = useState('');
-  const [aliasNoDisponible, setAliasNoDisponible] = useState('');
+  const [aliasDisponible, setAliasDisponible] = useState(true);
+  const [emailDisponible, setEmailDisponible] = useState(true);
+  const aliasTextInput = useRef();
+  const { mutate, isLoading } = useMutation(userApi.signup, {
+    onSuccess: (data) => {
+      navigation.navigate('Registracion2', { email: data.email, alias: data.alias });
+    },
+    onError: (error) => {
+      setAliasDisponible(error.response?.data?.aliasDisponible ?? true);
+      setEmailDisponible(error.response?.data?.emailDisponible ?? true);
+      Alert.alert('😞', error.response?.data?.message ?? 'Algo salió mal');
+    },
+  });
 
-  function onEmailTextInputChange(newText) {
-    setEmail(newText);
-    const emailValido = /^(\w|\d)(\w|\d|\.)*@(\w|\d)+(\.(\w|\d)+)+$/.test(newText);
-    setIsValidEmail(emailValido);
-  }
-
-  function onAliasTextInputChange(newText) {
-    setAlias(newText);
-  }
-
-  function onValidarButtonClick() {
-    setEsperandoValidacion(true);
-    setTimeout(() => {
-      setEsperandoValidacion(false);
-      const emailDisponible = email !== 'a@a.com';
-      const aliasDisponible = alias !== 'a';
-      setIsEmailDisponible(emailDisponible);
-      setIsAliasDisponible(aliasDisponible);
-
-      if (!emailDisponible) {
-        setEmailNoDisponible(email);
-      }
-      if (!aliasDisponible) {
-        setAliasNoDisponible(alias);
-      }
-
-      if (emailDisponible && aliasDisponible) {
-        navigation.navigate('Registracion2', { email, alias });
-      }
-    }, 3000);
+  function handleFormikSubmit(values) {
+    mutate(values);
   }
 
   return (
     <View style={styles.container}>
-      <TextInput
-        mode="outlined"
-        style={styles.textInput}
-        label="E-mail"
-        keyboardType="email-address"
-        onChangeText={onEmailTextInputChange}
-        defaultValue={email}
-        error={!isEmailDisponible}
-        textContentType="emailAddress"
-      />
-      <HelperText
-        type="error"
-        visible={!isEmailDisponible}
+      <Formik
+        initialValues={initialValues}
+        validationSchema={reviewSchema}
+        onSubmit={handleFormikSubmit}
       >
-        El e-mail
-        {' '}
-        {emailNoDisponible}
-        {' '}
-        no está disponible
-      </HelperText>
-      <TextInput
-        mode="outlined"
-        style={styles.textInput}
-        label="Alias"
-        onChangeText={onAliasTextInputChange}
-        defaultValue={alias}
-        textContentType="nickname"
-      />
-      <HelperText
-        type="error"
-        visible={!isAliasDisponible}
-      >
-        El alias
-        {' '}
-        {aliasNoDisponible}
-        {' '}
-        no está disponible
-      </HelperText>
-      <Button
-        mode="contained"
-        style={styles.button}
-        onPress={onValidarButtonClick}
-        disabled={!isValidEmail || alias === '' || esperandoValidacion}
-        loading={esperandoValidacion}
-      >
-        Validar
-      </Button>
+        {({
+          handleChange, handleBlur, handleSubmit, isValid, errors, touched, values,
+        }) => (
+          <>
+            <TextInput
+              mode="outlined"
+              style={styles.textInput}
+              label="E-mail"
+              keyboardType="email-address"
+              textContentType="emailAddress"
+              onBlur={handleBlur('email')}
+              error={touched.email && errors.email}
+              value={values.email}
+              onChangeText={handleChange('email')}
+              onSubmitEditing={() => aliasTextInput.current.focus()}
+              blurOnSubmit={false}
+            />
+            <HelperText type="error" visible={!emailDisponible}>
+              El e-mail no está disponible
+            </HelperText>
+            <TextInput
+              mode="outlined"
+              style={styles.textInput}
+              label="Alias"
+              textContentType="nickname"
+              onBlur={handleBlur('alias')}
+              error={touched.alias && errors.alias}
+              value={values.alias}
+              onChangeText={handleChange('alias')}
+              ref={aliasTextInput}
+              onSubmitEditing={handleSubmit}
+            />
+            <HelperText type="error" visible={!aliasDisponible}>
+              El alias no está disponible
+            </HelperText>
+            <Button
+              mode="contained"
+              style={styles.button}
+              onPress={handleSubmit}
+              disabled={!isValid || isLoading}
+              loading={isLoading}
+            >
+              Validar
+            </Button>
+          </>
+        )}
+      </Formik>
       <StatusBar />
     </View>
   );

@@ -1,7 +1,7 @@
 import React, { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
 import { Button, Paragraph } from 'react-native-paper';
-import { backgroundColor } from '../../styles/colors';
+import { surface } from '../../styles/colors';
 
 export default function Registracion2Screen({ navigation, route }) {
   function onLoginClick() {
@@ -14,7 +14,9 @@ export default function Registracion2Screen({ navigation, route }) {
         Revisá tu correo,
         {' '}
         {route.params.alias}
-        ! Tu experiencia SuperCook ya empezó
+        ! Se envió una contraseña provisoria.
+        {' '}
+        Tu experiencia SuperCook ya empezó
       </Paragraph>
       <Button
         style={styles.button}
@@ -31,7 +33,7 @@ export default function Registracion2Screen({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor,
+    surface,
     justifyContent: 'center',
     padding: 16,
   },
