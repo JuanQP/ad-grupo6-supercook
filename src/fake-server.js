@@ -1,5 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { createServer, Model, Response } from 'miragejs';
+import {
+  belongsTo, createServer, hasMany, Model, Response, RestSerializer,
+} from 'miragejs';
 
 if (window.server) {
   window.server.shutdown();
@@ -19,9 +21,37 @@ function middleware(request) {
   }
 }
 
+function esFavorita(receta, favoritos) {
+  return favoritos.some((f) => String(f.recetum) === receta.id);
+}
+
 const crearServer = () => createServer({
+  serializers: {
+    user: RestSerializer.extend({
+      include: ['receta', 'favoritos'],
+      embed: true,
+    }),
+    receta: RestSerializer.extend({
+      include: ['user'],
+      embed: true,
+    }),
+    favorito: RestSerializer.extend({
+      include: ['user', 'receta'],
+    }),
+  },
   models: {
-    user: Model,
+    user: Model.extend({
+      recetas: hasMany('receta', { inverse: 'user' }),
+      favoritos: hasMany('favorito'),
+    }),
+    receta: Model.extend({
+      favoritos: hasMany('favorito'),
+      user: belongsTo('user'),
+    }),
+    favorito: Model.extend({
+      user: belongsTo('user'),
+      receta: belongsTo('receta'),
+    }),
   },
 
   routes() {
@@ -120,13 +150,50 @@ const crearServer = () => createServer({
       });
     });
 
-    this.patch('yo', (schema, request) => {
+    this.patch('/yo', (schema, request) => {
       const data = JSON.parse(request.requestBody);
       const userId = middleware(request);
       const user = schema.users.find(userId);
       return user.update({
         ...data,
       });
+    });
+
+    this.get('/recomendados', function get(schema, request) {
+      const userId = middleware(request);
+      const { receta: recetas } = this.serialize(schema.receta.all());
+      const { favoritos } = this.serialize(schema.favoritos.where({ userId }));
+      return {
+        recetas: recetas.map((r) => ({
+          ...r,
+          esFavorita: esFavorita(r, favoritos),
+        })),
+      };
+    });
+
+    this.get('/recetasUltimas', function get(schema, request) {
+      const userId = middleware(request);
+      const { receta: recetas } = this.serialize(schema.receta.all());
+      const sortedRecetas = recetas.sort((a, b) => b.fecha - a.fecha);
+      const { favoritos } = this.serialize(schema.favoritos.where({ userId }));
+      return {
+        recetas: sortedRecetas.map((r) => ({
+          ...r,
+          esFavorita: esFavorita(r, favoritos),
+        })),
+      };
+    });
+
+    this.get('/ingredienteDeLaSemana', function get(schema, request) {
+      const userId = middleware(request);
+      const { receta: recetas } = this.serialize(schema.receta.all());
+      const { favoritos } = this.serialize(schema.favoritos.where({ userId }));
+      return {
+        recetas: recetas.map((r) => ({
+          ...r,
+          esFavorita: esFavorita(r, favoritos),
+        })),
+      };
     });
   },
 
@@ -170,6 +237,42 @@ const crearServer = () => createServer({
       alias: 'diegofegarcia',
       registrado: true,
       fechaNacimiento: new Date(),
+    });
+    server.schema.receta.create({
+      nombre: 'Hamburguesa',
+      userId: 1,
+      fecha: new Date(2022, 1, 1),
+    });
+    server.schema.receta.create({
+      nombre: 'Fideos',
+      userId: 2,
+      fecha: new Date(2022, 1, 2),
+    });
+    server.schema.receta.create({
+      nombre: 'Papas Fritas',
+      userId: 3,
+      fecha: new Date(2022, 1, 3),
+    });
+    server.schema.receta.create({
+      nombre: 'Sushi',
+      userId: 4,
+      fecha: new Date(2022, 1, 4),
+    });
+    server.create('favorito', {
+      userId: 1,
+      recetaId: 1,
+    });
+    server.create('favorito', {
+      userId: 2,
+      recetaId: 2,
+    });
+    server.create('favorito', {
+      userId: 3,
+      recetaId: 3,
+    });
+    server.create('favorito', {
+      userId: 4,
+      recetaId: 4,
     });
   },
 });

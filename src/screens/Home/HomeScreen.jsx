@@ -1,36 +1,54 @@
-import React, { useEffect, useState } from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
-import { Paragraph } from 'react-native-paper';
-import { backgroundColor } from '../../styles/colors';
-import { test } from '../../api/user';
+import React from 'react';
+import { Alert, ScrollView } from 'react-native';
+import { useQuery } from 'react-query';
+import RecipeSideScroller from '../../components/RecipeSideScroller';
+import HomeLayout from '../../layouts/HomeLayout';
+import * as recipesApi from '../../api/recipes';
+import * as userApi from '../../api/user';
 
 export default function HomeScreen() {
-  const [nombre, setNombre] = useState('');
-  useEffect(() => {
-    test().then((data) => {
-      setNombre(data.user.nombre);
-    });
+  const userQuery = useQuery('user', userApi.test, {
+    placeholderData: { user: { nombre: 'Invitado' } },
   });
+  const recomendadosQuery = useQuery('recomendados', recipesApi.recomendados);
+  const recetasUltimasQuery = useQuery('recetasUltimas', recipesApi.recetasUltimas);
+  const ingredienteDeLaSemanaQuery = useQuery('ingredienteDeLaSemana', recipesApi.ingredienteDeLaSemana);
+
+  function handleIconPress() {
+    Alert.alert('😳', 'Sin implementar');
+  }
+
+  function handleRecipePress(recipe) {
+    const { user, ...receta } = recipe;
+    Alert.alert('🍔', JSON.stringify(receta));
+  }
 
   return (
-    <View style={styles.container}>
-      <Paragraph style={styles.paragraph}>
-        {`Bienvenido ${nombre}!`}
-      </Paragraph>
-      <StatusBar />
-    </View>
+    <HomeLayout
+      icon="account-circle-outline"
+      title={`Hola ${userQuery.data.user.nombre}`}
+      onIconPress={handleIconPress}
+    >
+      <ScrollView>
+        <RecipeSideScroller
+          title="Recomendados para vos"
+          items={recomendadosQuery.data}
+          onVerTodosPress={() => {}}
+          onItemPress={handleRecipePress}
+        />
+        <RecipeSideScroller
+          title="Últimas recetas añadidas"
+          items={recetasUltimasQuery.data}
+          onVerTodosPress={() => {}}
+          onItemPress={handleRecipePress}
+        />
+        <RecipeSideScroller
+          title="Ingrediente de la semana"
+          items={ingredienteDeLaSemanaQuery.data}
+          onVerTodosPress={() => {}}
+          onItemPress={handleRecipePress}
+        />
+      </ScrollView>
+    </HomeLayout>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor,
-    justifyContent: 'center',
-    padding: 16,
-  },
-  paragraph: {
-    alignSelf: 'center',
-  },
-});
