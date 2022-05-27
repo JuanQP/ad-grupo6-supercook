@@ -6,7 +6,7 @@ import HomeLayout from '../../layouts/HomeLayout';
 import * as recipesApi from '../../api/recipes';
 import * as userApi from '../../api/user';
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }) {
   const userQuery = useQuery('user', userApi.test, {
     placeholderData: { user: { nombre: 'Invitado' } },
   });
@@ -15,7 +15,7 @@ export default function HomeScreen() {
   const ingredienteDeLaSemanaQuery = useQuery('ingredienteDeLaSemana', recipesApi.ingredienteDeLaSemana);
 
   function handleIconPress() {
-    Alert.alert('😳', 'Sin implementar');
+    navigation.navigate('Perfil');
   }
 
   function handleRecipePress(recipe) {
@@ -28,6 +28,7 @@ export default function HomeScreen() {
       icon="account-circle-outline"
       title={`Hola ${userQuery.data.user.nombre}`}
       onIconPress={handleIconPress}
+      padding={16}
     >
       <ScrollView>
         <RecipeSideScroller

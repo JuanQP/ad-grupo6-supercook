@@ -21,6 +21,10 @@ function middleware(request) {
   }
 }
 
+function alphabeticalOrder(a, b) {
+  return a.localeCompare(b);
+}
+
 function esFavorita(receta, favoritos) {
   return favoritos.some((f) => String(f.recetum) === receta.id);
 }
@@ -28,7 +32,7 @@ function esFavorita(receta, favoritos) {
 const crearServer = () => createServer({
   serializers: {
     user: RestSerializer.extend({
-      include: ['receta', 'favoritos'],
+      include: ['recetas', 'favoritos', 'preferencias'],
       embed: true,
     }),
     receta: RestSerializer.extend({
@@ -43,6 +47,7 @@ const crearServer = () => createServer({
     user: Model.extend({
       recetas: hasMany('receta', { inverse: 'user' }),
       favoritos: hasMany('favorito'),
+      preferencias: hasMany('preferencia', { inverse: 'user' }),
     }),
     receta: Model.extend({
       favoritos: hasMany('favorito'),
@@ -51,6 +56,9 @@ const crearServer = () => createServer({
     favorito: Model.extend({
       user: belongsTo('user'),
       receta: belongsTo('receta'),
+    }),
+    preferencia: Model.extend({
+      user: belongsTo('user'),
     }),
   },
 
@@ -195,9 +203,21 @@ const crearServer = () => createServer({
         })),
       };
     });
+
+    this.get('/preferencias', function get(schema) {
+      const { preferencia: preferencias } = this.serialize(schema.preferencia.all());
+      return {
+        preferencias: preferencias.sort((a, b) => alphabeticalOrder(a.descripcion, b.descripcion)),
+      };
+    });
   },
 
   seeds(server) {
+    server.schema.preferencia.create({ descripcion: 'Pollo' });
+    server.schema.preferencia.create({ descripcion: 'Hamburguesa' });
+    server.schema.preferencia.create({ descripcion: 'Vegetariano' });
+    server.schema.preferencia.create({ descripcion: 'Queso' });
+    server.schema.preferencia.create({ descripcion: 'Salchicha' });
     server.create('user', {
       nombre: 'Juan',
       apellido: 'Quinteros',
@@ -207,6 +227,8 @@ const crearServer = () => createServer({
       alias: 'juanquinteros',
       registrado: false,
       fechaNacimiento: new Date(),
+      preferenciaIds: [1, 2],
+      descripcion: 'Me gusta la comida 🍕',
     });
     server.create('user', {
       nombre: 'Ezequiel',
@@ -217,6 +239,8 @@ const crearServer = () => createServer({
       alias: 'egrillo',
       registrado: true,
       fechaNacimiento: new Date(),
+      preferenciaIds: [2, 3],
+      descripcion: 'Me gusta la comida 🍕',
     });
     server.create('user', {
       nombre: 'María Laura',
@@ -227,6 +251,8 @@ const crearServer = () => createServer({
       alias: 'mseveriens',
       registrado: true,
       fechaNacimiento: new Date(),
+      preferenciaIds: [3, 4],
+      descripcion: 'Me gusta la comida 🍕',
     });
     server.create('user', {
       nombre: 'Diego',
@@ -237,10 +263,12 @@ const crearServer = () => createServer({
       alias: 'diegofegarcia',
       registrado: true,
       fechaNacimiento: new Date(),
+      preferenciaIds: [1, 2, 3, 4],
+      descripcion: 'Me gusta la comida 🍕',
     });
     server.schema.receta.create({
       nombre: 'Hamburguesa',
-      userId: 1,
+      userId: 2,
       fecha: new Date(2022, 1, 1),
     });
     server.schema.receta.create({

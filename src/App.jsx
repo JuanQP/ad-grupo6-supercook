@@ -10,6 +10,7 @@ import Registracion1Screen from './screens/registracion/Registracion1Screen';
 import Registracion2Screen from './screens/registracion/Registracion2Screen';
 import Registracion3Screen from './screens/registracion/Registracion3Screen';
 import Registracion4Screen from './screens/registracion/Registracion4Screen';
+import PerfilScreen from './screens/Perfil/PerfilScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -65,6 +66,11 @@ export default function App() {
         name="Registracion4"
         component={Registracion4Screen}
         options={{ title: 'Generar contraseña', headerShown: false }}
+      />
+      <Stack.Screen
+        name="Perfil"
+        component={PerfilScreen}
+        options={{ title: 'Perfil', headerShown: false }}
       />
     </Stack.Navigator>
   );

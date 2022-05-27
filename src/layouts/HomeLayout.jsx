@@ -5,7 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import { surface } from '../styles/colors';
 
 function HomeLayout({
-  children, icon, title, onIconPress,
+  children, icon, title, onIconPress, padding,
 }) {
   return (
     <>
@@ -13,7 +13,7 @@ function HomeLayout({
         <Appbar.Action icon={icon} onPress={onIconPress} />
         <Appbar.Content title={title} />
       </Appbar.Header>
-      <View style={styles.container}>
+      <View style={{ ...styles.container, padding }}>
         {children}
         <StatusBar />
       </View>
@@ -26,7 +26,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: surface,
     justifyContent: 'center',
-    padding: 16,
   },
 });
 
