@@ -11,6 +11,9 @@ import Registracion2Screen from './screens/registracion/Registracion2Screen';
 import Registracion3Screen from './screens/registracion/Registracion3Screen';
 import Registracion4Screen from './screens/registracion/Registracion4Screen';
 import PerfilScreen from './screens/Perfil/PerfilScreen';
+import RecomendadosScreen from './screens/Home/RecomendadosScreen';
+import UltimasRecetasScreen from './screens/Home/UltimasRecetasScreen';
+import IngredienteDeLaSemanaScreen from './screens/Home/IngredienteDeLaSemanaScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +29,21 @@ export default function App() {
         name="Home"
         component={HomeScreen}
         options={{ title: 'Home', headerShown: false }}
+      />
+      <Stack.Screen
+        name="Recomendados"
+        component={RecomendadosScreen}
+        options={{ title: 'Recomendados', headerShown: false }}
+      />
+      <Stack.Screen
+        name="UltimasRecetas"
+        component={UltimasRecetasScreen}
+        options={{ title: 'Últimas recetas', headerShown: false }}
+      />
+      <Stack.Screen
+        name="IngredienteDeLaSemana"
+        component={IngredienteDeLaSemanaScreen}
+        options={{ title: 'Ingrediente de la Semana', headerShown: false }}
       />
       <Stack.Screen
         name="Recupero1"

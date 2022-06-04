@@ -23,6 +23,18 @@ export default function HomeScreen({ navigation }) {
     Alert.alert('🍔', JSON.stringify(receta));
   }
 
+  function handleRecomendadosPress() {
+    navigation.navigate('Recomendados');
+  }
+
+  function handleUltimasRecetasPress() {
+    navigation.navigate('UltimasRecetas');
+  }
+
+  function handleIngredienteDeLaSemanaPress() {
+    navigation.navigate('IngredienteDeLaSemana');
+  }
+
   return (
     <HomeLayout
       icon="account-circle-outline"
@@ -34,19 +46,19 @@ export default function HomeScreen({ navigation }) {
         <RecipeSideScroller
           title="Recomendados para vos"
           items={recomendadosQuery.data}
-          onVerTodosPress={() => {}}
+          onVerTodosPress={handleRecomendadosPress}
           onItemPress={handleRecipePress}
         />
         <RecipeSideScroller
           title="Últimas recetas añadidas"
           items={recetasUltimasQuery.data}
-          onVerTodosPress={() => {}}
+          onVerTodosPress={handleUltimasRecetasPress}
           onItemPress={handleRecipePress}
         />
         <RecipeSideScroller
           title="Ingrediente de la semana"
           items={ingredienteDeLaSemanaQuery.data}
-          onVerTodosPress={() => {}}
+          onVerTodosPress={handleIngredienteDeLaSemanaPress}
           onItemPress={handleRecipePress}
         />
       </ScrollView>
