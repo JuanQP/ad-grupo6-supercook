@@ -46,7 +46,7 @@ function ProfilePreferences({ user, loading, onSubmit }) {
         />
         <ActivityIndicator animating={loading} />
       </View>
-      <View style={{ flexDirection: 'row' }}>
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
         {user.preferencias.map((p) => (
           <Chip key={p.id} textStyle={{ color: colors.primary }}>
             {p.descripcion}
