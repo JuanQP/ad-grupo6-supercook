@@ -14,3 +14,8 @@ export async function ingredienteDeLaSemana() {
   const { data } = await axios.get('/ingredienteDeLaSemana');
   return data.recetas;
 }
+
+export async function getReceta(recetaId) {
+  const { data } = await axios.get(`/recetas/${recetaId}`);
+  return data.receta;
+}

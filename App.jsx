@@ -6,6 +6,12 @@ import axios from 'axios';
 import App from './src/App';
 import { backgroundColor, primary, surface } from './src/styles/colors';
 import crearServer from './src/fake-server';
+import 'intl';
+import 'intl/locale-data/jsonp/en';
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs([
+  /ViewPropTypes/,
+]);
 
 axios.defaults.baseURL = '/api';
 

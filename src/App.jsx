@@ -14,6 +14,7 @@ import PerfilScreen from './screens/Perfil/PerfilScreen';
 import RecomendadosScreen from './screens/Home/RecomendadosScreen';
 import UltimasRecetasScreen from './screens/Home/UltimasRecetasScreen';
 import IngredienteDeLaSemanaScreen from './screens/Home/IngredienteDeLaSemanaScreen';
+import RecetaScreen from './screens/Receta/RecetaScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -44,6 +45,11 @@ export default function App() {
         name="IngredienteDeLaSemana"
         component={IngredienteDeLaSemanaScreen}
         options={{ title: 'Ingrediente de la Semana', headerShown: false }}
+      />
+      <Stack.Screen
+        name="Receta"
+        component={RecetaScreen}
+        options={{ title: 'Receta', headerShown: false }}
       />
       <Stack.Screen
         name="Recupero1"

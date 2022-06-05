@@ -210,6 +210,114 @@ const crearServer = () => createServer({
         preferencias: preferencias.sort((a, b) => alphabeticalOrder(a.descripcion, b.descripcion)),
       };
     });
+
+    this.get('/recetas/:id', (schema, request) => {
+      // return schema.receta.find(request.params.id);
+      return {
+        receta: {
+          nombre: 'Katsu Kare カツカレー',
+          userId: 1,
+          fecha: new Date(2022, 1, 1),
+          descripcion: 'Mi plato favorito de 🇯🇵\nCarne de cerdo frita rebosada en panko con curry 😍',
+          fotos: [
+            'Imagen 1',
+            'Imagen 2',
+            'Imagen 3',
+          ],
+          user: {
+            nombre: 'Juan Ignacio',
+            apellido: 'Quinteros Parada',
+            provincia: 'Ciudad Autónoma de Buenos Aires'
+          },
+          personas: 6,
+          ingredientes: [
+            {
+              nombre: 'Panko',
+              cantidad: 500,
+              unidad: 'gr'
+            },
+            {
+              nombre: 'Huevos',
+              cantidad: 4,
+              unidad: 'u'
+            },
+            {
+              nombre: 'Zanahoria',
+              cantidad: 2,
+              unidad: 'u'
+            },
+            {
+              nombre: 'Papa',
+              cantidad: 2,
+              unidad: 'u'
+            },
+            {
+              nombre: 'Carne de cerdo',
+              cantidad: 500,
+              unidad: 'gr'
+            },
+            {
+              nombre: 'Cebolla',
+              cantidad: 1,
+              unidad: 'u'
+            },
+            {
+              nombre: 'Golden Curry',
+              cantidad: 4,
+              unidad: 'u'
+            },
+            {
+              nombre: 'Arroz doble carolina',
+              cantidad: 500,
+              unidad: 'gr'
+            },
+            {
+              nombre: 'Harina',
+              cantidad: 200,
+              unidad: 'gr'
+            },
+          ],
+          pasos: [
+            {
+              descripcion: 'Lavar el arroz doble carolina sumergiéndolo en agua y "masajearlo" hasta quitar todo el almidón',
+              media: [],
+            },
+            {
+              descripcion: 'Poner el arroz en olla con sal a gusto y dejarlo cocinar',
+              media: [],
+            },
+            {
+              descripcion: 'Rebosar la carne de cerdo primero pasándolo por harina, luego huevo y al final panko',
+              media: [],
+            },
+            {
+              descripcion: 'Pelar y cortar en cubitos la papa, zanahoria y cebolla',
+              media: [],
+            },
+            {
+              descripcion: 'Poner la papa, zanahoria y cebolla en la olla y agregar aceite por 3 minutos',
+              media: [],
+            },
+            {
+              descripcion: 'Agregar 2 vasos y medio de agua a la olla y esperar a que hierva',
+              media: [],
+            },
+            {
+              descripcion: 'Con el agua hirviendo, agregar los cubitos de Golden Curry, apagar el fuego y batir hasta que quede espeso',
+              media: [],
+            },
+            {
+              descripcion: 'En una sartén poner todas las milanesas de cerdo y fritar',
+              media: [],
+            },
+            {
+              descripcion: 'Cuando las 3 cosas estén listas, servir y disfrutar 😄',
+              media: [],
+            },
+          ],
+        }
+      }
+    });
   },
 
   seeds(server) {
