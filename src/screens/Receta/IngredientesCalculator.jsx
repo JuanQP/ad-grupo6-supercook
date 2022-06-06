@@ -57,7 +57,7 @@ function IngredientesCalculator({ personas, ingredientes, receta, onChange }) {
       <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
         <View style={{alignItems: 'center'}}>
           <Text>Ingredientes para</Text>
-          <Text style={{fontWeight: 'bold'}}>{personas} personas</Text>
+          <Text style={{fontWeight: 'bold'}}>{formatNumber(personas)} personas</Text>
         </View>
         <View>
           <TextInput
