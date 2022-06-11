@@ -8,9 +8,9 @@ import * as userApi from '../../api/user';
 import RecipeCard from '../../components/RecipeCard';
 
 export default function RecomendadosScreen({ navigation }) {
-  const { data: usuario } = useQuery('user', userApi.test, {
-    placeholderData: { user: { nombre: 'Invitado' } },
-    select: (data) => data.user
+  const { data: usuario } = useQuery('user', userApi.getUser, {
+    placeholderData: { nombre: 'Invitado' },
+    select: (data) => data.usuario,
   });
   const { data: recomendados } = useQuery('recomendados', recipesApi.recomendados);
 

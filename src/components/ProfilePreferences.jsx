@@ -14,9 +14,9 @@ import ChipPicker from './ChipPicker';
 function ProfilePreferences({ user, loading, onSubmit }) {
   const { colors } = useTheme();
   const [userPreferences, setUserPreferences] = React.useState([]);
-  const { data } = useQuery('preferencias', dropdownApi.preferencias, {
+  const { data } = useQuery('etiquetas', dropdownApi.etiquetas, {
     placeholderData: {
-      preferencias: [],
+      etiquetas: [],
     },
   });
   const [visible, setVisible] = React.useState(false);
@@ -61,7 +61,7 @@ function ProfilePreferences({ user, loading, onSubmit }) {
               <Caption>Seleccione las preferencias que desea agregar</Caption>
             </View>
             <ChipPicker
-              items={data.preferencias}
+              items={data.etiquetas}
               selectedItems={userPreferences}
               labelKey="descripcion"
               onChange={handlePreferencesChange}

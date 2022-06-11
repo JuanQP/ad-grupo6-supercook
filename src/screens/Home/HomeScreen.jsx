@@ -7,8 +7,8 @@ import * as recipesApi from '../../api/recipes';
 import * as userApi from '../../api/user';
 
 export default function HomeScreen({ navigation }) {
-  const userQuery = useQuery('user', userApi.test, {
-    placeholderData: { user: { nombre: 'Invitado' } },
+  const { data: usuarioData } = useQuery('user', userApi.getUser, {
+    placeholderData: { usuario: { nombre: 'Invitado' }},
   });
   const recomendadosQuery = useQuery('recomendados', recipesApi.recomendados);
   const recetasUltimasQuery = useQuery('recetasUltimas', recipesApi.recetasUltimas);
@@ -38,7 +38,7 @@ export default function HomeScreen({ navigation }) {
   return (
     <HomeLayout
       icon="account-circle-outline"
-      title={`Hola ${userQuery.data.user.nombre}`}
+      title={`Hola ${usuarioData.usuario.nombre}`}
       onIconPress={handleIconPress}
       padding={16}
     >

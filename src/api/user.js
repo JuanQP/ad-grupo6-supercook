@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-export async function test() {
-  const response = await axios.get('/');
+export async function getUser() {
+  const response = await axios.get('/yo');
   return response.data;
 }
 

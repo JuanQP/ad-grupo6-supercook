@@ -8,9 +8,9 @@ import * as userApi from '../../api/user';
 import RecipeCard from '../../components/RecipeCard';
 
 export default function IngredienteDeLaSemanaScreen({ navigation }) {
-  const { data: usuario } = useQuery('user', userApi.test, {
-    placeholderData: { user: { nombre: 'Invitado' } },
-    select: (data) => data.user
+  const { data: usuario } = useQuery('user', userApi.getUser, {
+    placeholderData: { nombre: 'Invitado' },
+    select: (data) => data.usuario,
   });
   const { data: ultimas } = useQuery('ingredienteDeLaSemana', recipesApi.ingredienteDeLaSemana);
 

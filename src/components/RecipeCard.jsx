@@ -26,7 +26,7 @@ function RecipeCard({ recipe, onPress }) {
           <Caption style={{ marginLeft: 5 }}>
             By
             {' '}
-            {recipe.user.nombre}
+            {recipe.usuario.nombre}
           </Caption>
         </View>
         <IconButton

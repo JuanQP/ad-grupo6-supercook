@@ -17,12 +17,12 @@ function PerfilScreen({ navigation }) {
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
   const queryClient = useQueryClient();
-  const { data } = useQuery('user', userApi.test, {
+  const { data } = useQuery('user', userApi.getUser, {
     placeholderData: {
-      user: {
+      usuario: {
         nombre: 'Invitado',
         apellido: 'Invitado',
-        descripcion: 'Una descripción...',
+        sobre_mi: 'Una descripción...',
         recetas: [],
         preferencias: [],
       },
@@ -36,14 +36,14 @@ function PerfilScreen({ navigation }) {
 
   function handleDetailsSubmit(values) {
     mutate({
-      id: data.user.id,
-      descripcion: values.descripcion,
+      id: data.usuario.id,
+      sobre_mi: values.sobre_mi,
     });
   }
 
   function handlePreferenceesSubmit(preferencias) {
     mutate({
-      id: data.user.id,
+      id: data.usuario.id,
       preferenciaIds: preferencias.map(keyExtractor),
     });
   }
@@ -59,21 +59,21 @@ function PerfilScreen({ navigation }) {
   return (
     <HomeLayout
       icon="account-circle-outline"
-      title={`Hola ${data.user.nombre}`}
+      title={`Hola ${data.usuario.nombre}`}
       onIconPress={() => {}}
       padding={0}
     >
       <ScrollView>
         <View style={{ flex: 1 }}>
-          <ProfileHeader user={data.user} onLogOutPress={handleLogOutButtonPress} />
+          <ProfileHeader user={data.usuario} onLogOutPress={handleLogOutButtonPress} />
           <View style={{ flex: 2, paddingHorizontal: 20 }}>
             <ProfileDetails
-              user={data.user}
+              user={data.usuario}
               onSubmit={handleDetailsSubmit}
               loading={isLoading}
             />
             <ProfilePreferences
-              user={data.user}
+              user={data.usuario}
               onSubmit={handlePreferenceesSubmit}
               loading={isLoading}
             />

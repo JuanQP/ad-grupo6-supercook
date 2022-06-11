@@ -11,7 +11,7 @@ import * as yup from 'yup';
 import { modalStyle, transparentColor } from '../styles/colors';
 
 const reviewSchema = yup.object({
-  descripcion: yup.string().max(200).required(),
+  sobre_mi: yup.string().max(200).required(),
 });
 
 function ProfileDetails({ user, loading, onSubmit }) {
@@ -20,7 +20,7 @@ function ProfileDetails({ user, loading, onSubmit }) {
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
   const initialValues = {
-    descripcion: user.descripcion,
+    sobre_mi: user.sobre_mi,
   };
 
   function handleFormikSubmit(values, actions) {
@@ -35,7 +35,7 @@ function ProfileDetails({ user, loading, onSubmit }) {
         <IconButton color={colors.backdrop} icon="pencil-circle" onPress={showModal} />
         <ActivityIndicator animating={loading} />
       </View>
-      <Text style={{ color: colors.primary }}>{user.descripcion}</Text>
+      <Text style={{ color: colors.primary }}>{user.sobre_mi}</Text>
       <Portal>
         <Modal
           visible={visible}
@@ -61,14 +61,14 @@ function ProfileDetails({ user, loading, onSubmit }) {
                     <View>
                       <TextInput
                         label=""
-                        onBlur={handleBlur('descripcion')}
-                        error={touched.descripcion && errors.descripcion}
-                        value={values.descripcion}
-                        onChangeText={handleChange('descripcion')}
+                        onBlur={handleBlur('sobre_mi')}
+                        error={touched.sobre_mi && errors.sobre_mi}
+                        value={values.sobre_mi}
+                        onChangeText={handleChange('sobre_mi')}
                         style={{ backgroundColor: transparentColor }}
                       />
                       <Caption style={{ alignSelf: 'flex-end' }}>
-                        {`${values.descripcion.length}/200`}
+                        {`${values.sobre_mi.length}/200`}
                       </Caption>
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>

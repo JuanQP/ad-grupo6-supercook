@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export async function preferencias() {
-  const response = await axios.get('/preferencias');
+export async function etiquetas() {
+  const response = await axios.get('/etiquetas');
   return response.data;
 }
