@@ -11,8 +11,8 @@ import { surface } from '../../styles/colors';
 import * as userApi from '../../api/user';
 
 const reviewSchema = yup.object({
-  password: yup.string().length(6).required(),
-  repeatPassword: yup.string().length(6).oneOf([yup.ref('password'), null], 'Las contraseñas no coinciden').required(),
+  password: yup.string().required(),
+  repeatPassword: yup.string().oneOf([yup.ref('password'), null], 'Las contraseñas no coinciden').required(),
 });
 const initialValues = {
   codigo: '',
