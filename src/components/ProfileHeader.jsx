@@ -8,6 +8,7 @@ import {
 } from '../styles/colors';
 
 function ProfileHeader({ user, onLogOutPress }) {
+
   const { colors } = useTheme();
   return (
     <ImageBackground
@@ -19,7 +20,12 @@ function ProfileHeader({ user, onLogOutPress }) {
       <Button mode="contained" style={{ alignSelf: 'flex-end' }} onPress={onLogOutPress}>
         Log out
       </Button>
-      <Avatar.Image size={60} source={avatarPlaceholder} />
+      <Avatar.Image
+        size={60}
+        source={user.img_perfil === '' ? avatarPlaceholder : {
+          uri: user.img_perfil
+        }}
+      />
       <Title style={styles.headerText}>{`${user.nombre} ${user.apellido}`}</Title>
       <View style={{ alignItems: 'center' }}>
         <Text style={{ ...styles.headerText, fontWeight: 'bold' }}>{user.recetas.length}</Text>
