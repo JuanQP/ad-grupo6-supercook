@@ -21,7 +21,7 @@ function renderCarouselItem({ item, index }) {
   )
 }
 
-function RecetaScreen({ route }) {
+function RecetaScreen({ navigation, route }) {
   const { data: receta, isLoading } = useQuery('receta',
     () => getReceta(route.params.recetaId),
     {
@@ -77,7 +77,7 @@ function RecetaScreen({ route }) {
             />
           )}
           {selectedTab === BUTTON_VALUES.Instrucciones && (
-            <PasosView receta={receta} />
+            <PasosView navigation={navigation} receta={receta} />
           )}
         </View>
       </ScrollView>

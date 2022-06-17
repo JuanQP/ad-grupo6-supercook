@@ -15,6 +15,7 @@ import RecomendadosScreen from './screens/Home/RecomendadosScreen';
 import UltimasRecetasScreen from './screens/Home/UltimasRecetasScreen';
 import IngredienteDeLaSemanaScreen from './screens/Home/IngredienteDeLaSemanaScreen';
 import RecetaScreen from './screens/Receta/RecetaScreen';
+import PasoScreen from './screens/Receta/PasoScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +26,11 @@ export default function App() {
         name="Login"
         component={LoginScreen}
         options={{ title: 'SuperCook 🍕', headerShown: false }}
+      />
+      <Stack.Screen
+        name="Paso"
+        component={PasoScreen}
+        options={{ title: 'Pasos', headerShown: false }}
       />
       <Stack.Screen
         name="Home"
