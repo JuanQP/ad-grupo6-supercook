@@ -1,27 +1,20 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from '../Home/HomeScreen';
-import PerfilScreen from '../Perfil/PerfilScreen';
-import RecomendadosScreen from '../Home/RecomendadosScreen';
-import UltimasRecetasScreen from '../Home/UltimasRecetasScreen';
-import IngredienteDeLaSemanaScreen from '../Home/IngredienteDeLaSemanaScreen';
+import HomeScreen from './HomeScreen';
+import RecomendadosScreen from './RecomendadosScreen';
+import UltimasRecetasScreen from './UltimasRecetasScreen';
+import IngredienteDeLaSemanaScreen from './IngredienteDeLaSemanaScreen';
 import RecetaScreen from '../Receta/RecetaScreen';
-import PasoScreen from '../Receta/PasoScreen';
 
 const Stack = createNativeStackNavigator();
 
-export default function HomeNavigator() {
+export default function HomeStack() {
   return (
     <Stack.Navigator initialRouteName='Home'>
       <Stack.Screen
         name="Home"
         component={HomeScreen}
-        options={{ title: 'Home', headerShown: false }}
-      />
-      <Stack.Screen
-        name="Paso"
-        component={PasoScreen}
-        options={{ title: 'Pasos', headerShown: false }}
+        options={{ title: 'Recomendados', headerShown: false }}
       />
       <Stack.Screen
         name="Recomendados"
@@ -44,5 +37,5 @@ export default function HomeNavigator() {
         options={{ title: 'Receta', headerShown: false }}
       />
     </Stack.Navigator>
-  );
+  )
 }
