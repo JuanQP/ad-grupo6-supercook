@@ -13,7 +13,7 @@ function HomeLayout({
         <Appbar.Action icon={icon} onPress={onIconPress} />
         <Appbar.Content title={title} />
       </Appbar.Header>
-      <View style={{ ...styles.container, padding }}>
+      <View style={{ ...styles.container, paddingHorizontal: padding }}>
         {children}
         <StatusBar />
       </View>

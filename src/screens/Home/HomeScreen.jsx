@@ -15,7 +15,7 @@ export default function HomeScreen({ navigation }) {
   const ingredienteDeLaSemanaQuery = useQuery('ingredienteDeLaSemana', recipesApi.ingredienteDeLaSemana);
 
   function handleIconPress() {
-    navigation.navigate('Perfil');
+    navigation.jumpTo('Perfil');
   }
 
   function handleRecipePress(recipe) {

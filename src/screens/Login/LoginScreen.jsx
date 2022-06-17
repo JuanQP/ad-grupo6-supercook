@@ -37,7 +37,7 @@ export default function LoginScreen({ navigation }) {
       if (!data.registrado) {
         navigation.navigate('Registracion3', data);
       } else {
-        navigation.navigate('Home');
+        navigation.navigate('AppNavigator');
       }
     },
     onError: (error) => {
