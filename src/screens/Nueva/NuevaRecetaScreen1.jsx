@@ -22,7 +22,7 @@ function NuevaRecetaScreen1 ({ navigation }) {
       setIsLoading(false);
     }
     if(data.existeReceta) {
-      navigation.navigate('ExisteReceta');
+      navigation.navigate('ExisteReceta', {nombre});
       return;
     }
     setRecetaContext({});

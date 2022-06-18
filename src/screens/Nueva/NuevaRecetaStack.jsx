@@ -5,6 +5,7 @@ import NuevaRecetaScreen2 from './NuevaRecetaScreen2';
 import { RecetaProvider } from '../../hooks/receta-context';
 import NuevaRecetaScreen3 from './NuevaRecetaScreen3';
 import NuevaRecetaAgregarPasoScreen from './NuevaRecetaAgregarPaso';
+import RecetaExistenteScreen from './RecetaExistenteScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +27,11 @@ export default function NuevaRecetaStack() {
           name="CrearReceta3"
           component={NuevaRecetaScreen3}
           options={{ title: 'Nueva Receta 3', headerShown: false }}
+        />
+        <Stack.Screen
+          name="ExisteReceta"
+          component={RecetaExistenteScreen}
+          options={{ title: 'Receta Existente', headerShown: false }}
         />
         <Stack.Screen
           name="CrearRecetaAgregarPaso"
