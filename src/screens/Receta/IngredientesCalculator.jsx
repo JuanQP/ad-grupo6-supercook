@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from "react-native";
 import { Button, Divider, IconButton, Modal, Portal, Surface, Text, TextInput, Title } from 'react-native-paper';
-
-function formatNumber(numero) {
-  return new Intl.NumberFormat('en', {maximumFractionDigits: 2}).format(numero);
-}
+import { formatNumber } from '../../utils/utils';
 
 function IngredientesCalculator({ personas, ingredientes, receta, onChange }) {
   const [selectedIngrediente, setSelectedIngrediente] = useState(null);
