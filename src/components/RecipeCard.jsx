@@ -14,10 +14,15 @@ function RecipeCard({ recipe, onPress }) {
     onPress(recipe);
   }
 
+  const imagenUrl = recipe?.fotosPortada?.[0]?.imagen;
+
   return (
     <View style={{ flexDirection: 'column', marginHorizontal: 10 }}>
       <TouchableWithoutFeedback onPress={handleImagePressed}>
-        <Image style={styles.imageContent} />
+        <Image 
+          style={styles.imageContent}
+          source={imagenUrl ? {uri: imagenUrl} : undefined}
+        />
       </TouchableWithoutFeedback>
       <Title>{recipe.nombre}</Title>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>

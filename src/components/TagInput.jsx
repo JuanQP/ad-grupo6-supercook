@@ -36,18 +36,19 @@ function TagInput({ label, mode, tags, onTagsChange }) {
               </Caption>
             </View>
           ) : (
-          tags.map((tag, i) => (
-            <Chip
-              key={i}
-              mode="outlined"
-              onPress={() => handleItemPress(i)}
-              style={{ margin: 1 }}
-              onClose={() => handleRemove(i)}
-            >
-              {tag}
-            </Chip>
-          ))
-        )}
+            <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+              {tags.map((tag, i) => (
+                <Chip
+                  key={i}
+                  mode="outlined"
+                  style={{ margin: 1 }}
+                  onClose={() => handleRemove(i)}
+                >
+                  {tag}
+                </Chip>
+              ))}
+            </View>
+          )}
       </View>
     </View>
   )
