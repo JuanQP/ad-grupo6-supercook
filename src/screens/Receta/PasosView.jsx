@@ -12,10 +12,10 @@ function PasosView({ receta, navigation }) {
     <View style={styles.container}>
       <Text style={{fontWeight: 'bold'}}>Preparación</Text>
       <Button onPress={handlePasoAPasoPress}>Cambiar a modo paso a paso</Button>
-      {receta.pasos.map((p, i) => (
+      {receta.pasosReceta.map((p, i) => (
         <View key={i} style={{flexDirection: 'row'}}>
           <Badge style={{alignSelf: 'center', marginRight: 5}}>{i+1}</Badge>
-          <Paragraph>{p.descripcion}</Paragraph>
+          <Paragraph>{p.descripcion_paso}</Paragraph>
         </View>
       ))}
     </View>

@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { Button, Divider, IconButton, Modal, Portal, Surface, Text, TextInput, Title } from 'react-native-paper';
 import { formatNumber } from '../../utils/utils';
 
-function IngredientesCalculator({ personas, ingredientes, receta, onChange }) {
+function IngredientesCalculator({ porciones, ingredientes, receta, onChange }) {
   const [selectedIngrediente, setSelectedIngrediente] = useState(null);
   const [selectedIngredienteIndex, setSelectedIngredienteIndex] = useState(null);
   const [cantidad, setCantidad] = useState("0");
@@ -15,7 +15,7 @@ function IngredientesCalculator({ personas, ingredientes, receta, onChange }) {
   function handlePersonasChange(newPersonas) {
     if(newPersonas < 0) return;
     if(newPersonas > 20) return;
-    const ratio = newPersonas / receta.personas;
+    const ratio = newPersonas / receta.porciones;
     const newIngredientes = receta.ingredientes.map(
       i => ({...i, cantidad: i.cantidad * ratio})
     );
@@ -26,7 +26,7 @@ function IngredientesCalculator({ personas, ingredientes, receta, onChange }) {
     if(isNaN(cantidad) || cantidad < 1) return;
     const ingredienteOriginal = receta.ingredientes[selectedIngredienteIndex];
     const ratio = Number(cantidad) / ingredienteOriginal.cantidad;
-    const newPersonas = receta.personas * ratio;
+    const newPersonas = receta.porciones * ratio;
     const newIngredientes = receta.ingredientes.map(
       i => ({...i, cantidad: i.cantidad * ratio})
     );
@@ -35,7 +35,7 @@ function IngredientesCalculator({ personas, ingredientes, receta, onChange }) {
   }
 
   function handleRestore() {
-    onChange(receta.personas, receta.ingredientes.slice());
+    onChange(receta.porciones, receta.ingredientes.slice());
   }
 
   function handleCantidadChange(value) {
@@ -54,14 +54,14 @@ function IngredientesCalculator({ personas, ingredientes, receta, onChange }) {
       <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
         <View style={{alignItems: 'center'}}>
           <Text>Ingredientes para</Text>
-          <Text style={{fontWeight: 'bold'}}>{formatNumber(personas)} porciones</Text>
+          <Text style={{fontWeight: 'bold'}}>{formatNumber(porciones)} porciones</Text>
         </View>
         <View>
           <TextInput
             mode='outlined'
-            left={<TextInput.Icon name="plus" onPress={() => handlePersonasChange(personas+1)} />}
-            right={<TextInput.Icon name="minus" onPress={() => handlePersonasChange(personas-1)} />}
-            value={formatNumber(personas)}
+            left={<TextInput.Icon name="plus" onPress={() => handlePersonasChange(porciones+1)} />}
+            right={<TextInput.Icon name="minus" onPress={() => handlePersonasChange(porciones-1)} />}
+            value={formatNumber(porciones)}
             editable={false}
             style={{textAlign: 'center'}}
           />
@@ -76,7 +76,7 @@ function IngredientesCalculator({ personas, ingredientes, receta, onChange }) {
       <View>
         {ingredientes.map((ingrediente, i) => (
           <View key={i} style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Text>{ingrediente.nombre}</Text>
+            <Text>{ingrediente.descripcion}</Text>
             <View style={{marginLeft: 'auto', width: 100, alignItems: 'center'}}>
               <Text>
                 {`${formatNumber(ingrediente.cantidad)} ${ingrediente.unidad}`}

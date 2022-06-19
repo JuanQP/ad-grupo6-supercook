@@ -26,21 +26,21 @@ function RecetaScreen({ navigation, route }) {
     () => getReceta(route.params.recetaId),
     {
       onSuccess: (receta) => {
-        setPersonas(receta.personas);
+        setPorciones(receta.porciones);
         setIngredientes(receta.ingredientes.slice());
       }
     }
   );
   const [selectedTab, setSelectedTab] = useState(BUTTON_VALUES.Ingredientes);
   const [ingredientes, setIngredientes] = useState([]);
-  const [personas, setPersonas] = useState(1);
+  const [porciones, setPorciones] = useState(1);
 
   function handleButtonPress(selected) {
     setSelectedTab(selected);
   }
 
-  function handleIngredientesChange(personas, ingredientes) {
-    setPersonas(personas);
+  function handleIngredientesChange(porciones, ingredientes) {
+    setPorciones(porciones);
     setIngredientes(ingredientes);
   }
 
@@ -56,7 +56,7 @@ function RecetaScreen({ navigation, route }) {
     <SafeAreaView style={{flex: 1}}>
       <View>
         <Carousel
-          data={receta.fotos}
+          data={receta.fotosPortada}
           renderItem={renderCarouselItem}
           sliderWidth={PAGE_WIDTH}
           itemWidth={PAGE_WIDTH*0.8}
@@ -65,13 +65,13 @@ function RecetaScreen({ navigation, route }) {
       <ScrollView style={{marginTop: 10}} keyboardShouldPersistTaps={'handled'}>
         <View style={styles.container}>
           <Title>{receta.nombre}</Title>
-          <UserDetail user={receta.user} />
+          <UserDetail user={receta.usuario} />
           <Text style={{ marginTop: 10 }}>{receta.descripcion}</Text>
           <ButtonGroup selected={selectedTab} onPress={handleButtonPress} />
           {selectedTab === BUTTON_VALUES.Ingredientes && (
             <IngredientesCalculator
               ingredientes={ingredientes}
-              personas={personas}
+              porciones={porciones}
               receta={receta}
               onChange={handleIngredientesChange}
             />
