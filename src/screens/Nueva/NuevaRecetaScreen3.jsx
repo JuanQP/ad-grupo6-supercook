@@ -17,8 +17,7 @@ function NuevaRecetaScreen3 ({ navigation }) {
   }
 
   async function handleSubmit() {
-    // navigation.navigate('CrearRecetaReview');
-    Alert.alert("Próximamente", "Próximo a implementar");
+    navigation.navigate('NuevaRecetaReview');
   }
 
   return (
@@ -26,11 +25,11 @@ function NuevaRecetaScreen3 ({ navigation }) {
       <View style={{flexGrow: 1}}>
         <Title>{receta.nombre}</Title>
         <Subheading>Paso a paso</Subheading>
-        {receta.pasos.length === 0 && (
+        {receta.pasosReceta.length === 0 && (
           <Caption>Todavía no agregaste ningún paso para preparar esta receta 😬</Caption>
         )}
-        {receta.pasos.map((p, i) => (
-          <Paso key={i} paso={p} index={i} onEditPress={handleEditPress} />
+        {receta.pasosReceta.map((paso, i) => (
+          <Paso key={i} paso={paso} onEditPress={handleEditPress} />
         ))}
         <Button
           mode="text"
@@ -45,7 +44,7 @@ function NuevaRecetaScreen3 ({ navigation }) {
           <Button
             style={{width: '100%'}}
             mode="contained"
-            disabled={receta.pasos.length === 0}
+            disabled={receta.pasosReceta.length === 0}
             onPress={handleSubmit}
           >
             Finalizar edición (3/3)

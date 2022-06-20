@@ -2,18 +2,11 @@ import React from 'react';
 import { View } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useQuery } from 'react-query';
-import { getReceta } from '../../api/recipes';
 import PasosViewer from '../../components/PasosViewer';
+import { useReceta } from '../../hooks/receta-context';
 
-function PasoScreen({ navigation, route }) {
-  const { recetaId } = route.params;
-  const { data: pasosReceta, isLoading } = useQuery('receta',
-    () => getReceta(recetaId),
-    {
-      select: (receta) => receta.pasosReceta,
-    },
-  );
+function PasosReviewScreen({ navigation }) {
+  const { value: receta } = useReceta();
 
   function handleCerrarPress() {
     navigation.goBack();
@@ -30,9 +23,9 @@ function PasoScreen({ navigation, route }) {
           onPress={handleCerrarPress}
         />
       </View>
-      <PasosViewer pasosReceta={pasosReceta} />
+      <PasosViewer pasosReceta={receta.pasosReceta} />
     </SafeAreaView>
   )
 }
 
-export default PasoScreen;
+export default PasosReviewScreen;

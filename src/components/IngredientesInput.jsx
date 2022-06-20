@@ -11,22 +11,22 @@ const UNIDADES = [
 
 function IngredientesInput({ mode, ingredientes, onIngredientesChange }) {
 
-  const [nombre, setNombre] = useState('');
+  const [descripcion, setDescripcion] = useState('');
   const [cantidad, setCantidad] = useState('');
   const [unidad, setUnidad] = useState(null);
   const itemInput = useRef(null);
   const cantidadInput = useRef(null);
 
   function handleSubmit() {
-    if(nombre === '' || cantidad === '' || unidad === null) return;
+    if(descripcion === '' || cantidad === '' || unidad === null) return;
     const nuevoIngrediente = {
-      nombre,
+      descripcion,
       cantidad,
       unidadId: unidad,
       unidad: UNIDADES.find(u => u.value === unidad).label,
     };
     onIngredientesChange([...ingredientes, nuevoIngrediente]);
-    setNombre('');
+    setDescripcion('');
     setCantidad('');
     itemInput.current.focus();
   }
@@ -46,7 +46,7 @@ function IngredientesInput({ mode, ingredientes, onIngredientesChange }) {
         )}
         {ingredientes.map((ingrediente, i) => (
           <View key={i} style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Text>{ingrediente.nombre}</Text>
+            <Text>{ingrediente.descripcion}</Text>
             <View style={{marginLeft: 'auto', width: 100, alignItems: 'center'}}>
               <Text>
                 {`${formatNumber(ingrediente.cantidad)} ${ingrediente.unidad}`}
@@ -65,13 +65,13 @@ function IngredientesInput({ mode, ingredientes, onIngredientesChange }) {
           style={{flexGrow: 1}}
           label="Item"
           mode={mode}
-          value={nombre}
+          value={descripcion}
           ref={itemInput}
           blurOnSubmit={true}
           returnKeyType="next"
           placeholder="Arroz Blanco"
           onSubmitEditing={() => cantidadInput.current.focus()}
-          onChangeText={setNombre}
+          onChangeText={setDescripcion}
         />
         <TextInput
           style={{flexGrow: 1}}

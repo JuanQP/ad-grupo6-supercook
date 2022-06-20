@@ -6,6 +6,9 @@ import { RecetaProvider } from '../../hooks/receta-context';
 import NuevaRecetaScreen3 from './NuevaRecetaScreen3';
 import NuevaRecetaAgregarPasoScreen from './NuevaRecetaAgregarPaso';
 import RecetaExistenteScreen from './RecetaExistenteScreen';
+import NuevaRecetaReviewScreen from './NuevaRecetaReviewScreen';
+import PasosReviewScreen from './PasosReviewScreen';
+import RecetaEnviadaScreen from './RecetaEnviadaScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -37,6 +40,21 @@ export default function NuevaRecetaStack() {
           name="CrearRecetaAgregarPaso"
           component={NuevaRecetaAgregarPasoScreen}
           options={{ title: 'Nuevo Paso', headerShown: false }}
+        />
+        <Stack.Screen
+          name="NuevaRecetaReview"
+          component={NuevaRecetaReviewScreen}
+          options={{ title: 'Review', headerShown: false }}
+        />
+        <Stack.Screen
+          name="PasosReview"
+          component={PasosReviewScreen}
+          options={{ title: 'Pasos Review', headerShown: false }}
+        />
+        <Stack.Screen
+          name="RecetaEnviada"
+          component={RecetaEnviadaScreen}
+          options={{ title: 'Receta Enviada', headerShown: false }}
         />
       </Stack.Navigator>
     </RecetaProvider>

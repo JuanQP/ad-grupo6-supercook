@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { Button, Divider, IconButton, Modal, Portal, Surface, Text, TextInput, Title } from 'react-native-paper';
 import { formatNumber } from '../../utils/utils';
 
-function IngredientesCalculator({ porciones, ingredientes, receta, onChange }) {
+function IngredientesCalculator({ porciones, editable=true, ingredientes, receta, onChange }) {
   const [selectedIngrediente, setSelectedIngrediente] = useState(null);
   const [selectedIngredienteIndex, setSelectedIngredienteIndex] = useState(null);
   const [cantidad, setCantidad] = useState("0");
@@ -85,6 +85,7 @@ function IngredientesCalculator({ porciones, ingredientes, receta, onChange }) {
             <IconButton
               icon="square-edit-outline"
               size={20}
+              disabled={!editable}
               onPress={() => handleEditIngrediente(ingrediente, i)}
             />
           </View>

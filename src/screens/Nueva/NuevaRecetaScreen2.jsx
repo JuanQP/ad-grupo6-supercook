@@ -42,12 +42,13 @@ function NuevaRecetaScreen2 ({ navigation, route }) {
     setRecetaContext({
       nombre,
       descripcion,
-      porciones,
+      porciones: Number(porciones),
       tiempo,
       categoria,
       etiquetas,
       ingredientes,
-      pasos: receta?.pasos ?? [],
+      pasosReceta: receta?.pasosReceta ?? [],
+      fotosPortada: receta?.fotosPortada ?? [],
     });
     navigation.navigate('CrearReceta3');
   }

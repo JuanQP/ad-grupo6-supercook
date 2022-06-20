@@ -9,7 +9,13 @@ function UserDetail({ user }) {
   const { colors } = useTheme();
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
-      <Avatar.Image size={48} source={avatarPlaceholder} />
+      <Avatar.Image
+        size={48}
+        source={user.img_perfil === '' ? avatarPlaceholder : {
+          uri: user.img_perfil
+        }}
+      />
+      
       <View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <IconButton 

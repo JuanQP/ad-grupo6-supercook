@@ -7,7 +7,8 @@ import { useReceta } from '../../hooks/receta-context';
 function NuevaRecetaAgregarPasoScreen({ navigation, route }) {
   const index = route?.params?.index;
   const { value: receta, onChange: setReceta } = useReceta();
-  const [descripcion, setDescripcion] = useState(Number.isInteger(index) ? receta.pasos[index].descripcion : '');
+  const [descripcion_paso, setDescripcion_paso] = useState(Number.isInteger(index) ? receta.pasosReceta[index].descripcion_paso : '');
+  const [numero_paso] = useState(Number.isInteger(index) ? receta.pasosReceta[index].numero_paso : receta.pasosReceta.length+1);
   const { colors }  = useTheme();
 
   function handleCancelar() {
@@ -17,11 +18,12 @@ function NuevaRecetaAgregarPasoScreen({ navigation, route }) {
   function handleGuardar() {
     const creandoPaso = index === undefined;
     const nuevoPaso = {
-      descripcion,
+      numero_paso,
+      descripcion_paso,
       media: [],
     };
     const nuevosPasos = [
-      ...receta.pasos,
+      ...receta.pasosReceta,
     ];
     if(creandoPaso) {
       nuevosPasos.push(nuevoPaso);
@@ -31,7 +33,7 @@ function NuevaRecetaAgregarPasoScreen({ navigation, route }) {
     }
     setReceta({
       ...receta,
-      pasos: nuevosPasos,
+      pasosReceta: nuevosPasos,
     });
     navigation.goBack();
   }
@@ -40,14 +42,14 @@ function NuevaRecetaAgregarPasoScreen({ navigation, route }) {
     <SafeAreaView style={{flex: 1, paddingHorizontal: 20}}>
       <View style={{flexGrow: 1}}>
         <Title>Nuevo paso</Title>
-        <Subheading>Paso {(index ?? receta.pasos.length) + 1}</Subheading>
+        <Subheading>Paso {numero_paso}</Subheading>
         <TextInput
           label="Descripción del paso"
           mode="outlined"
-          value={descripcion}
+          value={descripcion_paso}
           multiline
           numberOfLines={2}
-          onChangeText={setDescripcion}
+          onChangeText={setDescripcion_paso}
         />
         <View style={{marginTop: 20}}>
           <Subheading>Agregar imágenes/videos deseados</Subheading>

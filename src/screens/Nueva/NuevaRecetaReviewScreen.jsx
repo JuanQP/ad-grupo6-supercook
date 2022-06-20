@@ -1,20 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ActivityIndicator, Text, Title } from "react-native-paper";
-import { useQuery } from 'react-query';
-import { getReceta } from '../../api/recipes';
+import { FAB, Text, Title } from "react-native-paper";
 import Carousel from 'react-native-snap-carousel';
 import { Dimensions, Image, ScrollView, StyleSheet, View } from "react-native";
 import { nullImageColor } from '../../styles/colors';
-import UserDetail from './UserDetail';
-import ButtonGroup, { BUTTON_VALUES } from './ButtonGroup';
-import IngredientesCalculator from './IngredientesCalculator';
-import PasosView from './PasosView';
+import UserDetail from '../Receta/UserDetail';
+import ButtonGroup, { BUTTON_VALUES } from '../Receta/ButtonGroup';
+import IngredientesCalculator from '../Receta/IngredientesCalculator';
+import PasosView from '../Receta/PasosView';
+import { useReceta } from '../../hooks/receta-context';
+import { useQuery } from 'react-query';
+import { getUser } from '../../api/user';
 import ImagePlaceholder from '../../components/ImagePlaceholder';
 
 const PAGE_WIDTH = Dimensions.get('window').width;
 
-function renderCarouselItem({ item, index }) {
+function renderCarouselItem({ item }) {
   const imagenUrl = item?.imagen;
   return (
     <Image
@@ -24,20 +25,20 @@ function renderCarouselItem({ item, index }) {
   )
 }
 
-function RecetaScreen({ navigation, route }) {
-  const { data: receta, isLoading } = useQuery('receta',
-    () => getReceta(route.params.recetaId),
-    {
-      onSuccess: (receta) => {
-        setPorciones(receta.porciones);
-        setIngredientes(receta.ingredientes.slice());
-      }
-    }
-  );
+function NuevaRecetaReviewScreen({ navigation }) {
+  const { data: usuario, isLoading: isUsuarioLoading } = useQuery('usuario', getUser, {
+    select: (data) => data.usuario,
+  });
+  const { value: receta } = useReceta();
   const [selectedTab, setSelectedTab] = useState(BUTTON_VALUES.Ingredientes);
   const [ingredientes, setIngredientes] = useState([]);
   const [porciones, setPorciones] = useState(1);
 
+  useEffect(() => {
+    setPorciones(receta.porciones);
+    setIngredientes(receta.ingredientes.slice());
+  }, []);
+    
   function handleButtonPress(selected) {
     setSelectedTab(selected);
   }
@@ -48,15 +49,11 @@ function RecetaScreen({ navigation, route }) {
   }
 
   function handlePasoAPasoPress() {
-    navigation.navigate('Paso', { recetaId: receta.id });
+    navigation.navigate('PasosReview');
   }
-  
-  if(isLoading) {
-    return (
-      <SafeAreaView style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-        <ActivityIndicator animating={true} color={'gray'} />
-      </SafeAreaView>
-    )
+
+  function handleSavePress() {
+    navigation.navigate('RecetaEnviada');
   }
 
   return (
@@ -65,15 +62,15 @@ function RecetaScreen({ navigation, route }) {
         <Carousel
           data={receta.fotosPortada}
           renderItem={renderCarouselItem}
+          ListEmptyComponent={ <ImagePlaceholder texto="Sin imágenes" /> }
           sliderWidth={PAGE_WIDTH}
           itemWidth={PAGE_WIDTH*0.8}
-          ListEmptyComponent={ImagePlaceholder}
         />
       </View>
       <ScrollView keyboardShouldPersistTaps={'handled'}>
         <View style={styles.container}>
           <Title>{receta.nombre}</Title>
-          <UserDetail user={receta.usuario} />
+          { !isUsuarioLoading  && <UserDetail user={usuario} />}
           <Text style={{ marginTop: 10 }}>{receta.descripcion}</Text>
           <ButtonGroup selected={selectedTab} onPress={handleButtonPress} />
           {selectedTab === BUTTON_VALUES.Ingredientes && (
@@ -81,6 +78,7 @@ function RecetaScreen({ navigation, route }) {
               ingredientes={ingredientes}
               porciones={porciones}
               receta={receta}
+              editable={false}
               onChange={handleIngredientesChange}
             />
           )}
@@ -93,6 +91,12 @@ function RecetaScreen({ navigation, route }) {
           )}
         </View>
       </ScrollView>
+      <FAB
+        style={styles.fab}
+        small
+        icon="content-save"
+        onPress={handleSavePress}
+      />
     </SafeAreaView>
   );
 }
@@ -107,7 +111,13 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 30,
     marginVertical: 10,
+  },
+  fab: {
+    position: 'absolute',
+    margin: 16,
+    right: 0,
+    bottom: 0,
   }
 });
 
-export default RecetaScreen;
+export default NuevaRecetaReviewScreen;
