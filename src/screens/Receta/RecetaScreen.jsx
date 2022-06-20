@@ -4,7 +4,7 @@ import { ActivityIndicator, Text, Title } from "react-native-paper";
 import { useQuery } from 'react-query';
 import { getReceta } from '../../api/recipes';
 import Carousel from 'react-native-snap-carousel';
-import { Dimensions, ScrollView, StyleSheet, View } from "react-native";
+import { Dimensions, Image, ScrollView, StyleSheet, View } from "react-native";
 import { nullImageColor } from '../../styles/colors';
 import UserDetail from './UserDetail';
 import ButtonGroup, { BUTTON_VALUES } from './ButtonGroup';
@@ -14,10 +14,12 @@ import PasosView from './PasosView';
 const PAGE_WIDTH = Dimensions.get('window').width;
 
 function renderCarouselItem({ item, index }) {
+  const imagenUrl = item?.imagen;
   return (
-    <View style={styles.imagePlaceholder}>
-      <Title>{`#${index}: "${item}"`}</Title>
-    </View>
+    <Image
+      style={styles.image}
+      source={imagenUrl ? {uri: imagenUrl} : undefined}
+    />
   )
 }
 
@@ -62,7 +64,7 @@ function RecetaScreen({ navigation, route }) {
           itemWidth={PAGE_WIDTH*0.8}
         />
       </View>
-      <ScrollView style={{marginTop: 10}} keyboardShouldPersistTaps={'handled'}>
+      <ScrollView keyboardShouldPersistTaps={'handled'}>
         <View style={styles.container}>
           <Title>{receta.nombre}</Title>
           <UserDetail user={receta.usuario} />
@@ -86,11 +88,9 @@ function RecetaScreen({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-  imagePlaceholder: {
-    backgroundColor: nullImageColor,
+  image: {
     borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: nullImageColor,
     width: PAGE_WIDTH*0.8,
     height: 200
   },
