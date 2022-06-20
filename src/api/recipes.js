@@ -21,11 +21,6 @@ export async function getReceta(recetaId) {
 }
 
 export async function checkearReceta(nombre) {
-  // const { data } = await axios.get(`/checkearReceta/${recetaId}`);
-  // return data.receta;
-  return await new Promise((resolve, _) => {
-    setTimeout(() => {
-      resolve({existeReceta: nombre === 'existe'});
-    }, 1000);
-  });
+  const { data } = await axios.get(`/checkearReceta`, { params: { nombre } });
+  return data;
 }

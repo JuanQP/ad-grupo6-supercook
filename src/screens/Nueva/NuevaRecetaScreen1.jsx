@@ -13,15 +13,15 @@ function NuevaRecetaScreen1 ({ navigation }) {
   async function handleSubmit() {
     if(nombre === '') return;
     setIsLoading(true);
-    let data;
+    let existeReceta;
     try {
-      data = await checkearReceta(nombre);
+      existeReceta = await checkearReceta(nombre);
     } catch {
       return;
     } finally {
       setIsLoading(false);
     }
-    if(data.existeReceta) {
+    if(existeReceta) {
       navigation.navigate('ExisteReceta', {nombre});
       return;
     }
