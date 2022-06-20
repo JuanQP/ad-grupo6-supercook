@@ -88,7 +88,7 @@ function NuevaRecetaScreen2 ({ navigation, route }) {
           left={<TextInput.Icon name="account-outline" />}
         />
         <TextInput
-          label="Tiempo de cocción (Minutos)"
+          label="Tiempo de preparacion (Minutos)"
           mode="outlined"
           placeholder="45"
           keyboardType='decimal-pad'
