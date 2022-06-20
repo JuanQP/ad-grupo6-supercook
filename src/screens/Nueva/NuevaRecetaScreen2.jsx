@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useQuery } from 'react-query';
 import { ScrollView, View } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Avatar, Button, TextInput, Title, useTheme } from 'react-native-paper';
@@ -6,6 +7,8 @@ import SingleDropdown from '../../components/SingleDropdown';
 import TagInput from '../../components/TagInput';
 import IngredientesInput from '../../components/IngredientesInput';
 import { useReceta } from '../../hooks/receta-context';
+import * as categoriesApi from '../../api/categories';
+
 
 const CATEGORIAS = [
   {value: 1, label: "Pizza"},
@@ -18,10 +21,17 @@ const CATEGORIAS = [
   {value: 8, label: "Ensaladas"},
 ]
 
+
+
+
+
+
 function NuevaRecetaScreen2 ({ navigation, route }) {
   const { colors } = useTheme();
   const { nombre } = route.params;
   const { value: receta, onChange: setRecetaContext } = useReceta();
+  const CATEGORIAS2 = useQuery('categories', categoriesApi.categorias);
+  console.log(CATEGORIAS2);
 
   const [descripcion, setDescripcion] = useState('');
   const [porciones, setPorciones] = useState('');
@@ -79,7 +89,7 @@ function NuevaRecetaScreen2 ({ navigation, route }) {
           left={<TextInput.Icon name="account-outline" />}
         />
         <TextInput
-          label="Tiempo de cocción (Minutos)"
+          label="Tiempo de preparacion (Minutos)"
           mode="outlined"
           placeholder="45"
           keyboardType='decimal-pad'

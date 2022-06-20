@@ -13,21 +13,24 @@ function IngredientesInput({ mode, ingredientes, onIngredientesChange }) {
 
   const [descripcion, setDescripcion] = useState('');
   const [cantidad, setCantidad] = useState('');
-  const [unidad, setUnidad] = useState(null);
+  const [unidad, setUnidad] = useState('');
   const itemInput = useRef(null);
   const cantidadInput = useRef(null);
+  const unidadInput = useRef(null);
 
   function handleSubmit() {
     if(descripcion === '' || cantidad === '' || unidad === null) return;
     const nuevoIngrediente = {
       descripcion,
       cantidad,
-      unidadId: unidad,
-      unidad: UNIDADES.find(u => u.value === unidad).label,
+      unidad
+      //unidadId: unidad,
+      //unidad: UNIDADES.find(u => u.value === unidad).label,
     };
     onIngredientesChange([...ingredientes, nuevoIngrediente]);
     setDescripcion('');
     setCantidad('');
+    setUnidad('');
     itemInput.current.focus();
   }
 
@@ -83,13 +86,23 @@ function IngredientesInput({ mode, ingredientes, onIngredientesChange }) {
           keyboardType="decimal-pad"
           onChangeText={setCantidad}
         />
-        <SingleDropdown
+        <TextInput
+          style={{flexGrow: 1}}
+          label="Unidad"
+          mode={mode}
+          value={unidad}
+          ref={unidadInput}
+          placeholder="Unidad"
+          //keyboardType="decimal-pad"
+          onChangeText={setUnidad}
+        />
+                {/* <SingleDropdown
           label="Unidad"
           mode={mode}
           list={UNIDADES}
           value={unidad}
           setValue={setUnidad}
-        />
+        /> */}
         <IconButton
           icon="plus-box-outline"
           onPress={handleSubmit}
