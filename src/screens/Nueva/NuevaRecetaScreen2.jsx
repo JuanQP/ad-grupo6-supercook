@@ -10,24 +10,28 @@ import { useReceta } from '../../hooks/receta-context';
 import * as categoriesApi from '../../api/categories';
 
 
-// const CATEGORIAS = [
-//   {value: 1, label: "Pizza"},
-//   {value: 2, label: "Hamburguesa"},
-//   {value: 3, label: "Milanesa"},
-//   {value: 4, label: "Americano"},
-//   {value: 5, label: "Postres"},
-//   {value: 6, label: "Dieta"},
-//   {value: 7, label: "Empanadas"},
-//   {value: 8, label: "Ensaladas"},
-// ]
+const CATEGORIAS = [
+  {value: 1, label: "Pizza"},
+  {value: 2, label: "Hamburguesa"},
+  {value: 3, label: "Milanesa"},
+  {value: 4, label: "Americano"},
+  {value: 5, label: "Postres"},
+  {value: 6, label: "Dieta"},
+  {value: 7, label: "Empanadas"},
+  {value: 8, label: "Ensaladas"},
+]
 
 
-const CATEGORIAS = useQuery('categories', categoriesApi.categorias);
+
+
+
 
 function NuevaRecetaScreen2 ({ navigation, route }) {
   const { colors } = useTheme();
   const { nombre } = route.params;
   const { value: receta, onChange: setRecetaContext } = useReceta();
+  const CATEGORIAS2 = useQuery('categories', categoriesApi.categorias);
+  console.log(CATEGORIAS2);
 
   const [descripcion, setDescripcion] = useState('');
   const [porciones, setPorciones] = useState('');
