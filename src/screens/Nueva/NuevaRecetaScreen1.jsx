@@ -21,12 +21,14 @@ function NuevaRecetaScreen1 ({ navigation }) {
     } finally {
       setIsLoading(false);
     }
+    const nombreDeReceta = nombre;
+    setNombre('');
     if(existeReceta) {
-      navigation.navigate('ExisteReceta', {nombre});
+      navigation.navigate('ExisteReceta', {nombre: nombreDeReceta});
       return;
     }
     setRecetaContext({});
-    navigation.navigate('CrearReceta2', {nombre});
+    navigation.navigate('CrearReceta2', {nombre: nombreDeReceta});
   }
 
   return (
