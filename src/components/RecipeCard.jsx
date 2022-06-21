@@ -17,14 +17,14 @@ function RecipeCard({ recipe, onPress }) {
   const imagenUrl = recipe?.fotosPortada?.[0]?.imagen;
 
   return (
-    <View style={{ flexDirection: 'column', marginHorizontal: 10 }}>
+    <View style={{ flexDirection: 'column', marginHorizontal: 10, width: 280}}>
       <TouchableWithoutFeedback onPress={handleImagePressed}>
         <Image 
           style={styles.imageContent}
           source={imagenUrl ? {uri: imagenUrl} : undefined}
         />
       </TouchableWithoutFeedback>
-      <Title>{recipe.nombre}</Title>
+      <Title numberOfLines={1}>{recipe.nombre}</Title>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Avatar.Image size={24} theme={{ colors: { primary: nullImageColor } }} />
