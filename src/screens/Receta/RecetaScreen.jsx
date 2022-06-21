@@ -61,7 +61,7 @@ function RecetaScreen({ navigation, route }) {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <View>
+      <View style={{marginTop:15}}>
         <Carousel
           data={receta.fotosPortada}
           renderItem={renderCarouselItem}
