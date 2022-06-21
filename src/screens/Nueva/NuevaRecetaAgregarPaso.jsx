@@ -41,7 +41,7 @@ function NuevaRecetaAgregarPasoScreen({ navigation, route }) {
   return (
     <SafeAreaView style={{flex: 1, paddingHorizontal: 20}}>
       <View style={{flexGrow: 1}}>
-        <Title>Nuevo paso</Title>
+        <Title style={{marginTop:15}}>Nuevo paso</Title>
         <Subheading>Paso {numero_paso}</Subheading>
         <TextInput
           label="Descripción del paso"
@@ -53,7 +53,7 @@ function NuevaRecetaAgregarPasoScreen({ navigation, route }) {
         />
         <View style={{marginTop: 20}}>
           <Subheading>Agregar imágenes/videos deseados</Subheading>
-          <View style={{flexDirection: 'row'}}>
+          <View style={{flexDirection: 'row', marginTop: 15}}>
             <View style={{...styles.multimediaContainer, backgroundColor: colors.background}}>
               <Avatar.Icon icon="camera" color={colors.disabled} style={{backgroundColor: 'transparent'}} />
             </View>
@@ -64,7 +64,7 @@ function NuevaRecetaAgregarPasoScreen({ navigation, route }) {
         </View>
       </View>
       <View style={{flexGrow: 1, justifyContent: 'flex-end'}}>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row', marginBottom: 10}}>
           <Button
             style={{flex: 1, width: '100%'}}
             mode="outlined"

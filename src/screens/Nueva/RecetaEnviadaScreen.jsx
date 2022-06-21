@@ -18,7 +18,7 @@ function RecetaEnviadaScreen({ navigation }) {
           Tu receta va a ser validada. Cuando finalicemos te avisamos!!!
         </Text>
       </View>
-      <View style={{flexGrow: 1, justifyContent: 'flex-end'}}>
+      <View style={{flexGrow: 1, justifyContent: 'flex-end', marginBottom: 10}}>
         <Button
           mode="contained"
           onPress={handleHomePress}

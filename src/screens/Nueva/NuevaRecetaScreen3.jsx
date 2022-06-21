@@ -40,7 +40,7 @@ function NuevaRecetaScreen3 ({ navigation }) {
         </Button>
       </View>
       <View style={{flexGrow: 1, justifyContent: 'flex-end'}}>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row', marginBottom: 10}}>
           <Button
             style={{width: '100%'}}
             mode="contained"

@@ -25,14 +25,14 @@ function UserDetail({ user }) {
             style={{padding: 0, margin: 0}}
           />
           <Text>{`${user.nombre} ${user.apellido}`}</Text>
-        </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <IconButton 
+        {/*</View>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>*/}
+          {/* <IconButton 
             icon="map-marker"
             size={20}
             color={colors.disabled}
             style={{padding: 0, margin: 0}}
-          />
+          /> */}
           <Caption>{user.provincia}</Caption>
         </View>
       </View>
