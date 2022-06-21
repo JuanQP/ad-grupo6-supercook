@@ -76,6 +76,7 @@ function NuevaRecetaAgregarPasoScreen({ navigation, route }) {
             style={{flex: 1, width: '100%'}}
             mode="contained"
             onPress={handleGuardar}
+            disabled={descripcion_paso === ''}
           >
             Guardar
           </Button>
