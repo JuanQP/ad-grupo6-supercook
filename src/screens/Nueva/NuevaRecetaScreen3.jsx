@@ -23,8 +23,8 @@ function NuevaRecetaScreen3 ({ navigation }) {
   return (
     <SafeAreaView style={{flex: 1, paddingHorizontal: 20}}>
       <View style={{flexGrow: 1}}>
-        <Title>{receta.nombre}</Title>
-        <Subheading>Paso a paso</Subheading>
+        <Title style={{marginTop:15}}>{receta.nombre}</Title>
+        <Subheading style={{marginTop:10}}>Paso a paso</Subheading>
         {receta.pasosReceta.length === 0 && (
           <Caption>Todavía no agregaste ningún paso para preparar esta receta 😬</Caption>
         )}

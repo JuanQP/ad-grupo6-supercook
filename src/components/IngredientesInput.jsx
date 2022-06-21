@@ -40,7 +40,7 @@ function IngredientesInput({ mode, ingredientes, onIngredientesChange }) {
 
   return (
     <View>
-      <Title>Ingredientes</Title>
+      <Title style={{marginTop:10}}>Ingredientes</Title>
       <View>
         {ingredientes.length === 0 && (
           <Caption>

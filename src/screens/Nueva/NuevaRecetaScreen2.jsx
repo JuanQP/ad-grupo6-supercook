@@ -56,8 +56,8 @@ function NuevaRecetaScreen2 ({ navigation, route }) {
   return (
     <SafeAreaView style={{flex: 1, paddingHorizontal: 20}}>
       <ScrollView keyboardShouldPersistTaps="always">
-        <Title>{nombre}</Title>
-        <View style={{backgroundColor: colors.background, borderRadius: 10, alignItems: 'center', justifyContent: 'center', height: 200}}>
+        <Title style={{marginTop:15}}>{nombre}</Title>
+        <View style={{marginTop:10, backgroundColor: colors.background, borderRadius: 10, alignItems: 'center', justifyContent: 'center', height: 200}}>
           <Avatar.Icon icon="camera" color={colors.disabled} style={{backgroundColor: 'transparent'}} />
         </View>
         <TextInput
@@ -68,6 +68,7 @@ function NuevaRecetaScreen2 ({ navigation, route }) {
           numberOfLines={2}
           value={descripcion}
           onChangeText={setDescripcion}
+          style={{marginTop:10}}
         />
         <TextInput
           label="Porciones"
