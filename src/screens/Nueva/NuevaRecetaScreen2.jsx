@@ -8,6 +8,7 @@ import TagInput from '../../components/TagInput';
 import IngredientesInput from '../../components/IngredientesInput';
 import { useReceta } from '../../hooks/receta-context';
 import * as categoriesApi from '../../api/categories';
+import CargaImagen from '../../components/CargaImagen';
 
 function NuevaRecetaScreen2 ({ navigation, route }) {
   const { colors } = useTheme();
@@ -57,8 +58,9 @@ function NuevaRecetaScreen2 ({ navigation, route }) {
     <SafeAreaView style={{flex: 1, paddingHorizontal: 20}}>
       <ScrollView keyboardShouldPersistTaps="always">
         <Title style={{marginTop:15}}>{nombre}</Title>
-        <View style={{marginTop:10, backgroundColor: colors.background, borderRadius: 10, alignItems: 'center', justifyContent: 'center', height: 200}}>
-          <Avatar.Icon icon="camera" color={colors.disabled} style={{backgroundColor: 'transparent'}} />
+        <View style={{marginTop:10, borderRadius: 10, alignItems: 'center', justifyContent: 'center', height: 260}}>
+          {/* <Avatar.Icon icon="camera" color={colors.disabled} style={{backgroundColor: 'transparent'}} /> */}
+          <CargaImagen/>
         </View>
         <TextInput
           label="Descripción"
@@ -68,7 +70,7 @@ function NuevaRecetaScreen2 ({ navigation, route }) {
           numberOfLines={2}
           value={descripcion}
           onChangeText={setDescripcion}
-          style={{marginTop:10}}
+          style={{marginTop:50}}
         />
         <TextInput
           label="Porciones"

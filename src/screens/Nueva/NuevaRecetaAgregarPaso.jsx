@@ -3,6 +3,8 @@ import { StyleSheet, View } from "react-native";
 import { Avatar, Button, Subheading, TextInput, Title, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useReceta } from '../../hooks/receta-context';
+import CargaImagenPaso from '../../components/CargaImagenPaso';
+import CargaVideoPaso from '../../components/CargaVideoPaso';
 
 function NuevaRecetaAgregarPasoScreen({ navigation, route }) {
   const index = route?.params?.index;
@@ -55,10 +57,12 @@ function NuevaRecetaAgregarPasoScreen({ navigation, route }) {
           <Subheading>Agregar imágenes/videos deseados</Subheading>
           <View style={{flexDirection: 'row', marginTop: 15}}>
             <View style={{...styles.multimediaContainer, backgroundColor: colors.background}}>
-              <Avatar.Icon icon="camera" color={colors.disabled} style={{backgroundColor: 'transparent'}} />
+              {/* <Avatar.Icon icon="camera" color={colors.disabled} style={{backgroundColor: 'transparent'}} /> */}
+              <CargaImagenPaso/>
             </View>
             <View style={{...styles.multimediaContainer, backgroundColor: colors.background}}>
-              <Avatar.Icon icon="video" color={colors.disabled} style={{backgroundColor: 'transparent'}} />
+              {/* <Avatar.Icon icon="video" color={colors.disabled} style={{backgroundColor: 'transparent'}} /> */}
+              <CargaVideoPaso/>
             </View>
           </View>
         </View>
