@@ -20,7 +20,7 @@ export default function RecomendadosScreen({ navigation }) {
 
   function handleRecipePress(recipe) {
     const { user, ...receta } = recipe;
-    Alert.alert('🍔', JSON.stringify(receta));
+    navigation.navigate('Receta', { recetaId: recipe.id })
   }
 
   return (

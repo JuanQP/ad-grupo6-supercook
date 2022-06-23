@@ -24,3 +24,9 @@ export async function checkearReceta(nombre) {
   const { data } = await axios.get(`/checkearReceta`, { params: { nombre } });
   return data;
 }
+
+export async function crearReceta(receta) {
+  const { data } = await axios.post('/recetas', receta);
+  return data;
+}
+
