@@ -10,7 +10,7 @@ import { useReceta } from '../../hooks/receta-context';
 import * as categoriesApi from '../../api/categories';
 import CargaImagen from '../../components/CargaImagen';
 
-function NuevaRecetaScreen2 ({ navigation, route }) {
+function NuevaRecetaScreen2({ navigation, route }) {
   const { colors } = useTheme();
   const { nombre } = route.params;
   const { value: receta, onChange: setRecetaContext } = useReceta();
@@ -30,6 +30,8 @@ function NuevaRecetaScreen2 ({ navigation, route }) {
   const [categoria, setCategoria] = useState(null);
   const [etiquetas, setEtiquetas] = useState([]);
   const [ingredientes, setIngredientes] = useState([]);
+  const [pasosReceta, setPasosReceta] = useState([]);
+  const [fotosPortada, setFotosPortada] = useState([]);
 
   function handleEtiquetasChange(etiquetas) {
     setEtiquetas(etiquetas);
@@ -48,19 +50,23 @@ function NuevaRecetaScreen2 ({ navigation, route }) {
       categoria,
       etiquetas,
       ingredientes,
-      pasosReceta: receta?.pasosReceta ?? [],
-      fotosPortada: receta?.fotosPortada ?? [],
+      pasosReceta,
+      fotosPortada,
     });
+    console.log(JSON.stringify(receta));
     navigation.navigate('CrearReceta3');
   }
 
   return (
-    <SafeAreaView style={{flex: 1, paddingHorizontal: 20}}>
+    <SafeAreaView style={{ flex: 1, paddingHorizontal: 20 }}>
       <ScrollView keyboardShouldPersistTaps="always">
-        <Title style={{marginTop:15}}>{nombre}</Title>
-        <View style={{marginTop:10, borderRadius: 10, alignItems: 'center', justifyContent: 'center', height: 260}}>
+        <Title style={{ marginTop: 15 }}>{nombre}</Title>
+        <View style={{ marginTop: 10, borderRadius: 10, alignItems: 'center', justifyContent: 'center', height: 260 }}>
           {/* <Avatar.Icon icon="camera" color={colors.disabled} style={{backgroundColor: 'transparent'}} /> */}
-          <CargaImagen/>
+          <CargaImagen
+            fotosPortada={fotosPortada}
+            // onChangeFotosPortada={setFotosPortada}
+          />
         </View>
         <TextInput
           label="Descripción"
@@ -70,7 +76,7 @@ function NuevaRecetaScreen2 ({ navigation, route }) {
           numberOfLines={2}
           value={descripcion}
           onChangeText={setDescripcion}
-          style={{marginTop:50}}
+          style={{ marginTop: 50 }}
         />
         <TextInput
           label="Porciones"
@@ -109,7 +115,7 @@ function NuevaRecetaScreen2 ({ navigation, route }) {
           onIngredientesChange={handleIngredientesChange}
         />
         <Button
-          style={{marginTop: 10}}
+          style={{ marginTop: 10 }}
           mode="contained"
           onPress={handleSiguientePress}
         >
