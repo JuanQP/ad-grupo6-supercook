@@ -17,11 +17,11 @@ import * as recipesApi from '../../api/recipes';
 const PAGE_WIDTH = Dimensions.get('window').width;
 
 function renderCarouselItem({ item }) {
-  const imagenUrl = item?.imagen;
+  // const imagenUrl = item?.imagen;
   return (
     <Image
       style={styles.image}
-      source={imagenUrl ? { uri: imagenUrl } : undefined}
+      source={item ? { uri: item } : undefined}
     />
   )
 }
