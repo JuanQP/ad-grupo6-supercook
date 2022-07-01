@@ -50,10 +50,9 @@ function NuevaRecetaScreen2({ navigation, route }) {
       categoria,
       etiquetas,
       ingredientes,
-      pasosReceta,
-      fotosPortada,
+      pasosReceta: receta?.pasosReceta ?? [],
+      fotosPortada: receta?.fotosPortada ?? [],
     });
-    console.log(JSON.stringify(receta));
     navigation.navigate('CrearReceta3');
   }
 
