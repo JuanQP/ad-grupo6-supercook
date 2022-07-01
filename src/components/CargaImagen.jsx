@@ -1,7 +1,7 @@
 /* eslint-disable linebreak-style */
 import React, { useState } from 'react';
 import {
-  View, Image, Dimensions, ScrollView, StyleSheet,
+  View, Image, Dimensions, StyleSheet,
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -12,7 +12,7 @@ import ImagePlaceholder from './ImagePlaceholder';
 
 const PAGE_WIDTH = Dimensions.get('window').width;
 
-function CargaImagen({ fotosPortada }) {
+function CargaImagen({ fotosPortada, onChangeFotosPortada }) {
   const { colors } = useTheme();
   const [image, setImage] = useState(null);
 
@@ -24,13 +24,16 @@ function CargaImagen({ fotosPortada }) {
       quality: 1,
     });
     if (!result.cancelled) {
-      setImage(result.uri);
-      fotosPortada.push(result.uri);
+      const nuevaImagen = result.uri;
+      setImage(nuevaImagen);
+      onChangeFotosPortada([
+        ...fotosPortada,
+        nuevaImagen,
+      ]);
     }
   };
 
   function renderCarouselItem({ item }) {
-    const imagenUrl = item?.imagen;
     return (
       <Image
         style={styles.image}

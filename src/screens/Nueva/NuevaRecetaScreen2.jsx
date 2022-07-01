@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import { ScrollView, View } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Avatar, Button, TextInput, Title, useTheme } from 'react-native-paper';
+import { Button, TextInput, Title } from 'react-native-paper';
 import SingleDropdown from '../../components/SingleDropdown';
 import TagInput from '../../components/TagInput';
 import IngredientesInput from '../../components/IngredientesInput';
@@ -11,7 +11,6 @@ import * as categoriesApi from '../../api/categories';
 import CargaImagen from '../../components/CargaImagen';
 
 function NuevaRecetaScreen2({ navigation, route }) {
-  const { colors } = useTheme();
   const { nombre } = route.params;
   const { value: receta, onChange: setRecetaContext } = useReceta();
   const { data: categorias } = useQuery(
@@ -30,7 +29,6 @@ function NuevaRecetaScreen2({ navigation, route }) {
   const [categoria, setCategoria] = useState(null);
   const [etiquetas, setEtiquetas] = useState([]);
   const [ingredientes, setIngredientes] = useState([]);
-  const [pasosReceta, setPasosReceta] = useState([]);
   const [fotosPortada, setFotosPortada] = useState([]);
 
   function handleEtiquetasChange(etiquetas) {
@@ -39,6 +37,10 @@ function NuevaRecetaScreen2({ navigation, route }) {
 
   function handleIngredientesChange(ingredientes) {
     setIngredientes(ingredientes);
+  }
+
+  function handleFotosPortadaChange(fotos) {
+    setFotosPortada(fotos);
   }
 
   function handleSiguientePress() {
@@ -51,7 +53,7 @@ function NuevaRecetaScreen2({ navigation, route }) {
       etiquetas,
       ingredientes,
       pasosReceta: receta?.pasosReceta ?? [],
-      fotosPortada: receta?.fotosPortada ?? [],
+      fotosPortada,
     });
     navigation.navigate('CrearReceta3');
   }
@@ -61,10 +63,9 @@ function NuevaRecetaScreen2({ navigation, route }) {
       <ScrollView keyboardShouldPersistTaps="always">
         <Title style={{ marginTop: 15 }}>{nombre}</Title>
         <View style={{ marginTop: 10, borderRadius: 10, alignItems: 'center', justifyContent: 'center', height: 260 }}>
-          {/* <Avatar.Icon icon="camera" color={colors.disabled} style={{backgroundColor: 'transparent'}} /> */}
           <CargaImagen
             fotosPortada={fotosPortada}
-            // onChangeFotosPortada={setFotosPortada}
+            onChangeFotosPortada={handleFotosPortadaChange}
           />
         </View>
         <TextInput
