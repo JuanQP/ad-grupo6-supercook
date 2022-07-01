@@ -1,11 +1,11 @@
 /* eslint-disable linebreak-style */
 import React, { useState } from 'react';
 import {
-  View, Image, Dimensions, StyleSheet,
+  View, ImageBackground, Dimensions, StyleSheet,
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useTheme, Avatar, Button } from 'react-native-paper';
+import { useTheme, Avatar, Button, IconButton } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import { nullImageColor } from '../styles/colors';
 import ImagePlaceholder from './ImagePlaceholder';
@@ -33,12 +33,25 @@ function CargaImagen({ fotosPortada, onChangeFotosPortada }) {
     }
   };
 
-  function renderCarouselItem({ item }) {
+  function handleRemoveImage(index) {
+    const nuevasImagenes = fotosPortada.filter((_, i) => i !== index);
+    onChangeFotosPortada(nuevasImagenes);
+  }
+
+  function renderCarouselItem({ item, index }) {
     return (
-      <Image
+      <ImageBackground
         style={styles.image}
         source={item ? { uri: item } : undefined}
-      />
+      >
+        <IconButton
+          style={{backgroundColor: colors.surface, elevation: 4, marginLeft: 'auto'}}
+          color={colors.text}
+          icon="close"
+          size={20}
+          onPress={() => handleRemoveImage(index)}
+        />
+      </ImageBackground>
     );
   }
 
