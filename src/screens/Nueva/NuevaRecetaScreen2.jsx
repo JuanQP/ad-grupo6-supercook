@@ -64,6 +64,7 @@ function NuevaRecetaScreen2({ navigation, route }) {
         <Title style={{ marginTop: 15 }}>{nombre}</Title>
         <View style={{ marginTop: 10, borderRadius: 10, alignItems: 'center', justifyContent: 'center', height: 260 }}>
           <CargaImagen
+            mediaType='Images'
             fotosPortada={fotosPortada}
             onChangeFotosPortada={handleFotosPortadaChange}
           />
