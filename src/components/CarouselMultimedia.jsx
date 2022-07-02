@@ -23,7 +23,7 @@ export function CarouselMultimedia({
   }
 
   function renderCarouselItem({ item, index }) {
-    const isVideo = !!item.match(/\.mp4$/i);
+    const isVideo = !!item?.match(/\.mp4$/i);
 
     if(isVideo) {
       return (
