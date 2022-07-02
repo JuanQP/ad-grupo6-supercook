@@ -3,26 +3,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ActivityIndicator, Text, Title } from "react-native-paper";
 import { useQuery } from 'react-query';
 import { getReceta } from '../../api/recipes';
-import Carousel from 'react-native-snap-carousel';
-import { Dimensions, Image, ScrollView, StyleSheet, View } from "react-native";
-import { nullImageColor } from '../../styles/colors';
+import { ScrollView, StyleSheet, View } from "react-native";
 import UserDetail from './UserDetail';
 import ButtonGroup, { BUTTON_VALUES } from './ButtonGroup';
 import IngredientesCalculator from './IngredientesCalculator';
 import PasosView from './PasosView';
-import ImagePlaceholder from '../../components/ImagePlaceholder';
-
-const PAGE_WIDTH = Dimensions.get('window').width;
-
-function renderCarouselItem({ item, index }) {
-  const imagenUrl = item?.imagen;
-  return (
-    <Image
-      style={styles.image}
-      source={imagenUrl ? {uri: imagenUrl} : undefined}
-    />
-  )
-}
+import { CarouselMultimedia } from '../../components/CarouselMultimedia';
 
 function RecetaScreen({ navigation, route }) {
   const { data: receta, isLoading } = useQuery('receta',
@@ -31,7 +17,7 @@ function RecetaScreen({ navigation, route }) {
       onSuccess: (receta) => {
         setPorciones(receta.porciones);
         setIngredientes(receta.ingredientes.slice());
-      }
+      },
     }
   );
   const [selectedTab, setSelectedTab] = useState(BUTTON_VALUES.Ingredientes);
@@ -50,7 +36,7 @@ function RecetaScreen({ navigation, route }) {
   function handlePasoAPasoPress() {
     navigation.navigate('Paso', { recetaId: receta.id });
   }
-  
+
   if(isLoading) {
     return (
       <SafeAreaView style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
@@ -62,13 +48,7 @@ function RecetaScreen({ navigation, route }) {
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={{marginTop:15}}>
-        <Carousel
-          data={receta.fotosPortada}
-          renderItem={renderCarouselItem}
-          sliderWidth={PAGE_WIDTH}
-          itemWidth={PAGE_WIDTH*0.8}
-          ListEmptyComponent={ImagePlaceholder}
-        />
+        <CarouselMultimedia data={receta.fotosPortada.map(f => f.imagen)} />
       </View>
       <ScrollView keyboardShouldPersistTaps={'handled'}>
         <View style={styles.container}>
@@ -98,12 +78,6 @@ function RecetaScreen({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-  image: {
-    borderRadius: 10,
-    backgroundColor: nullImageColor,
-    width: PAGE_WIDTH*0.8,
-    height: 200
-  },
   container: {
     paddingHorizontal: 30,
     marginVertical: 10,

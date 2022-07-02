@@ -1,28 +1,8 @@
 import React, { useState } from "react";
-import { Dimensions, StyleSheet, View, Image } from "react-native";
-import { Badge, IconButton, Text, useTheme, Title } from "react-native-paper";
-import Carousel from "react-native-snap-carousel";
+import { View } from "react-native";
+import { Badge, IconButton, Text, useTheme } from "react-native-paper";
 import { Alert } from "react-native-web";
-import { nullImageColor } from "../styles/colors";
-import ImagePlaceholder from "./ImagePlaceholder";
-
-const PAGE_WIDTH = Dimensions.get('window').width;
-
-function renderCarouselItem({ item, index }) {
-  if (!item.img_multimedia.match(/http/)) {
-    return (
-      <View style={styles.imageContent}>
-        <Title>Sin imágenes</Title>
-      </View>
-    );
-  }
-  return (
-    <Image
-      style={styles.imageContent}
-      source={item.img_multimedia ? { uri: item.img_multimedia } : undefined}
-    />
-  );
-}
+import { CarouselMultimedia } from "./CarouselMultimedia";
 
 export default function PasosViewer({ pasosReceta }) {
   const { colors } = useTheme();
@@ -50,20 +30,13 @@ export default function PasosViewer({ pasosReceta }) {
     return arreglo;
   }
 
-
   return (
     <>
       <View style={{ marginVertical: 10, paddingHorizontal: 20 }}>
         <Text>{index + 1} de {pasosReceta.length}</Text>
       </View>
       <View style={{ marginVertical: 10 }}>
-        <Carousel
-          data={dataMultimedia(pasosReceta[index].pasosMultimedia) ?? []}
-          renderItem={renderCarouselItem}
-          sliderWidth={PAGE_WIDTH}
-          itemWidth={PAGE_WIDTH * 0.8}
-          ListEmptyComponent={<ImagePlaceholder texto="Sin imágenes" />}
-        />
+        <CarouselMultimedia data={dataMultimedia(pasosReceta[index].pasosMultimedia) ?? []} />
       </View>
       <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
         <Badge style={{ alignSelf: 'center', marginRight: 10 }}>{pasosReceta[index].numero_paso}</Badge>
@@ -91,20 +64,3 @@ export default function PasosViewer({ pasosReceta }) {
     </>
   )
 }
-
-const styles = StyleSheet.create({
-  imagePlaceholder: {
-    backgroundColor: nullImageColor,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: PAGE_WIDTH * 0.9,
-    height: 200
-  },
-  imageContent: {
-    backgroundColor: nullImageColor,
-    width: 280,
-    height: 180,
-    borderRadius: 10,
-  },
-});

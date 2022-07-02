@@ -1,30 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FAB, Text, Title } from "react-native-paper";
-import Carousel from 'react-native-snap-carousel';
-import { Dimensions, Image, ScrollView, StyleSheet, View, Alert } from "react-native";
+import { ScrollView, StyleSheet, View, Alert } from "react-native";
 import { useQuery, useMutation } from 'react-query';
-import { nullImageColor } from '../../styles/colors';
 import UserDetail from '../Receta/UserDetail';
 import ButtonGroup, { BUTTON_VALUES } from '../Receta/ButtonGroup';
 import IngredientesCalculator from '../Receta/IngredientesCalculator';
 import PasosView from '../Receta/PasosView';
 import { useReceta } from '../../hooks/receta-context';
 import { getUser } from '../../api/user';
-import ImagePlaceholder from '../../components/ImagePlaceholder';
 import * as recipesApi from '../../api/recipes';
-
-const PAGE_WIDTH = Dimensions.get('window').width;
-
-function renderCarouselItem({ item }) {
-  // const imagenUrl = item?.imagen;
-  return (
-    <Image
-      style={styles.image}
-      source={item ? { uri: item } : undefined}
-    />
-  )
-}
+import { CarouselMultimedia } from '../../components/CarouselMultimedia';
 
 function NuevaRecetaReviewScreen({ navigation }) {
   const { data: usuario, isLoading: isUsuarioLoading } = useQuery('usuario', getUser, {
@@ -70,13 +56,7 @@ function NuevaRecetaReviewScreen({ navigation }) {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ marginTop: 15 }}>
-        <Carousel
-          data={receta.fotosPortada}
-          renderItem={renderCarouselItem}
-          ListEmptyComponent={<ImagePlaceholder texto="Sin imágenes" />}
-          sliderWidth={PAGE_WIDTH}
-          itemWidth={PAGE_WIDTH * 0.8}
-        />
+        <CarouselMultimedia data={receta.fotosPortada} />
       </View>
       <ScrollView keyboardShouldPersistTaps={'handled'}>
         <View style={styles.container}>
@@ -114,12 +94,6 @@ function NuevaRecetaReviewScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  image: {
-    borderRadius: 10,
-    backgroundColor: nullImageColor,
-    width: PAGE_WIDTH * 0.8,
-    height: 200
-  },
   container: {
     paddingHorizontal: 30,
     marginVertical: 10,
