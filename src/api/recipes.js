@@ -30,3 +30,7 @@ export async function crearReceta(receta) {
   return data;
 }
 
+export async function getRecetaPorNombre({nombre, sort}) {
+  const { data } = await axios.get('/recetasPorNombre', {params: {nombre, sort}});
+  return data.recetas;
+}
