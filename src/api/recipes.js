@@ -1,4 +1,5 @@
 import axios from 'axios';
+import * as FileSystem from 'expo-file-system';
 
 export async function recomendados() {
   const { data } = await axios.get('/recomendados');
@@ -25,8 +26,25 @@ export async function checkearReceta(nombre) {
   return data;
 }
 
-export async function crearReceta(receta) {
-  const { data } = await axios.post('/recetas', receta);
-  return data;
+const convertirFotosRecetaABase64 = async (receta) => {
+  const fotosPortadaEnBase64 = await Promise.all(
+    receta.fotosPortada.map(async (imagen) => {
+      return await FileSystem.readAsStringAsync(imagen, { encoding: 'base64' });
+    })
+  )
+  receta.fotosPortada = fotosPortadaEnBase64;
+
+  for (const [indexPasoReceta, pasoReceta] of receta.pasosReceta.entries()) {
+    for (const [indexPasoMultimedia, pasoMultimedia] of pasoReceta.pasosMultimedia.entries()) {
+      receta.pasosReceta[indexPasoReceta].pasosMultimedia[indexPasoMultimedia].img_multimedia = await FileSystem.readAsStringAsync(pasoMultimedia.img_multimedia, { encoding: 'base64' });
+    }
+  }
+
+  return receta;
 }
 
+export async function crearReceta(receta) {
+  const nuevaReceta64 = await convertirFotosRecetaABase64(receta);
+  // const { data } = await axios.post('/recetas', nuevaReceta64);
+  return null;
+}
