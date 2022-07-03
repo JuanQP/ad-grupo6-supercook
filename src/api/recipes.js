@@ -45,6 +45,6 @@ const convertirFotosRecetaABase64 = async (receta) => {
 
 export async function crearReceta(receta) {
   const nuevaReceta64 = await convertirFotosRecetaABase64(receta);
-  // const { data } = await axios.post('/recetas', nuevaReceta64);
-  return null;
+  const { data } = await axios.post('/recetas', nuevaReceta64);
+  return data;
 }
