@@ -20,14 +20,7 @@ export default function PasosViewer({ pasosReceta }) {
   }
 
   function dataMultimedia(pasosMultimedia) {
-    const arreglo = pasosMultimedia?.map(item => {
-      const imagenes = {
-        "img_multimedia": item.img_multimedia
-      };
-
-      return imagenes;
-    })
-    return arreglo;
+    return pasosMultimedia?.map(item => item.img_multimedia);
   }
 
   return (

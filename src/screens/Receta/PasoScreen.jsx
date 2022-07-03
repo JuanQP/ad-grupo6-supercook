@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { IconButton } from 'react-native-paper';
+import { ActivityIndicator, IconButton } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useQuery } from 'react-query';
 import { getReceta } from '../../api/recipes';
@@ -12,11 +12,20 @@ function PasoScreen({ navigation, route }) {
     () => getReceta(recetaId),
     {
       select: (receta) => receta.pasosReceta,
+      initialData: [],
     },
   );
 
   function handleCerrarPress() {
     navigation.goBack();
+  }
+
+  if(isLoading) {
+    return (
+      <SafeAreaView style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <ActivityIndicator animating={true} color={'gray'} />
+      </SafeAreaView>
+    )
   }
 
   return (

@@ -1,20 +1,23 @@
 import React, { useState } from 'react';
-import { StyleSheet, View } from "react-native";
-import { Avatar, Button, Subheading, TextInput, Title, useTheme } from 'react-native-paper';
+import { View } from "react-native";
+import { Button, Subheading, TextInput, Title } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useReceta } from '../../hooks/receta-context';
-import CargaImagenPaso from '../../components/CargaImagenPaso';
-import CargaVideoPaso from '../../components/CargaVideoPaso';
+import CargaImagen from '../../components/CargaImagen';
 
 function NuevaRecetaAgregarPasoScreen({ navigation, route }) {
   const index = route?.params?.index;
   const { value: receta, onChange: setReceta } = useReceta();
   const [descripcion_paso, setDescripcion_paso] = useState(Number.isInteger(index) ? receta.pasosReceta[index].descripcion_paso : '');
   const [numero_paso] = useState(Number.isInteger(index) ? receta.pasosReceta[index].numero_paso : receta.pasosReceta.length+1);
-  const { colors }  = useTheme();
+  const [pasosMultimedia, setPasosMultimedia] = useState(Number.isInteger(index) ? receta.pasosReceta[index].pasosMultimedia : []);
 
   function handleCancelar() {
     navigation.goBack();
+  }
+
+  function handleMultimediaChange(pasosMultimedia) {
+    setPasosMultimedia(pasosMultimedia.map(p => ({img_multimedia: p})));
   }
 
   function handleGuardar() {
@@ -22,7 +25,7 @@ function NuevaRecetaAgregarPasoScreen({ navigation, route }) {
     const nuevoPaso = {
       numero_paso,
       descripcion_paso,
-      media: [],
+      pasosMultimedia,
     };
     const nuevosPasos = [
       ...receta.pasosReceta,
@@ -56,14 +59,11 @@ function NuevaRecetaAgregarPasoScreen({ navigation, route }) {
         <View style={{marginTop: 20}}>
           <Subheading>Agregar imágenes/videos deseados</Subheading>
           <View style={{flexDirection: 'row', marginTop: 15}}>
-            <View style={{...styles.multimediaContainer, backgroundColor: colors.background}}>
-              {/* <Avatar.Icon icon="camera" color={colors.disabled} style={{backgroundColor: 'transparent'}} /> */}
-              <CargaImagenPaso/>
-            </View>
-            <View style={{...styles.multimediaContainer, backgroundColor: colors.background}}>
-              {/* <Avatar.Icon icon="video" color={colors.disabled} style={{backgroundColor: 'transparent'}} /> */}
-              <CargaVideoPaso/>
-            </View>
+            <CargaImagen
+              mediaType='All'
+              multimedia={pasosMultimedia.map(p => p.img_multimedia)}
+              onChangeMultimedia={handleMultimediaChange}
+            />
           </View>
         </View>
       </View>
@@ -89,16 +89,5 @@ function NuevaRecetaAgregarPasoScreen({ navigation, route }) {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  multimediaContainer: {
-    flex: 1,
-    marginHorizontal: 5,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 200,
-  },
-});
 
 export default NuevaRecetaAgregarPasoScreen;

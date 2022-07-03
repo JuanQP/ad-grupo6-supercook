@@ -8,7 +8,7 @@ import { CarouselMultimedia } from './CarouselMultimedia';
 
 const PAGE_WIDTH = Dimensions.get('window').width;
 
-function CargaImagen({mediaType='Images', fotosPortada, onChangeFotosPortada }) {
+function CargaImagen({mediaType='Images', multimedia, onChangeMultimedia }) {
   const { colors } = useTheme();
 
   const openGallery = async () => {
@@ -20,8 +20,8 @@ function CargaImagen({mediaType='Images', fotosPortada, onChangeFotosPortada }) 
     });
     if (!result.cancelled) {
       const nuevaImagen = result.uri;
-      onChangeFotosPortada([
-        ...fotosPortada,
+      onChangeMultimedia([
+        ...multimedia,
         nuevaImagen,
       ]);
     }
@@ -34,10 +34,10 @@ function CargaImagen({mediaType='Images', fotosPortada, onChangeFotosPortada }) 
       }}
       >
         <CarouselMultimedia
-          data={fotosPortada}
+          data={multimedia}
           editable
           textoVacio="Seleccioná contenido para mostrar 😁"
-          onChangeMultimedia={onChangeFotosPortada}
+          onChangeMultimedia={onChangeMultimedia}
         />
       </View>
       <Button onPress={openGallery} style={{backgroundColor: colors.primary }} mode="contained">
