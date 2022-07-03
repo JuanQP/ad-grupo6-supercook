@@ -53,3 +53,13 @@ export async function crearReceta(receta) {
   const { data } = await axios.post('/recetas', nuevaReceta64);
   return data;
 }
+
+export async function getRecetaPorNombre({nombre, sort}) {
+  const { data } = await axios.get('/recetasPorNombre', {params: {nombre, sort}});
+  return data.recetas;
+}
+
+export async function getRecetaPorCategoria({tipo, sort}) {
+  const { data } = await axios.get('/recetasPorTipo', {params: {tipo, sort}});
+  return data.recetas;
+}

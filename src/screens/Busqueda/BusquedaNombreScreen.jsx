@@ -1,23 +1,32 @@
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ActivityIndicator, Chip, Text, TextInput, Title, useTheme } from 'react-native-paper';
+import { ActivityIndicator, Chip, Menu, Text, TextInput, Title, useTheme } from 'react-native-paper';
 import FilterButtonGroup, { BUTTON_VALUES } from '../../components/FilterButtonGroup';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery } from 'react-query';
 import * as recetasApi from "../../api/recipes";
 import RecipeCard from '../../components/RecipeCard';
+
+const ORDENAMIENTOS = [
+  {nombre: 'Sin ordenar', sort: undefined, icon: 'null', menuLabel: 'Sin ordenar'},
+  {nombre: 'Nombre', sort: 1, icon: 'sort-alphabetical-ascending', menuLabel: 'Nombre'},
+  {nombre: 'Nombre', sort: 2, icon: 'sort-alphabetical-descending', menuLabel: 'Nombre'},
+];
 
 function BusquedaNombreScreen({ navigation }) {
   const { colors } = useTheme();
   const [selectedButton] = useState(BUTTON_VALUES.Nombre);
   const [nombre, setNombre] = useState('');
+  const [queryNombre, setQueryNombre] = useState('');
   const [sort, setSort] = useState(undefined);
-  const queryClient = useQueryClient();
-  const { data: recetas, isLoading, refetch } = useQuery(
-    'recetas-busqueda',
-    () => recetasApi.getRecetaPorNombre({ nombre, sort }),
+  const [visible, setVisible] = useState(false);
+  const openMenu = () => setVisible(true);
+  const closeMenu = () => setVisible(false);
+  const { data: recetas, isLoading } = useQuery(
+    ['recetas-busqueda', queryNombre, sort], // Cuando alguno de estos cambia, hace refetch
+    () => recetasApi.getRecetaPorNombre({ nombre: queryNombre, sort }),
     {
-      enabled: false,
+      enabled: true,
       initialData: [],
     },
   );
@@ -32,28 +41,20 @@ function BusquedaNombreScreen({ navigation }) {
 
   function handleRemoveSort() {
     setSort(undefined);
-    queryClient.fetchQuery(
-      'recetas-busqueda',
-      () => recetasApi.getRecetaPorNombre({ nombre, sort: undefined }),
-    );
   }
 
   function handleRemoveSearch() {
     setNombre('');
-    setSort(undefined);
-    queryClient.fetchQuery(
-      'recetas-busqueda',
-      () => recetasApi.getRecetaPorNombre({ nombre: '', sort: undefined }),
-    );
+    setQueryNombre('');
   }
 
-  function handleToggleSort() {
-    const newSort = sort === 'asc' ? 'desc' : 'asc';
-    setSort(newSort);
-    queryClient.fetchQuery(
-      'recetas-busqueda',
-      () => recetasApi.getRecetaPorNombre({ nombre, sort: newSort }),
-    );
+  function handleSearch() {
+    setQueryNombre(nombre);
+  }
+
+  function handleSortPress(sort) {
+    setSort(sort);
+    closeMenu();
   }
 
   return (
@@ -68,24 +69,51 @@ function BusquedaNombreScreen({ navigation }) {
         value={nombre}
         left={<TextInput.Icon name="magnify" />}
         onChangeText={setNombre}
-        onSubmitEditing={() => refetch()}
+        onSubmitEditing={handleSearch}
       />
       <Title>Resultados</Title>
       <View style={{flexDirection: 'row'}}>
-        {nombre !== '' && <Chip onClose={handleRemoveSearch}>Nombre: {nombre}</Chip>}
         <Chip
-          icon={sort === 'asc' ? 'arrow-up' : sort === 'desc' ? 'arrow-down' : 'null'}
-          onClose={handleRemoveSort}
-          onPress={handleToggleSort}
+          onClose={handleRemoveSearch}
+          disabled={queryNombre === ''}
         >
-          Ordenar por: Nombre
+          Nombre: {queryNombre}
         </Chip>
+        <View style={{marginLeft: 'auto'}}>
+          <Menu
+            visible={visible}
+            onDismiss={closeMenu}
+            anchor={(
+              <Chip
+                icon={ORDENAMIENTOS[sort ?? 0].icon}
+                onPress={openMenu}
+                onClose={handleRemoveSort}
+              >
+                {ORDENAMIENTOS[sort ?? 0].nombre}
+              </Chip>
+            )}
+          >
+            {ORDENAMIENTOS.map((o, i) => (
+              <Menu.Item
+                key={i}
+                icon={o.icon}
+                onPress={() => handleSortPress(o.sort)}
+                title={o.menuLabel}
+              />
+            ))}
+          </Menu>
+        </View>
       </View>
       {isLoading && (
         <ActivityIndicator animating={isLoading} color={colors.primary} />
       )}
       <View style={{flex: 1}}>
         <ScrollView contentContainerStyle={{paddingVertical: 10}}>
+          {recetas.length === 0 && (
+            <View>
+              <Text style={{textAlign: 'center'}}>Sin resultados 🤔</Text>
+            </View>
+          )}
           {recetas?.map(receta => (
             <RecipeCard
               key={receta.id}
