@@ -63,3 +63,9 @@ export async function getRecetaPorCategoria({tipo, sort}) {
   const { data } = await axios.get('/recetasPorTipo', {params: {tipo, sort}});
   return data.recetas;
 }
+
+export async function getRecetaPorIngrediente({ingrediente, sort}, conIngrediente = true) {
+  const endpoint = conIngrediente ? '/recetasPorIngrediente' : '/recetasSinIngrediente';
+  const { data } = await axios.get(endpoint, {params: {ingrediente, sort}});
+  return data.recetas;
+}
