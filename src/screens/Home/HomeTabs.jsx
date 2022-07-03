@@ -2,10 +2,10 @@ import React from 'react';
 import PerfilScreen from '../Perfil/PerfilScreen';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import HomeStack from './HomeStack';
-import BusquedaScreen from '../Busqueda/BusquedaScreen';
 import FavoritosScreen from '../Favoritos/FavoritosScreen';
 import { useTheme } from 'react-native-paper';
 import NuevaRecetaStack from '../Nueva/NuevaRecetaStack';
+import BusquedaStack from '../Busqueda/BusquedaStack';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -24,8 +24,8 @@ export default function HomeTabs() {
         options={{tabBarIcon: 'home', tabBarLabel: 'Home'}}
       />
       <Tab.Screen
-        name="Búsqueda"
-        component={BusquedaScreen}
+        name="BúsquedaStack"
+        component={BusquedaStack}
         options={{tabBarIcon: 'magnify', tabBarLabel: 'Buscar'}}
       />
       <Tab.Screen
