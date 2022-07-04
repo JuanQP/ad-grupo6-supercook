@@ -8,14 +8,16 @@ import {
   useTheme,
 } from 'react-native-paper';
 import {
-  Alert, ScrollView, StyleSheet, View,
+  Alert, ScrollView, StyleSheet, View, Image
 } from 'react-native';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import { useMutation } from 'react-query';
 import axios from 'axios';
-import { surface } from '../../styles/colors';
+import { surface, superCook } from '../../styles/colors';
 import * as loginApi from '../../api/login';
+
+
 
 const reviewSchema = yup.object({
   email: yup.string().email().required(),
@@ -68,9 +70,11 @@ export default function LoginScreen({ navigation }) {
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ flexGrow: 1 }}>
       <View style={styles.formView}>
-        <Text style={{ fontSize: 18, marginBottom: 18 }}>
-          Supercook 🍕
+        <Text style={{ fontSize: 55, marginBottom: 5, fontFamily: 'WendyOne' }}>
+          SuperCook
         </Text>
+        {/* <Image source={require('../../../assets/supercook.png')} /> */}
+        <Image source={superCook} style={{width: '25%',  height: '25%'}} />
         <Formik
           initialValues={initialValues}
           validationSchema={reviewSchema}

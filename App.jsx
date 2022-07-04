@@ -8,6 +8,7 @@ import App from './src/App';
 import { backgroundColor, primary, surface } from './src/styles/colors';
 import 'intl';
 import 'intl/locale-data/jsonp/en';
+import { useFonts } from 'expo-font';
 import { LogBox } from 'react-native';
 LogBox.ignoreLogs([
   /ViewPropTypes/,
@@ -29,6 +30,15 @@ const theme = {
 };
 
 export default function Main() {
+
+  const [loaded] = useFonts({
+    WendyOne: require('./assets/fonts/WendyOne-Regular.ttf'),
+  });
+
+  if (!loaded) {
+    return null;
+  }
+
   return (
     <PaperProvider theme={theme}>
       <QueryClientProvider client={queryClient}>

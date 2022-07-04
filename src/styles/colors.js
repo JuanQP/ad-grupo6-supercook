@@ -1,6 +1,8 @@
 /* eslint-disable global-require */
 export const profileBackground = require('../../assets/perfil-background.jpeg');
 export const avatarPlaceholder = require('../../assets/avatar-placeholder.png');
+export const superCook = require('../../assets/supercook.png');
+
 
 export const primary = '#E31818';
 export const backgroundColor = '#E7E7E7';

@@ -30,6 +30,9 @@ function ProfileDetails({ user, loading, onSubmit }) {
 
   return (
     <View style={{ flex: 1 }}>
+    <Button mode="contained" style={{marginTop: 20, marginBottom: 10}}>
+      Mis recetas guardadas
+    </Button>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <Text>Sobre Mí</Text>
         <IconButton color={colors.backdrop} icon="pencil-circle" onPress={showModal} />
