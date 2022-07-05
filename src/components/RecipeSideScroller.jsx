@@ -4,7 +4,7 @@ import { Button, Text } from 'react-native-paper';
 import RecipeCard from './RecipeCard';
 
 function RecipeSideScroller({
-  title, items, onVerTodosPress, onItemPress,
+  title, items, onVerTodosPress, onItemPress, onFavoritoPress
 }) {
   return (
     <View>
@@ -13,7 +13,7 @@ function RecipeSideScroller({
         <Button mode="text" onPress={onVerTodosPress}>Ver todos</Button>
       </View>
       <ScrollView horizontal>
-        {items.map((i) => <RecipeCard key={`${i.id}`} recipe={i} onPress={onItemPress} />)}
+        {items.map((i) => <RecipeCard key={`${i.id}`} recipe={i} onPress={onItemPress} onFavoritoPress={onFavoritoPress} />)}
       </ScrollView>
     </View>
   );

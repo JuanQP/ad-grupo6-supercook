@@ -1,10 +1,12 @@
 import React from 'react';
 import { Alert, ScrollView } from 'react-native';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import RecipeSideScroller from '../../components/RecipeSideScroller';
 import HomeLayout from '../../layouts/HomeLayout';
 import * as recipesApi from '../../api/recipes';
 import * as userApi from '../../api/user';
+import * as favoritesApi from '../../api/favorites'
+import RecipeCard from '../../components/RecipeCard';
 
 export default function HomeScreen({ navigation }) {
   const { data: usuarioData } = useQuery('user', userApi.getUser, {
@@ -35,6 +37,21 @@ export default function HomeScreen({ navigation }) {
     navigation.navigate('IngredienteDeLaSemana');
   }
 
+  const { mutate, isLoading } = useMutation(favoritesApi.agregarFavorito, { 
+    onSuccess: () => {
+      queryClient.invalidateQueries(['recomendados']);
+      queryClient.invalidateQueries(['recetasUltimas']);
+      queryClient.invalidateQueries(['ingredienteDeLaSemana']);
+    },
+  });
+
+  function handleFavoritoPress(recipe) {
+    mutate ({
+      id: recipe.id
+    })
+  }
+
+
   return (
     <HomeLayout
       icon="account-circle-outline"
@@ -48,18 +65,21 @@ export default function HomeScreen({ navigation }) {
           items={recomendadosQuery.data}
           onVerTodosPress={handleRecomendadosPress}
           onItemPress={handleRecipePress}
+          onFavoritoPress={handleFavoritoPress}
         />
         <RecipeSideScroller
           title="Últimas recetas añadidas"
           items={recetasUltimasQuery.data}
           onVerTodosPress={handleUltimasRecetasPress}
           onItemPress={handleRecipePress}
+          onFavoritoPress={handleFavoritoPress}
         />
         <RecipeSideScroller
           title="Ingrediente de la semana"
           items={ingredienteDeLaSemanaQuery.data}
           onVerTodosPress={handleIngredienteDeLaSemanaPress}
           onItemPress={handleRecipePress}
+          onFavoritoPress={handleFavoritoPress}
         />
       </ScrollView>
     </HomeLayout>
