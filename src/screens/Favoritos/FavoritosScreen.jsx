@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, ScrollView } from 'react-native';
 import { Text, Title } from 'react-native-paper';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import HomeLayout from '../../layouts/HomeLayout';
 import * as userApi from '../../api/user';
 import RecipeCard from '../../components/RecipeCard';
@@ -13,6 +13,8 @@ function FavoritosScreen({ navigation }) {
     select: (data) => data.usuario,
   });
 
+  const queryClient = useQueryClient();
+
   const { data: favoritos } = useQuery('favorites', favoritesApi.favoritos, {
     placeholderData: [],
   });
@@ -21,9 +23,28 @@ function FavoritosScreen({ navigation }) {
     navigation.navigate('Perfil');
   }
 
+  const { mutate } = useMutation(favoritesApi.agregarFavorito, { // agregar: post_favorito..
+    onSuccess: () => {
+      queryClient.invalidateQueries(['favorites']);
+    },
+  });
+
   function handleRecipePress(recipe) {
     const { user, ...receta } = recipe;
     navigation.navigate('Receta', { recetaId: recipe.id })
+  }
+
+  // const { mutate, isLoading } = useMutation(userApi.patchUser, {
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries(['user']);
+  //   },
+  // });
+
+  function handleFavoritoPress(recipe) {
+    mutate ({
+      id: recipe.id, 
+      //esFavorito: !recipe.esFavorito
+    });
   }
 
   return (
@@ -50,6 +71,7 @@ function FavoritosScreen({ navigation }) {
             key={r.id}
             recipe={r}
             onPress={handleRecipePress}
+            onFavoritoPress={handleFavoritoPress}
           />
         ))}
       </ScrollView>
