@@ -56,6 +56,10 @@ function PerfilScreen({ navigation }) {
     navigation.navigate('Login');
   }
 
+  function handleOnPressRecGuardadas() {
+    navigation.navigate('RecetasGuardadas');
+  }
+
   return (
     <HomeLayout
       icon="account-circle-outline"
@@ -71,6 +75,7 @@ function PerfilScreen({ navigation }) {
               user={data.usuario}
               onSubmit={handleDetailsSubmit}
               loading={isLoading}
+              onPressRecetasGuardadas={handleOnPressRecGuardadas}
             />
             <ProfilePreferences
               user={data.usuario}

@@ -14,7 +14,7 @@ const reviewSchema = yup.object({
   sobre_mi: yup.string().max(200).required(),
 });
 
-function ProfileDetails({ user, loading, onSubmit }) {
+function ProfileDetails({ user, loading, onSubmit, onPressRecetasGuardadas }) {
   const { colors } = useTheme();
   const [visible, setVisible] = React.useState(false);
   const showModal = () => setVisible(true);
@@ -34,7 +34,7 @@ function ProfileDetails({ user, loading, onSubmit }) {
 
   return (
     <View style={{ flex: 1 }}>
-    <Button mode="contained" style={{marginTop: 20, marginBottom: 10}} onPress={handleRecetasGuardadas}>
+    <Button mode="contained" style= {{marginTop: 20, marginBottom: 10}} onPress= {onPressRecetasGuardadas}>
       Mis recetas guardadas
     </Button>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>

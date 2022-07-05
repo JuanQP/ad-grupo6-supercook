@@ -1,7 +1,7 @@
 import React from 'react';
-import PerfilScreen from '../Perfil/PerfilScreen';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import HomeStack from './HomeStack';
+import PerfilStack from './../Perfil/PerfilStack';
 import FavoritosScreen from '../Favoritos/FavoritosScreen';
 import { useTheme } from 'react-native-paper';
 import NuevaRecetaStack from '../Nueva/NuevaRecetaStack';
@@ -38,9 +38,14 @@ export default function HomeTabs() {
         component={FavoritosScreen}
         options={{tabBarIcon: 'star-outline', tabBarLabel: 'Favs'}}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Perfil"
         component={PerfilScreen}
+        options={{tabBarIcon: 'account-circle-outline', tabBarLabel: 'Mi Perfil'}}
+      /> */}
+      <Tab.Screen
+        name="PerfilStack"
+        component={PerfilStack}
         options={{tabBarIcon: 'account-circle-outline', tabBarLabel: 'Mi Perfil'}}
       />
     </Tab.Navigator>
