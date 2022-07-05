@@ -1,7 +1,7 @@
 import React from 'react';
 import { Alert, ScrollView } from 'react-native';
 import { Title } from 'react-native-paper';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient} from 'react-query';
 import HomeLayout from '../../layouts/HomeLayout';
 import * as recipesApi from '../../api/recipes';
 import * as userApi from '../../api/user';
@@ -24,16 +24,16 @@ export default function UltimasRecetasScreen({ navigation }) {
     navigation.navigate('Receta', { recetaId: recipe.id })
   }
 
+  const queryClient = useQueryClient();
   const { mutate, isLoading } = useMutation(favoritesApi.agregarFavorito, { 
     onSuccess: () => {
-      queryClient.invalidateQueries(['recomendados']);
+      queryClient.invalidateQueries(['recetasUltimas']);
     },
   });
 
   function handleFavoritoPress(recipe) {
     mutate ({
       id: recipe.id
-      //esFavorito: !recipe.esFavorito
     })
   }
 

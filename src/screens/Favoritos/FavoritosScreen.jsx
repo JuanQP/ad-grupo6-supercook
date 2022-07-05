@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, ScrollView } from 'react-native';
 import { Text, Title } from 'react-native-paper';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import HomeLayout from '../../layouts/HomeLayout';
 import * as userApi from '../../api/user';
 import RecipeCard from '../../components/RecipeCard';
@@ -26,16 +26,21 @@ function FavoritosScreen({ navigation }) {
     navigation.navigate('Receta', { recetaId: recipe.id })
   }
 
-  return (
-    // <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-    //   <Text style={{fontSize: 30}}>
-    //     En construcción
-    //   </Text>
-    //   <Text style={{fontSize: 30}}>
-    //     🚧
-    //   </Text>
-    // </View>
+  const queryClient = useQueryClient();
+  const { mutate, isLoading } = useMutation(favoritesApi.agregarFavorito, { 
+    onSuccess: () => {
+      queryClient.invalidateQueries(['favorites']);
+    },
+  });
 
+  function handleFavoritoPress(recipe) {
+    mutate ({
+      id: recipe.id
+      //esFavorito: !recipe.esFavorito
+    })
+  }
+
+  return (
     <HomeLayout
       icon="account-circle-outline"
       title={`Hola ${usuario.nombre}`}
@@ -50,6 +55,7 @@ function FavoritosScreen({ navigation }) {
             key={r.id}
             recipe={r}
             onPress={handleRecipePress}
+            onFavoritoPress={handleFavoritoPress}
           />
         ))}
       </ScrollView>

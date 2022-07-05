@@ -12,6 +12,7 @@ export default function HomeScreen({ navigation }) {
   const { data: usuarioData } = useQuery('user', userApi.getUser, {
     placeholderData: { usuario: { nombre: 'Invitado' }},
   });
+  const queryClient = useQueryClient();
   const recomendadosQuery = useQuery('recomendados', recipesApi.recomendados);
   const recetasUltimasQuery = useQuery('recetasUltimas', recipesApi.recetasUltimas);
   const ingredienteDeLaSemanaQuery = useQuery('ingredienteDeLaSemana', recipesApi.ingredienteDeLaSemana);
