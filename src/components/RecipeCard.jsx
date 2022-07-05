@@ -15,7 +15,7 @@ function RecipeCard({ recipe, onPress, onFavoritoPress }) {
   }
 
   function handleFavoritaPress() {
-    onFavoritoPress(recipe)
+    onFavoritoPress(recipe);
   }
 
   const imagenUrl = recipe?.fotosPortada?.[0]?.imagen;

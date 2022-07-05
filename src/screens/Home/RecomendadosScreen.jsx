@@ -24,7 +24,7 @@ export default function RecomendadosScreen({ navigation }) {
     navigation.navigate('Receta', { recetaId: recipe.id })
   }
 
-  const { mutate, isLoading } = useMutation(favoritesApi.agregarFavorito, { // agregar: post_favorito..
+  const { mutate, isLoading } = useMutation(favoritesApi.agregarFavorito, { 
     onSuccess: () => {
       queryClient.invalidateQueries(['recomendados']);
     },
@@ -32,7 +32,7 @@ export default function RecomendadosScreen({ navigation }) {
 
   function handleFavoritoPress(recipe) {
     mutate ({
-      id: recipe.id, 
+      id: recipe.id
       //esFavorito: !recipe.esFavorito
     })
   }

@@ -4,12 +4,11 @@ export async function favoritos() {
   console.log('esto es data');
   const { data } = await axios.get('/favoritos');
 
-  console.log('esto es data', (data));
+  //console.log('esto es data', (data));
   return data.favoritos;
 }
 
-export async function agregarFavorito() {
-  console.log('esto es fav');
-  const { data } = await axios.post('/agregarFavorito');
-  return data.recetas;
+export async function agregarFavorito({ id }) {
+  const { data } = await axios.post('/agregarFavorito', { id });
+  return data;
 }
