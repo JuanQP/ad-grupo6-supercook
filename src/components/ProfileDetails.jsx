@@ -28,9 +28,13 @@ function ProfileDetails({ user, loading, onSubmit }) {
     onSubmit(values, actions);
   }
 
+  function handleRecetasGuardadas() {
+
+  }
+
   return (
     <View style={{ flex: 1 }}>
-    <Button mode="contained" style={{marginTop: 20, marginBottom: 10}}>
+    <Button mode="contained" style={{marginTop: 20, marginBottom: 10}} onPress={handleRecetasGuardadas}>
       Mis recetas guardadas
     </Button>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
