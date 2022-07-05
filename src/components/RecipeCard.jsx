@@ -8,10 +8,14 @@ import {
 } from 'react-native-paper';
 import { nullImageColor, starColor } from '../styles/colors';
 
-function RecipeCard({ recipe, onPress }) {
+function RecipeCard({ recipe, onPress, onFavoritoPress }) {
   const { colors } = useTheme();
   function handleImagePressed() {
     onPress(recipe);
+  }
+
+  function handleFavoritaPress() {
+    onFavoritoPress(recipe)
   }
 
   const imagenUrl = recipe?.fotosPortada?.[0]?.imagen;
@@ -37,7 +41,7 @@ function RecipeCard({ recipe, onPress }) {
         <IconButton
           color={recipe.esFavorita ? starColor : colors.disabled}
           icon="star"
-          onPress={() => {}}
+          onPress={handleFavoritaPress}
         />
       </View>
     </View>

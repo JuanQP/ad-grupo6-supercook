@@ -1,10 +1,11 @@
 import React from 'react';
 import { Alert, ScrollView } from 'react-native';
 import { Title } from 'react-native-paper';
-import { useQuery } from 'react-query';
 import HomeLayout from '../../layouts/HomeLayout';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import * as recipesApi from '../../api/recipes';
 import * as userApi from '../../api/user';
+import * as favoritesApi from '../../api/favorites'
 import RecipeCard from '../../components/RecipeCard';
 
 export default function RecomendadosScreen({ navigation }) {
@@ -23,6 +24,19 @@ export default function RecomendadosScreen({ navigation }) {
     navigation.navigate('Receta', { recetaId: recipe.id })
   }
 
+  const { mutate, isLoading } = useMutation(favoritesApi.agregarFavorito, { // agregar: post_favorito..
+    onSuccess: () => {
+      queryClient.invalidateQueries(['recomendados']);
+    },
+  });
+
+  function handleFavoritoPress(recipe) {
+    mutate ({
+      id: recipe.id, 
+      //esFavorito: !recipe.esFavorito
+    })
+  }
+
   return (
     <HomeLayout
       icon="account-circle-outline"
@@ -37,6 +51,7 @@ export default function RecomendadosScreen({ navigation }) {
             key={r.id}
             recipe={r}
             onPress={handleRecipePress}
+            onFavoritoPress={handleFavoritoPress}
           />
         ))}
       </ScrollView>
