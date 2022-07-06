@@ -9,23 +9,21 @@ import {
 import { nullImageColor, trashCanColor } from '../styles/colors';
 
 function SavedRecipeCard({ recipe, onPress, onBorrarGuardadaPress }) {
-  const { colors } = useTheme();
+
   function handleImagePressed() {
     onPress(recipe);
   }
 
   function handleBorrarGuardadaPress() {
-    console.log('handleBorrarGuardadaPress');
     onBorrarGuardadaPress(recipe.id);
-    
   }
 
-  const imagenUrl = recipe?.fotosPortada?.[0]?.imagen;
+  const imagenUrl = recipe?.imagenUrl;
 
   return (
-    <View style={{ flexDirection: 'column', marginHorizontal: 10, width: 280, marginTop: 15}}>
+    <View style={{ flexDirection: 'column', marginHorizontal: 0, width: '100%', marginTop: 15}}>
       <TouchableWithoutFeedback onPress={handleImagePressed}>
-        <Image 
+        <Image
           style={styles.imageContent}
           source={imagenUrl ? {uri: imagenUrl} : undefined}
         />
@@ -37,7 +35,7 @@ function SavedRecipeCard({ recipe, onPress, onBorrarGuardadaPress }) {
           <Caption style={{ marginLeft: 5 }}>
             By
             {' '}
-            {recipe.usuario.nombre}
+            {recipe.usuarioNombre}
           </Caption>
         </View>
         <IconButton
@@ -46,6 +44,11 @@ function SavedRecipeCard({ recipe, onPress, onBorrarGuardadaPress }) {
           onPress={handleBorrarGuardadaPress}
         />
       </View>
+      <View>
+        <Caption>
+          Para {recipe.porciones} porciones en lugar de {recipe.porcionesOriginales} porciones
+        </Caption>
+      </View>
     </View>
   );
 }
@@ -53,8 +56,8 @@ function SavedRecipeCard({ recipe, onPress, onBorrarGuardadaPress }) {
 const styles = StyleSheet.create({
   imageContent: {
     backgroundColor: nullImageColor,
-    width: 280,
-    height: 180,
+    width: '100%',
+    height: 200,
     borderRadius: 10,
   },
 });

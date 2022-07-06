@@ -16,26 +16,20 @@ function IngredientesCalculator({ porciones, editable=true, ingredientes, receta
     if(newPersonas < 0) return;
     if(newPersonas > 20) return;
     const ratio = newPersonas / receta.porciones;
-    const newIngredientes = receta.ingredientes.map(
-      i => ({...i, cantidad: i.cantidad * ratio})
-    );
-    onChange(newPersonas, newIngredientes);
+    onChange(ratio);
   }
 
   function handleIngredienteChange() {
     if(isNaN(cantidad) || cantidad < 1) return;
     const ingredienteOriginal = receta.ingredientes[selectedIngredienteIndex];
     const ratio = Number(cantidad) / ingredienteOriginal.cantidad;
-    const newPersonas = receta.porciones * ratio;
-    const newIngredientes = receta.ingredientes.map(
-      i => ({...i, cantidad: i.cantidad * ratio})
-    );
-    onChange(newPersonas, newIngredientes);
+    onChange(ratio);
     hideModal();
   }
 
   function handleRestore() {
-    onChange(receta.porciones, receta.ingredientes.slice());
+    const defaultRatio = 1;
+    onChange(defaultRatio);
   }
 
   function handleCantidadChange(value) {
@@ -102,7 +96,7 @@ function IngredientesCalculator({ porciones, editable=true, ingredientes, receta
           <View style={{flexDirection: 'row'}}>
             <TextInput
               mode="outlined"
-              value={selectedIngrediente?.nombre || ''} disabled
+              value={selectedIngrediente?.descripcion || ''} disabled
             />
             <TextInput
               mode='outlined'

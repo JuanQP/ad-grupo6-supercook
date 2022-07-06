@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ActivityIndicator, Text, Title, FAB } from "react-native-paper";
 import { useQuery } from 'react-query';
@@ -10,28 +10,39 @@ import IngredientesCalculator from './IngredientesCalculator';
 import PasosView from './PasosView';
 import { CarouselMultimedia } from '../../components/CarouselMultimedia';
 import Comentarios from './Comentarios';
+import { addLocalRecipe } from '../../utils/utils';
 
 function RecetaScreen({ navigation, route }) {
+  const [selectedTab, setSelectedTab] = useState(BUTTON_VALUES.Ingredientes);
+  const [ingredientes, setIngredientes] = useState([]);
+  const [porciones, setPorciones] = useState(1);
   const { data: receta, isLoading } = useQuery('receta',
     () => getReceta(route.params.recetaId),
     {
       onSuccess: (receta) => {
-        setPorciones(receta.porciones);
-        setIngredientes(receta.ingredientes.slice());
+        const { newPorciones, newIngredientes } = updateWithRatio(receta, route.params.ratio ?? 1);
+        setPorciones(newPorciones);
+        setIngredientes([...newIngredientes]);
       },
     }
   );
-  const [selectedTab, setSelectedTab] = useState(BUTTON_VALUES.Ingredientes);
-  const [ingredientes, setIngredientes] = useState([]);
-  const [porciones, setPorciones] = useState(1);
+
+  function updateWithRatio(receta, ratio) {
+    const newPorciones = receta.porciones * ratio;
+    const newIngredientes = receta.ingredientes.map(
+      i => ({...i, cantidad: i.cantidad * ratio})
+    );
+    return { newPorciones, newIngredientes };
+  }
 
   function handleButtonPress(selected) {
     setSelectedTab(selected);
   }
 
-  function handleIngredientesChange(porciones, ingredientes) {
-    setPorciones(porciones);
-    setIngredientes(ingredientes);
+  function handleIngredientesChange(ratio) {
+    const { newPorciones, newIngredientes } = updateWithRatio(receta, ratio);
+    setPorciones(newPorciones);
+    setIngredientes(newIngredientes);
   }
 
   function handlePasoAPasoPress() {
@@ -42,11 +53,14 @@ function RecetaScreen({ navigation, route }) {
     console.log('handleComentariosPress');
   }
 
-  
-  function handleSavePress() {
-    //mutate(receta);
-    // navigation.navigate('RecetaEnviada');
-    console.log('Aca guardo en la BD local')
+  async function handleSavePress() {
+    const ratio = porciones / receta.porciones;
+    try {
+      await addLocalRecipe(receta, ratio);
+      console.log("Receta guardada localmente");
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   if(isLoading) {

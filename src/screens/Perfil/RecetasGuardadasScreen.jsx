@@ -1,51 +1,47 @@
-import React from 'react';
-import { View, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { ScrollView } from 'react-native';
 import { Text, Title } from 'react-native-paper';
 import { useQuery } from 'react-query';
 import HomeLayout from '../../layouts/HomeLayout';
 import * as userApi from '../../api/user';
 import SavedRecipeCard from '../../components/SavedRecipeCard';
-import * as favoritesApi from '../../api/favorites';
-import { Alert } from "react-native-web";
-
+import { useFocusEffect } from "@react-navigation/native";
+import { getLocalRecipes, saveLocalRecipes } from '../../utils/utils';
 
 function RecetasGuardadasScreen({ navigation }) {
   const { data: usuario } = useQuery('user', userApi.getUser, {
     placeholderData: { nombre: 'Invitado' },
     select: (data) => data.usuario,
   });
+  const [recetas, setRecetas] = useState([]);
 
-  const { data: favoritos } = useQuery('favorites', favoritesApi.favoritos, {
-    placeholderData: [],
-  });
+  // Ejecutar al navegar a esta pantalla
+  useFocusEffect(
+    React.useCallback(() => {
+      const leerDBLocal = async () => {
+        const recetasGuardadas = await getLocalRecipes();
+        setRecetas(recetasGuardadas);
+      }
+      leerDBLocal();
+    }, [])
+  );
 
   function handleIconPress() {
     navigation.navigate('PerfilStack', { screen: 'Perfil' });
   }
 
   function handleRecipePress(recipe) {
-    const { user, ...receta } = recipe;
-    navigation.navigate('Receta', { recetaId: recipe.id })
+    const { id: recetaId, ratio } = recipe;
+    navigation.navigate('Receta', { recetaId, ratio })
   }
 
-  function handleEliminarPress(id) {
-    // mutate ({
-    //   id: recipe.id
-    //   //esFavorito: !recipe.esFavorito
-    // })
-    console.log('handleEliminarPress');
+  async function handleEliminarPress(id) {
+    const nuevasRecetas = recetas.filter(receta => receta.id !== id);
+    await saveLocalRecipes(nuevasRecetas);
+    setRecetas(nuevasRecetas);
   }
 
   return (
-    // <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-    //   <Text style={{fontSize: 30}}>
-    //     En construcción
-    //   </Text>
-    //   <Text style={{fontSize: 30}}>
-    //     🚧
-    //   </Text>
-    // </View>
-
     <HomeLayout
       icon="account-circle-outline"
       title={`Hola ${usuario.nombre}`}
@@ -53,9 +49,13 @@ function RecetasGuardadasScreen({ navigation }) {
       padding={16}
     >
       <Title>Recetas Guardadas</Title>
-      {/* {console.log(JSON.stringify(favoritos))} */}
       <ScrollView style={{marginTop: 10}}>
-        {favoritos.map(r => (
+        {recetas.length === 0 && (
+          <Text style={{textAlign: 'center'}}>
+            Todavía no tenés recetas guardadas 😬
+          </Text>
+        )}
+        {recetas.map(r => (
           <SavedRecipeCard
             key={r.id}
             recipe={r}
