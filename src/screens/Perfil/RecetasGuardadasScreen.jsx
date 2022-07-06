@@ -55,9 +55,9 @@ function RecetasGuardadasScreen({ navigation }) {
             Todavía no tenés recetas guardadas 😬
           </Text>
         )}
-        {recetas.map(r => (
+        {recetas.map((r, i) => (
           <SavedRecipeCard
-            key={r.id}
+            key={i}
             recipe={r}
             onPress={handleRecipePress}
             onBorrarGuardadaPress={handleEliminarPress}
