@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ActivityIndicator, Text, Title, FAB } from "react-native-paper";
+import { ActivityIndicator, Snackbar, Text, Title, FAB } from "react-native-paper";
 import { useQuery } from 'react-query';
 import { getReceta } from '../../api/recipes';
 import { ScrollView, StyleSheet, View } from "react-native";
@@ -16,6 +16,9 @@ function RecetaScreen({ navigation, route }) {
   const [selectedTab, setSelectedTab] = useState(BUTTON_VALUES.Ingredientes);
   const [ingredientes, setIngredientes] = useState([]);
   const [porciones, setPorciones] = useState(1);
+  const [visible, setVisible] = React.useState(false);
+  const onDismissSnackBar = () => setVisible(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
   const queryKey = route.params.ratio ? 'receta-with-ratio' : 'receta';
   const { data: receta, isLoading } = useQuery(queryKey,
     () => getReceta(route.params.recetaId),
@@ -58,9 +61,11 @@ function RecetaScreen({ navigation, route }) {
     const ratio = porciones / receta.porciones;
     try {
       await addLocalRecipe(receta, ratio);
-      console.log("Receta guardada localmente");
+      setSnackbarMessage('Receta guardada localmente 😌')
     } catch (error) {
-      console.error(error);
+      setSnackbarMessage(error.message);
+    } finally {
+      setVisible(true);
     }
   }
 
@@ -114,6 +119,16 @@ function RecetaScreen({ navigation, route }) {
         onPress={handleSavePress}
         loading={isLoading}
       />
+      <Snackbar
+        visible={visible}
+        duration={4000}
+        onDismiss={onDismissSnackBar}
+        action={{
+          label: 'Cerrar',
+          onPress: onDismissSnackBar,
+        }}>
+        {snackbarMessage}
+      </Snackbar>
     </SafeAreaView>
   );
 }
