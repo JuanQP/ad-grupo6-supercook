@@ -20,7 +20,7 @@ function RecetasGuardadasScreen({ navigation }) {
   });
 
   function handleIconPress() {
-    navigation.navigate('Perfil');
+    navigation.navigate('PerfilStack', { screen: 'Perfil' });
   }
 
   function handleRecipePress(recipe) {

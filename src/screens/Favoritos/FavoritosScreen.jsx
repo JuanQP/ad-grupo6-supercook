@@ -20,7 +20,7 @@ function FavoritosScreen({ navigation }) {
   });
 
   function handleIconPress() {
-    navigation.navigate('Perfil');
+    navigation.navigate('PerfilStack', { screen: 'Perfil' });
   }
 
   const { mutate } = useMutation(favoritesApi.agregarFavorito, { // agregar: post_favorito..

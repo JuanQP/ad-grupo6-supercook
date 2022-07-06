@@ -16,7 +16,7 @@ export default function UltimasRecetasScreen({ navigation }) {
   const { data: ultimos } = useQuery('recetasUltimas', recipesApi.recetasUltimas);
 
   function handleIconPress() {
-    navigation.navigate('Perfil');
+    navigation.navigate('PerfilStack', { screen: 'Perfil' });
   }
 
   function handleRecipePress(recipe) {
@@ -25,7 +25,7 @@ export default function UltimasRecetasScreen({ navigation }) {
   }
 
   const queryClient = useQueryClient();
-  const { mutate, isLoading } = useMutation(favoritesApi.agregarFavorito, { 
+  const { mutate, isLoading } = useMutation(favoritesApi.agregarFavorito, {
     onSuccess: () => {
       queryClient.invalidateQueries(['recetasUltimas']);
     },

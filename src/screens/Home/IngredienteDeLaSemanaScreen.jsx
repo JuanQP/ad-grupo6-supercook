@@ -16,7 +16,7 @@ export default function IngredienteDeLaSemanaScreen({ navigation }) {
   const { data: ultimas } = useQuery('ingredienteDeLaSemana', recipesApi.ingredienteDeLaSemana);
 
   function handleIconPress() {
-    navigation.navigate('Perfil');
+    navigation.navigate('PerfilStack', { screen: 'Perfil' });
   }
 
   function handleRecipePress(recipe) {
@@ -25,7 +25,7 @@ export default function IngredienteDeLaSemanaScreen({ navigation }) {
   }
 
   const queryClient = useQueryClient();
-  const { mutate, isLoading } = useMutation(favoritesApi.agregarFavorito, { 
+  const { mutate, isLoading } = useMutation(favoritesApi.agregarFavorito, {
     onSuccess: () => {
       queryClient.invalidateQueries(['ingredienteDeLaSemana']);
     },

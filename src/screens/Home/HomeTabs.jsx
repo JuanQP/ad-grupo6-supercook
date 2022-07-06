@@ -38,11 +38,6 @@ export default function HomeTabs() {
         component={FavoritosScreen}
         options={{tabBarIcon: 'star-outline', tabBarLabel: 'Favs'}}
       />
-      {/* <Tab.Screen
-        name="Perfil"
-        component={PerfilScreen}
-        options={{tabBarIcon: 'account-circle-outline', tabBarLabel: 'Mi Perfil'}}
-      /> */}
       <Tab.Screen
         name="PerfilStack"
         component={PerfilStack}
