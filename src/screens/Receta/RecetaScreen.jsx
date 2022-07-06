@@ -9,6 +9,7 @@ import ButtonGroup, { BUTTON_VALUES } from './ButtonGroup';
 import IngredientesCalculator from './IngredientesCalculator';
 import PasosView from './PasosView';
 import { CarouselMultimedia } from '../../components/CarouselMultimedia';
+import Comentarios from './Comentarios';
 
 function RecetaScreen({ navigation, route }) {
   const { data: receta, isLoading } = useQuery('receta',
@@ -35,6 +36,10 @@ function RecetaScreen({ navigation, route }) {
 
   function handlePasoAPasoPress() {
     navigation.navigate('Paso', { recetaId: receta.id });
+  }
+
+  function handleComentariosPress(){
+    console.log('handleComentariosPress');
   }
 
   
@@ -78,6 +83,13 @@ function RecetaScreen({ navigation, route }) {
               onPasoAPasoPress={handlePasoAPasoPress}
             />
           )}
+          {selectedTab === BUTTON_VALUES.Comentarios && (
+            <Comentarios
+              navigation={navigation}
+              receta={receta}
+              onComentariosPress={handleComentariosPress}
+            />
+          )}
         </View>
       </ScrollView>
       <FAB
@@ -93,7 +105,7 @@ function RecetaScreen({ navigation, route }) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 30,
+    paddingHorizontal: 15,
     marginVertical: 10,
   },
   fab: {
