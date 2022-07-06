@@ -16,7 +16,7 @@ function CargaImagen({mediaType='Images', multimedia, onChangeMultimedia }) {
       mediaTypes: ImagePicker.MediaTypeOptions[mediaType],
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 1,
+      quality: 0.3,
     });
     if (!result.cancelled) {
       const nuevaImagen = result.uri;
