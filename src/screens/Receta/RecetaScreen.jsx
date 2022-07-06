@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ActivityIndicator, Text, Title } from "react-native-paper";
+import { ActivityIndicator, Text, Title, FAB } from "react-native-paper";
 import { useQuery } from 'react-query';
 import { getReceta } from '../../api/recipes';
 import { ScrollView, StyleSheet, View } from "react-native";
@@ -35,6 +35,13 @@ function RecetaScreen({ navigation, route }) {
 
   function handlePasoAPasoPress() {
     navigation.navigate('Paso', { recetaId: receta.id });
+  }
+
+  
+  function handleSavePress() {
+    //mutate(receta);
+    // navigation.navigate('RecetaEnviada');
+    console.log('Aca guardo en la BD local')
   }
 
   if(isLoading) {
@@ -73,6 +80,13 @@ function RecetaScreen({ navigation, route }) {
           )}
         </View>
       </ScrollView>
+      <FAB
+        style={styles.fab}
+        small
+        icon="notebook-plus"
+        onPress={handleSavePress}
+        loading={isLoading}
+      />
     </SafeAreaView>
   );
 }
@@ -81,6 +95,12 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 30,
     marginVertical: 10,
+  },
+  fab: {
+    position: 'absolute',
+    margin: 16,
+    right: 0,
+    bottom: 0,
   }
 });
 

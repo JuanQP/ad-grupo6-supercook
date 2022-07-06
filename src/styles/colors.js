@@ -9,6 +9,7 @@ export const backgroundColor = '#E7E7E7';
 export const surface = '#F5F3F1';
 export const nullImageColor = '#AAA5';
 export const starColor = '#EBEF2A';
+export const trashCanColor = '#E31818';
 export const shadowColor = 'rgba(0,0,0,1)';
 export const transparentColor = 'transparent';
 

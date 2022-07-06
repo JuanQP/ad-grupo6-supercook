@@ -4,8 +4,10 @@ import { Text, Title } from 'react-native-paper';
 import { useQuery } from 'react-query';
 import HomeLayout from '../../layouts/HomeLayout';
 import * as userApi from '../../api/user';
-import RecipeCard from '../../components/RecipeCard';
+import SavedRecipeCard from '../../components/SavedRecipeCard';
 import * as favoritesApi from '../../api/favorites';
+import { Alert } from "react-native-web";
+
 
 function RecetasGuardadasScreen({ navigation }) {
   const { data: usuario } = useQuery('user', userApi.getUser, {
@@ -26,6 +28,14 @@ function RecetasGuardadasScreen({ navigation }) {
     navigation.navigate('Receta', { recetaId: recipe.id })
   }
 
+  function handleEliminarPress(id) {
+    // mutate ({
+    //   id: recipe.id
+    //   //esFavorito: !recipe.esFavorito
+    // })
+    console.log('handleEliminarPress');
+  }
+
   return (
     // <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
     //   <Text style={{fontSize: 30}}>
@@ -42,14 +52,15 @@ function RecetasGuardadasScreen({ navigation }) {
       onIconPress={handleIconPress}
       padding={16}
     >
-      <Title>Recetas Favoritas</Title>
+      <Title>Recetas Guardadas</Title>
       {/* {console.log(JSON.stringify(favoritos))} */}
       <ScrollView style={{marginTop: 10}}>
         {favoritos.map(r => (
-          <RecipeCard
+          <SavedRecipeCard
             key={r.id}
             recipe={r}
             onPress={handleRecipePress}
+            onBorrarGuardadaPress={handleEliminarPress}
           />
         ))}
       </ScrollView>
