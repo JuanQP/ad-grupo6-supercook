@@ -28,6 +28,7 @@ export default function UltimasRecetasScreen({ navigation }) {
   const { mutate, isLoading } = useMutation(favoritesApi.agregarFavorito, {
     onSuccess: () => {
       queryClient.invalidateQueries(['recetasUltimas']);
+      queryClient.invalidateQueries(['favorites']);
     },
   });
 

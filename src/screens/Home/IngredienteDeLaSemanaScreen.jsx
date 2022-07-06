@@ -28,6 +28,7 @@ export default function IngredienteDeLaSemanaScreen({ navigation }) {
   const { mutate, isLoading } = useMutation(favoritesApi.agregarFavorito, {
     onSuccess: () => {
       queryClient.invalidateQueries(['ingredienteDeLaSemana']);
+      queryClient.invalidateQueries(['favorites']);
     },
   });
 

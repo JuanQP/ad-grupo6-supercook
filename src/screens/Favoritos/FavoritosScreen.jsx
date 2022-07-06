@@ -26,6 +26,9 @@ function FavoritosScreen({ navigation }) {
   const { mutate } = useMutation(favoritesApi.agregarFavorito, { // agregar: post_favorito..
     onSuccess: () => {
       queryClient.invalidateQueries(['favorites']);
+      queryClient.invalidateQueries(['recomendados']);
+      queryClient.invalidateQueries(['recetasUltimas']);
+      queryClient.invalidateQueries(['ingredienteDeLaSemana']);
     },
   });
 

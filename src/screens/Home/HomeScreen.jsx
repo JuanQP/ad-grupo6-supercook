@@ -43,6 +43,7 @@ export default function HomeScreen({ navigation }) {
       queryClient.invalidateQueries(['recomendados']);
       queryClient.invalidateQueries(['recetasUltimas']);
       queryClient.invalidateQueries(['ingredienteDeLaSemana']);
+      queryClient.invalidateQueries(['favorites']);
     },
   });
 

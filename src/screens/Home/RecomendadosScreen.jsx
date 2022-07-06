@@ -28,6 +28,7 @@ export default function RecomendadosScreen({ navigation }) {
   const { mutate, isLoading } = useMutation(favoritesApi.agregarFavorito, {
     onSuccess: () => {
       queryClient.invalidateQueries(['recomendados']);
+      queryClient.invalidateQueries(['favorites']);
     },
   });
 
