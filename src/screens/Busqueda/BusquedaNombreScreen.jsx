@@ -8,9 +8,9 @@ import * as recetasApi from "../../api/recipes";
 import RecipeCard from '../../components/RecipeCard';
 
 const ORDENAMIENTOS = [
-  {nombre: 'Sin ordenar', sort: undefined, icon: 'null', menuLabel: 'Sin ordenar'},
-  {nombre: 'Nombre', sort: 1, icon: 'sort-alphabetical-ascending', menuLabel: 'Nombre'},
-  {nombre: 'Nombre', sort: 2, icon: 'sort-alphabetical-descending', menuLabel: 'Nombre'},
+  { nombre: 'Sin ordenar', sort: undefined, icon: 'null', menuLabel: 'Sin ordenar' },
+  { nombre: 'Nombre', sort: 1, icon: 'sort-alphabetical-ascending', menuLabel: 'Nombre' },
+  { nombre: 'Nombre', sort: 2, icon: 'sort-alphabetical-descending', menuLabel: 'Nombre' },
 ];
 
 function BusquedaNombreScreen({ navigation }) {
@@ -59,9 +59,12 @@ function BusquedaNombreScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Title>Búsqueda</Title>
-      <FilterButtonGroup selected={selectedButton} onPress={handleSelectButton} />
+      <Title style={{ marginTop: 15, marginLeft: 15 }}>Búsqueda</Title>
+      <FilterButtonGroup
+        selected={selectedButton}
+        onPress={handleSelectButton} />
       <TextInput
+        style={{ marginLeft: 8, marginRight: 8, marginTop: 5}}
         label="Búsqueda"
         mode="outlined"
         placeholder="¿Qué vas a buscar hoy? 😋"
@@ -71,15 +74,15 @@ function BusquedaNombreScreen({ navigation }) {
         onChangeText={setNombre}
         onSubmitEditing={handleSearch}
       />
-      <Title>Resultados</Title>
-      <View style={{flexDirection: 'row'}}>
+      <Title style={{ marginTop: 15, marginLeft: 15 }}>Resultados</Title>
+      <View style={{ flexDirection: 'row', marginRight: 8, marginLeft: 8 }}>
         <Chip
           onClose={handleRemoveSearch}
           disabled={queryNombre === ''}
         >
           Nombre: {queryNombre}
         </Chip>
-        <View style={{marginLeft: 'auto'}}>
+        <View style={{ marginLeft: 'auto' }}>
           <Menu
             visible={visible}
             onDismiss={closeMenu}
@@ -107,11 +110,11 @@ function BusquedaNombreScreen({ navigation }) {
       {isLoading && (
         <ActivityIndicator animating={isLoading} color={colors.primary} />
       )}
-      <View style={{flex: 1}}>
-        <ScrollView contentContainerStyle={{paddingVertical: 10}}>
+      <View style={{ flex: 1 }}>
+        <ScrollView contentContainerStyle={{ paddingVertical: 10 }}>
           {recetas.length === 0 && (
             <View>
-              <Text style={{textAlign: 'center'}}>Sin resultados 🤔</Text>
+              <Text style={{ textAlign: 'center' }}>Sin resultados 🤔</Text>
             </View>
           )}
           {recetas?.map(receta => (

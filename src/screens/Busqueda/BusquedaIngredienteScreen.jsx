@@ -60,9 +60,10 @@ function BusquedaIngredienteScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Title>Búsqueda</Title>
+      <Title style={{ marginTop: 15, marginLeft: 15 }}>Búsqueda</Title>
       <FilterButtonGroup selected={selectedButton} onPress={handleSelectButton} />
       <TextInput
+        style={{ marginLeft: 8, marginRight: 8, marginTop: 5}}
         label="Búsqueda"
         mode="outlined"
         placeholder="¿Qué vas a buscar hoy? 😋"
@@ -77,7 +78,7 @@ function BusquedaIngredienteScreen({ navigation }) {
         <Switch value={conIngrediente} onValueChange={() => setConIngrediente(!conIngrediente)} />
         <Text style={{textAlignVertical: 'center'}}>Con ingrediente</Text>
       </View>
-      <Title>Resultados</Title>
+      <Title style={{marginLeft: 15 }}>Resultados</Title>
       <View style={{flexDirection: 'row'}}>
         <Chip
           onClose={handleRemoveSearch}

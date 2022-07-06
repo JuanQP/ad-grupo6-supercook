@@ -59,9 +59,10 @@ function BusquedaUsuarioScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Title>Búsqueda</Title>
+      <Title style={{ marginTop: 15, marginLeft: 15 }}>Búsqueda</Title>
       <FilterButtonGroup selected={selectedButton} onPress={handleSelectButton} />
       <TextInput
+        style={{ marginLeft: 8, marginRight: 8, marginTop: 5}}
         label="Búsqueda"
         mode="outlined"
         placeholder="Ingresá nombre, email o alias"
@@ -71,7 +72,7 @@ function BusquedaUsuarioScreen({ navigation }) {
         onChangeText={setUsuario}
         onSubmitEditing={handleSearch}
       />
-      <Title>Resultados</Title>
+      <Title style={{ marginTop: 15, marginLeft: 15 }}>Resultados</Title>
       <View style={{flexDirection: 'row'}}>
         <Chip
           onClose={handleRemoveSearch}

@@ -59,9 +59,10 @@ function BusquedaTipoScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Title>Búsqueda</Title>
+      <Title style={{ marginTop: 15, marginLeft: 15 }}>Búsqueda</Title>
       <FilterButtonGroup selected={selectedButton} onPress={handleSelectButton} />
       <TextInput
+        style={{ marginLeft: 8, marginRight: 8, marginTop: 5}}
         label="Búsqueda"
         mode="outlined"
         placeholder="¿Qué vas a buscar hoy? 😋"
@@ -71,8 +72,8 @@ function BusquedaTipoScreen({ navigation }) {
         onChangeText={setTipo}
         onSubmitEditing={handleSearch}
       />
-      <Title>Resultados</Title>
-      <View style={{flexDirection: 'row'}}>
+      <Title style={{ marginTop: 15, marginLeft: 15 }}>Resultados</Title>
+      <View style={{ flexDirection: 'row', marginRight: 8, marginLeft: 8 }}>
         <Chip
           onClose={handleRemoveSearch}
           disabled={queryTipo === ''}
