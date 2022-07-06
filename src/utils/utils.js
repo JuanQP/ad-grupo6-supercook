@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LOCALDB_KEY = '@db';
+const LOCAL_RECIPE_KEY = '@recipe';
 
 export function formatNumber(numero) {
   return new Intl.NumberFormat('en', {maximumFractionDigits: 2}).format(numero);
@@ -46,4 +47,18 @@ export async function addLocalRecipe(recipe, ratio) {
 
 export async function deleteLocalRecipe(recipeId) {
 
+}
+
+export async function getRecetaLocal() {
+  const serializedRecipe = await AsyncStorage.getItem(LOCAL_RECIPE_KEY);
+  return serializedRecipe ? JSON.parse(serializedRecipe) : null;
+}
+
+export async function saveRecetaLocal(recipe) {
+  const serializedRecipe = JSON.stringify(recipe);
+  await AsyncStorage.setItem(LOCAL_RECIPE_KEY, serializedRecipe);
+}
+
+export async function deleteRecetaLocal() {
+  await AsyncStorage.removeItem(LOCAL_RECIPE_KEY);
 }

@@ -23,13 +23,13 @@ function NuevaRecetaScreen2({ navigation, route }) {
       ),
     },
   );
-  const [descripcion, setDescripcion] = useState('');
-  const [porciones, setPorciones] = useState('');
-  const [tiempo, setTiempo] = useState('');
-  const [categoria, setCategoria] = useState(null);
-  const [etiquetas, setEtiquetas] = useState([]);
-  const [ingredientes, setIngredientes] = useState([]);
-  const [fotosPortada, setFotosPortada] = useState([]);
+  const [descripcion, setDescripcion] = useState(receta.descripcion);
+  const [porciones, setPorciones] = useState(String(receta.porciones));
+  const [tiempo, setTiempo] = useState(receta.tiempo);
+  const [categoria, setCategoria] = useState(receta.categoria);
+  const [etiquetas, setEtiquetas] = useState(receta.etiquetas);
+  const [ingredientes, setIngredientes] = useState(receta.ingredientes);
+  const [fotosPortada, setFotosPortada] = useState(receta.fotosPortada);
 
   function handleEtiquetasChange(etiquetas) {
     setEtiquetas(etiquetas);

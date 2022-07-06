@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { FAB, Text, Title } from "react-native-paper";
+import { Avatar, Button, Divider, FAB, Modal, Portal, Text, Title, useTheme } from "react-native-paper";
 import { ScrollView, StyleSheet, View, Alert } from "react-native";
 import { useQuery, useMutation } from 'react-query';
 import UserDetail from '../Receta/UserDetail';
@@ -11,8 +11,11 @@ import { useReceta } from '../../hooks/receta-context';
 import { getUser } from '../../api/user';
 import * as recipesApi from '../../api/recipes';
 import { CarouselMultimedia } from '../../components/CarouselMultimedia';
+import * as Network from 'expo-network';
+import { deleteRecetaLocal, saveRecetaLocal } from '../../utils/utils';
 
 function NuevaRecetaReviewScreen({ navigation }) {
+  const { colors } = useTheme();
   const { data: usuario, isLoading: isUsuarioLoading } = useQuery('usuario', getUser, {
     select: (data) => data.usuario,
   });
@@ -20,18 +23,26 @@ function NuevaRecetaReviewScreen({ navigation }) {
   const [selectedTab, setSelectedTab] = useState(BUTTON_VALUES.Ingredientes);
   const [ingredientes, setIngredientes] = useState([]);
   const [porciones, setPorciones] = useState(1);
+  const [visible, setVisible] = React.useState(false);
+  const showModal = () => setVisible(true);
+  const hideModal = () => setVisible(false);
+  const containerStyle = {backgroundColor: colors.surface, padding: 20, margin: 20, borderRadius: 10};
 
   const { mutate, isLoading } = useMutation(recipesApi.crearReceta, {
-    onSuccess: (data) => {
+    onSuccess: () => {
+      deleteRecetaLocal(); // Se borra la receta local, siempre
       navigation.navigate('RecetaEnviada');
     },
     onError: (error) => {
       Alert.alert('😞', error.response?.data?.message ?? 'Algo salió mal');
     },
+    onSettled: () => {
+      setVisible(false);
+    },
   });
 
   useEffect(() => {
-    setPorciones(receta.porciones);
+    setPorciones(Number(receta.porciones));
     setIngredientes(receta.ingredientes.slice());
   }, []);
 
@@ -48,9 +59,24 @@ function NuevaRecetaReviewScreen({ navigation }) {
     navigation.navigate('PasosReview');
   }
 
-  function handleSavePress() {
+  function handleEnviarIgual() {
     mutate(receta);
-    // navigation.navigate('RecetaEnviada');
+  }
+
+  async function handleGuardarLocalmente() {
+    await saveRecetaLocal(receta);
+    navigation.popToTop();
+    navigation.navigate('Home');
+    Alert.alert("Receta guardada localmente", "Podés recuperarla si vas nuevamente a la pantalla de agregar receta 😊")
+  }
+
+  async function handleSavePress() {
+    const networkState = await Network.getNetworkStateAsync();
+    if(networkState.type === Network.NetworkStateType.WIFI) {
+      mutate(receta);
+      return;
+    }
+    showModal();
   }
 
   return (
@@ -89,6 +115,23 @@ function NuevaRecetaReviewScreen({ navigation }) {
         onPress={handleSavePress}
         loading={isLoading}
       />
+      <Portal>
+        <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
+          <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+            <Avatar.Icon color={colors.primary} icon="alert-circle" style={{backgroundColor: 'transparent'}} />
+            <Title>Aviso!</Title>
+          </View>
+          <Text style={{textAlign: 'center'}}>No estás conectado a una red Wifi.</Text>
+          <Text style={{textAlign: 'center'}}>¿Querés enviar de todas formas la receta? 🤔</Text>
+          <Divider style={{marginVertical: 10}} />
+          <Button mode='contained' onPress={handleEnviarIgual}>
+            Enviar usando datos móviles
+          </Button>
+          <Button mode='outlined' style={{marginTop: 10}} onPress={handleGuardarLocalmente}>
+            Guardar y enviar más tarde
+          </Button>
+        </Modal>
+      </Portal>
     </SafeAreaView>
   );
 }
