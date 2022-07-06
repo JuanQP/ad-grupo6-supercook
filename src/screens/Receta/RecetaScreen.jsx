@@ -16,7 +16,8 @@ function RecetaScreen({ navigation, route }) {
   const [selectedTab, setSelectedTab] = useState(BUTTON_VALUES.Ingredientes);
   const [ingredientes, setIngredientes] = useState([]);
   const [porciones, setPorciones] = useState(1);
-  const { data: receta, isLoading } = useQuery('receta',
+  const queryKey = route.params.ratio ? 'receta-with-ratio' : 'receta';
+  const { data: receta, isLoading } = useQuery(queryKey,
     () => getReceta(route.params.recetaId),
     {
       onSuccess: (receta) => {
