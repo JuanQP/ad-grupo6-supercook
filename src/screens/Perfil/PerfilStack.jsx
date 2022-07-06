@@ -21,16 +21,6 @@ export default function PerfilStack() {
         component={RecetasGuardadasScreen}
         options={{ title: 'Recetas Guardadas', headerShown: false }}
       />
-      {/* <Stack.Screen
-        name="UltimasRecetas"
-        component={UltimasRecetasScreen}
-        options={{ title: 'Últimas recetas', headerShown: false }}
-      />
-      <Stack.Screen
-        name="IngredienteDeLaSemana"
-        component={IngredienteDeLaSemanaScreen}
-        options={{ title: 'Ingrediente de la Semana', headerShown: false }}
-      /> */}
       <Stack.Screen
         name="Receta"
         component={RecetaScreen}
