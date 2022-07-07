@@ -31,6 +31,7 @@ function PerfilScreen({ navigation }) {
   const { mutate, isLoading } = useMutation(userApi.patchUser, {
     onSuccess: () => {
       queryClient.invalidateQueries(['user']);
+      queryClient.invalidateQueries(['recomendados']);
     },
   });
 

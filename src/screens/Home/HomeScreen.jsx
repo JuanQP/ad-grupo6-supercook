@@ -13,9 +13,18 @@ export default function HomeScreen({ navigation }) {
     placeholderData: { usuario: { nombre: 'Invitado' }},
   });
   const queryClient = useQueryClient();
-  const recomendadosQuery = useQuery('recomendados', recipesApi.recomendados);
-  const recetasUltimasQuery = useQuery('recetasUltimas', recipesApi.recetasUltimas);
-  const ingredienteDeLaSemanaQuery = useQuery('ingredienteDeLaSemana', recipesApi.ingredienteDeLaSemana);
+  const {data: recomendadosData} = useQuery('recomendados', recipesApi.recomendados);
+  const {data: recetasUltimasData} = useQuery('recetasUltimas', recipesApi.recetasUltimas);
+  const {data: ingredienteDeLaSemanaData} = useQuery('ingredienteDeLaSemana', recipesApi.ingredienteDeLaSemana);
+
+  const { mutate, isLoading } = useMutation(favoritesApi.agregarFavorito, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['recomendados']);
+      queryClient.invalidateQueries(['recetasUltimas']);
+      queryClient.invalidateQueries(['ingredienteDeLaSemana']);
+      queryClient.invalidateQueries(['favorites']);
+    },
+  });
 
   function handleIconPress() {
     navigation.jumpTo('PerfilStack', { screen: 'Perfil' });
@@ -38,21 +47,11 @@ export default function HomeScreen({ navigation }) {
     navigation.navigate('IngredienteDeLaSemana');
   }
 
-  const { mutate, isLoading } = useMutation(favoritesApi.agregarFavorito, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['recomendados']);
-      queryClient.invalidateQueries(['recetasUltimas']);
-      queryClient.invalidateQueries(['ingredienteDeLaSemana']);
-      queryClient.invalidateQueries(['favorites']);
-    },
-  });
-
   function handleFavoritoPress(recipe) {
     mutate ({
       id: recipe.id
     })
   }
-
 
   return (
     <HomeLayout
@@ -64,21 +63,21 @@ export default function HomeScreen({ navigation }) {
       <ScrollView>
         <RecipeSideScroller
           title="Recomendados para vos"
-          items={recomendadosQuery.data}
+          items={recomendadosData}
           onVerTodosPress={handleRecomendadosPress}
           onItemPress={handleRecipePress}
           onFavoritoPress={handleFavoritoPress}
         />
         <RecipeSideScroller
           title="Últimas recetas añadidas"
-          items={recetasUltimasQuery.data}
+          items={recetasUltimasData}
           onVerTodosPress={handleUltimasRecetasPress}
           onItemPress={handleRecipePress}
           onFavoritoPress={handleFavoritoPress}
         />
         <RecipeSideScroller
           title="Ingrediente de la semana"
-          items={ingredienteDeLaSemanaQuery.data}
+          items={ingredienteDeLaSemanaData}
           onVerTodosPress={handleIngredienteDeLaSemanaPress}
           onItemPress={handleRecipePress}
           onFavoritoPress={handleFavoritoPress}
