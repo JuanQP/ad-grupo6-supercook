@@ -20,6 +20,8 @@ const initialValues = {
 export default function Registracion1Screen({ navigation }) {
   const [aliasDisponible, setAliasDisponible] = useState(true);
   const [emailDisponible, setEmailDisponible] = useState(true);
+  const [emailEnviado, setEmailEnviado] = useState('');
+  const [aliasEnviado, setAliasEnviado] = useState('');
   const aliasTextInput = useRef();
   const { mutate, isLoading } = useMutation(userApi.signup, {
     onSuccess: (data) => {
@@ -34,6 +36,8 @@ export default function Registracion1Screen({ navigation }) {
 
   function handleFormikSubmit(values) {
     mutate(values);
+    setEmailEnviado(values.email);
+    setAliasEnviado(values.alias);
   }
 
   return (
@@ -61,7 +65,7 @@ export default function Registracion1Screen({ navigation }) {
               blurOnSubmit={false}
             />
             <HelperText type="error" visible={!emailDisponible}>
-              El e-mail no está disponible
+              {emailEnviado} no está disponible
             </HelperText>
             <TextInput
               mode="outlined"
@@ -76,7 +80,7 @@ export default function Registracion1Screen({ navigation }) {
               onSubmitEditing={handleSubmit}
             />
             <HelperText type="error" visible={!aliasDisponible}>
-              El alias no está disponible
+              El alias {aliasEnviado} no está disponible
             </HelperText>
             <Button
               mode="contained"
