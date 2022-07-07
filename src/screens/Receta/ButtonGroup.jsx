@@ -36,14 +36,22 @@ function ButtonGroup({ selected, onPress }) {
         mode={selected === BUTTON_VALUES.Instrucciones ? 'contained' : 'outlined'}>
          Preparacion
        </Button>
-      {/* <Button
-        onPress={handleComentariosPress}
-        mode={selected === BUTTON_VALUES.Comentarios ? 'contained' : 'outlined'}
-       /> */}
-      <Button icon={{ source: "comment-text-multiple", direction: 'rtl'}}
-        mode={selected === BUTTON_VALUES.Comentarios ? 'contained' : 'outlined'}
-        onPress={handleComentariosPress}
+      <View
+        style={{
+          borderWidth: 1,
+          borderColor: colors.disabled,
+          borderRadius: 10,
+          backgroundColor: selected === BUTTON_VALUES.Comentarios ? colors.primary : 'transparent',
+        }}
+      >
+        <IconButton
+          icon="comment-text-multiple"
+          color={selected === BUTTON_VALUES.Comentarios ? colors.background : colors.primary}
+          size={20}
+          mode={selected === BUTTON_VALUES.Comentarios ? 'contained' : 'outlined'}
+          onPress={handleComentariosPress}
         />
+      </View>
     </View>
   );
 }
