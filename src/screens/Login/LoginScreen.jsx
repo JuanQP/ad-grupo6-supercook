@@ -34,14 +34,6 @@ export default function LoginScreen({ navigation }) {
   const passwordTextInput = useRef();
 
   const { mutate, isLoading } = useMutation(loginApi.login, {
-    onSuccess: (data) => {
-      axios.defaults.headers.common.Authorization = `Bearer ${data.token}`;
-      if (!data.registrado) {
-        navigation.navigate('Registracion3', data);
-      } else {
-        navigation.navigate('AppNavigator');
-      }
-    },
     onError: (error) => {
       Alert.alert('😞', error.response?.data?.message ?? 'Algo salió mal');
     },
@@ -49,10 +41,19 @@ export default function LoginScreen({ navigation }) {
 
   async function handleFormikSubmit(values, actions) {
     actions.setFieldValue('password', '');
-    if (!recordarme) {
-      actions.setFieldValue('email', '');
-    }
-    mutate(values);
+    mutate(values, {
+      onSuccess: (data) => {
+        if (!recordarme) {
+          actions.setFieldValue('email', '');
+        }
+        axios.defaults.headers.common.Authorization = `Bearer ${data.token}`;
+        if (!data.registrado) {
+          navigation.navigate('Registracion3', data);
+        } else {
+          navigation.navigate('AppNavigator');
+        }
+      },
+    });
   }
 
   function onRecordarmeCheckboxClick() {

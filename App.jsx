@@ -12,6 +12,7 @@ import { useFonts } from 'expo-font';
 import { LogBox } from 'react-native';
 LogBox.ignoreLogs([
   /ViewPropTypes/,
+  /AxiosError/,
 ]);
 const { BACKEND_HOST } = Constants.manifest.extra;
 axios.defaults.baseURL = `http://${BACKEND_HOST}/api`;
