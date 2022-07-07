@@ -12,7 +12,7 @@ function Comentarios({ receta }) {
   const [comentario, setComentario] = useState('');
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
-  const { data: comentarios } = useQuery(
+  const { data: comentarios, isLoading: isComentariosLoading } = useQuery(
     'comentarios',
     () => recipesApi.getComentarios(receta.id),
     {
@@ -46,6 +46,12 @@ function Comentarios({ receta }) {
 
   return (
     <View style={styles.container}>
+      {isComentariosLoading && (
+        <ActivityIndicator
+          animating={isComentariosLoading}
+          color={colors.primary}
+        />
+      )}
       {comentarios.map((c, i) => (
         <View key={i} style={styles.comentario}>
           <Paragraph>{c.descripcion}</Paragraph>
