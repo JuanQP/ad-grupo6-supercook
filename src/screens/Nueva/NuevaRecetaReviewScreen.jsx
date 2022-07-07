@@ -103,7 +103,10 @@ function NuevaRecetaReviewScreen({ navigation }) {
           <Title>{receta.nombre}</Title>
           {!isUsuarioLoading && <UserDetail user={usuario} />}
           <Text style={{ marginTop: 10 }}>{receta.descripcion}</Text>
-          <ButtonGroup selected={selectedTab} onPress={handleButtonPress} />
+          <ButtonGroup
+            selected={selectedTab}
+            onPress={handleButtonPress}
+          />
           {selectedTab === BUTTON_VALUES.Ingredientes && (
             <IngredientesCalculator
               ingredientes={ingredientes}

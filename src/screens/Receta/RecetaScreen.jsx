@@ -87,7 +87,11 @@ function RecetaScreen({ navigation, route }) {
           <Title>{receta.nombre}</Title>
           <UserDetail user={receta.usuario} />
           <Text style={{ marginTop: 10 }}>{receta.descripcion}</Text>
-          <ButtonGroup selected={selectedTab} onPress={handleButtonPress} />
+          <ButtonGroup
+            mostrarComentarios
+            selected={selectedTab}
+            onPress={handleButtonPress}
+          />
           {selectedTab === BUTTON_VALUES.Ingredientes && (
             <IngredientesCalculator
               ingredientes={ingredientes}
