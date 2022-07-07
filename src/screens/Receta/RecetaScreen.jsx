@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ActivityIndicator, Snackbar, Text, Title, FAB } from "react-native-paper";
+import { ActivityIndicator, Snackbar, Text, Title, FAB, useTheme} from "react-native-paper";
 import { useQuery } from 'react-query';
 import { getReceta } from '../../api/recipes';
+import { categoriaById } from '../../api/categories'
 import { ScrollView, StyleSheet, View } from "react-native";
 import UserDetail from './UserDetail';
 import ButtonGroup, { BUTTON_VALUES } from './ButtonGroup';
@@ -13,6 +14,7 @@ import Comentarios from './Comentarios';
 import { addLocalRecipe } from '../../utils/utils';
 
 function RecetaScreen({ navigation, route }) {
+  const { colors } = useTheme();
   const [selectedTab, setSelectedTab] = useState(BUTTON_VALUES.Ingredientes);
   const [ingredientes, setIngredientes] = useState([]);
   const [porciones, setPorciones] = useState(1);
@@ -34,7 +36,7 @@ function RecetaScreen({ navigation, route }) {
   function updateWithRatio(receta, ratio) {
     const newPorciones = receta.porciones * ratio;
     const newIngredientes = receta.ingredientes.map(
-      i => ({...i, cantidad: i.cantidad * ratio})
+      i => ({ ...i, cantidad: i.cantidad * ratio })
     );
     return { newPorciones, newIngredientes };
   }
@@ -53,7 +55,7 @@ function RecetaScreen({ navigation, route }) {
     navigation.navigate('Paso', { recetaId: receta.id });
   }
 
-  function handleComentariosPress(){
+  function handleComentariosPress() {
     console.log('handleComentariosPress');
   }
 
@@ -69,24 +71,27 @@ function RecetaScreen({ navigation, route }) {
     }
   }
 
-  if(isLoading) {
+  if (isLoading) {
     return (
-      <SafeAreaView style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <ActivityIndicator animating={true} color={'gray'} />
       </SafeAreaView>
     )
   }
 
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <View style={{marginTop:15}}>
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={{ marginTop: 15 }}>
         <CarouselMultimedia data={receta.fotosPortada.map(f => f.imagen)} />
       </View>
       <ScrollView keyboardShouldPersistTaps={'handled'}>
         <View style={styles.container}>
           <Title>{receta.nombre}</Title>
+          <View style={{ ...styles.container2, backgroundColor: colors.background }}>
+            <Text style={{ marginTop: 1 }}>{'Categoria: ' + receta.categoria["descripcion"]}</Text>
+          </View>
           <UserDetail user={receta.usuario} />
-          <Text style={{ marginTop: 10 }}>{receta.descripcion}</Text>
+          <Text style={{ marginTop: 5 }}>{receta.descripcion}</Text>
           <ButtonGroup
             mostrarComentarios
             selected={selectedTab}
@@ -147,7 +152,15 @@ const styles = StyleSheet.create({
     margin: 16,
     right: 0,
     bottom: 0,
-  }
+  },
+  container2: {
+    flexDirection: 'row',
+    borderRadius: 10,
+    justifyContent: 'flex-start',
+    marginTop: 2,
+    paddingVertical: 3,
+    marginLeft: 6,
+  },
 });
 
 export default RecetaScreen;
