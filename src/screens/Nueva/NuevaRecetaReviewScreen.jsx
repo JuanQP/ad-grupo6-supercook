@@ -44,7 +44,6 @@ function NuevaRecetaReviewScreen({ navigation }) {
 
   async function selectApi(recipe) {
     const {action, ...recipeValues} = recipe;
-    return;
     if(action === RECETAS_ACCIONES.Crear) {
       return await recipesApi.crearReceta(recipeValues);
     }
