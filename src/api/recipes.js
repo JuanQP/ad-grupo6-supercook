@@ -46,20 +46,25 @@ const convertirMultimediaRecetaABase64 = async (receta) => {
 
       if (isVideo) {
         const videoBase64 = await FileSystem.readAsStringAsync(uri, { encoding: 'base64' });
+        const lastIndex = uri.lastIndexOf('.');
+        const formatoVideo = uri.slice(lastIndex + 1);
+        const vidFormatoBase64 = 'data:video/' + formatoVideo + ';base64,' + videoBase64;
         const video_multimedia = {
           "tipo_multimedia": "video",
-          "img_multimedia": videoBase64,
+          "img_multimedia": vidFormatoBase64,
           "pasoId": indexPasoReceta
         };
         receta.pasosReceta[indexPasoReceta].pasosMultimedia[indexPasoMultimedia] = video_multimedia;
       } else {
         const imgBase64 = await FileSystem.readAsStringAsync(uri, { encoding: 'base64' });
+        const lastIndex = uri.lastIndexOf('.');
+        const formatoImagen = uri.slice(lastIndex + 1);
+        const imgFormatoBase64 = 'data:image/' + formatoImagen + ';base64,' + imgBase64;
         const imagen_multimedia = {
           "tipo_multimedia": "imagen",
-          "img_multimedia": imgBase64,
+          "img_multimedia": imgFormatoBase64,
           "pasoId": indexPasoReceta
         };
-
         receta.pasosReceta[indexPasoReceta].pasosMultimedia[indexPasoMultimedia] = imagen_multimedia;
       }
     }
