@@ -110,3 +110,8 @@ export async function getComentarios(recetaId) {
   const { data } = await axios.get(`/comentarios/${recetaId}`);
   return data.comentarios;
 }
+
+export async function crearComentario(comentario) {
+  const { data } = await axios.post(`/cargarComentario/${comentario.recetaId}`, comentario);
+  return data;
+}
