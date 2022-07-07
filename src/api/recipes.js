@@ -29,7 +29,10 @@ export async function checkearReceta(nombre) {
 const convertirMultimediaRecetaABase64 = async (receta) => {
   const fotosPortadaEnBase64 = await Promise.all(
     receta.fotosPortada.map(async (imagen) => {
-      // return await FileSystem.readAsStringAsync(imagen, { encoding: 'base64' });
+      // Si empieza con http entonces es una imagen que ya existe en el backend,
+      // no hacemos nada
+      if(imagen.match(/^http/i)) return imagen;
+
       const fotoPortadaBase64 = await FileSystem.readAsStringAsync(imagen, { encoding: 'base64' });
       const lastIndex = imagen.lastIndexOf('.');
       const formatoImagen = imagen.slice(lastIndex + 1);
@@ -43,30 +46,17 @@ const convertirMultimediaRecetaABase64 = async (receta) => {
       const uri = receta.pasosReceta[indexPasoReceta].pasosMultimedia[indexPasoMultimedia].img_multimedia;
 
       const isVideo = !!uri?.match(/\.mp4$/i);
-
-      if (isVideo) {
-        const videoBase64 = await FileSystem.readAsStringAsync(uri, { encoding: 'base64' });
-        const lastIndex = uri.lastIndexOf('.');
-        const formatoVideo = uri.slice(lastIndex + 1);
-        const vidFormatoBase64 = 'data:video/' + formatoVideo + ';base64,' + videoBase64;
-        const video_multimedia = {
-          "tipo_multimedia": "video",
-          "img_multimedia": vidFormatoBase64,
-          "pasoId": indexPasoReceta
-        };
-        receta.pasosReceta[indexPasoReceta].pasosMultimedia[indexPasoMultimedia] = video_multimedia;
-      } else {
-        const imgBase64 = await FileSystem.readAsStringAsync(uri, { encoding: 'base64' });
-        const lastIndex = uri.lastIndexOf('.');
-        const formatoImagen = uri.slice(lastIndex + 1);
-        const imgFormatoBase64 = 'data:image/' + formatoImagen + ';base64,' + imgBase64;
-        const imagen_multimedia = {
-          "tipo_multimedia": "imagen",
-          "img_multimedia": imgFormatoBase64,
-          "pasoId": indexPasoReceta
-        };
-        receta.pasosReceta[indexPasoReceta].pasosMultimedia[indexPasoMultimedia] = imagen_multimedia;
-      }
+      const isHttp = !!uri?.match(/^http/i);
+      // URL o base64
+      const base64 = isHttp ? null : (await FileSystem.readAsStringAsync(uri, { encoding: 'base64' }));
+      const lastIndex = isHttp ? 0 : uri.lastIndexOf('.');
+      const formatoMultimedia = isHttp ? '' : uri.slice(lastIndex + 1);
+      const multimedia = {
+        tipo_multimedia: isVideo ? 'video' : 'imagen',
+        img_multimedia: isHttp ? uri : `data:${isVideo ? 'video' : 'image'}/${formatoMultimedia};base64,${base64}`,
+        pasoId: indexPasoReceta,
+      };
+      receta.pasosReceta[indexPasoReceta].pasosMultimedia[indexPasoMultimedia] = multimedia;
     }
   }
   return receta;
