@@ -28,7 +28,7 @@ function NuevaRecetaScreen3 ({ navigation }) {
         {receta.pasosReceta.length === 0 && (
           <Caption>Todavía no agregaste ningún paso para preparar esta receta 😬</Caption>
         )}
-        {receta.pasosReceta.map((paso, i) => (
+        {receta.pasosReceta.sort((a,b) => a.numero_paso - b.numero_paso).map((paso, i) => (
           <Paso key={i} paso={paso} onEditPress={handleEditPress} />
         ))}
         <Button
