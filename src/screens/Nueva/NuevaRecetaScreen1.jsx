@@ -6,8 +6,9 @@ import { checkearReceta } from '../../api/recipes';
 import { useReceta } from '../../hooks/receta-context';
 import { useFocusEffect } from '@react-navigation/native';
 import { deleteRecetaLocal, getRecetaLocal } from '../../utils/utils';
+import { RECETAS_ACCIONES } from './RecetaExistenteScreen';
 
-const EMPTY_RECETA = {
+export const EMPTY_RECETA = {
   categoria: null,
   descripcion: '',
   etiquetas: [],
@@ -16,7 +17,7 @@ const EMPTY_RECETA = {
   nombre: '',
   pasosReceta: [],
   porciones: 1,
-  tiempo: '',
+  tiempo_coccion: 60,
 };
 
 function NuevaRecetaScreen1 ({ navigation }) {
@@ -38,9 +39,9 @@ function NuevaRecetaScreen1 ({ navigation }) {
   async function handleSubmit() {
     if(nombre === '') return;
     setIsLoading(true);
-    let existeReceta;
+    let recetaExistente;
     try {
-      existeReceta = await checkearReceta(nombre);
+      recetaExistente = await checkearReceta(nombre);
     } catch {
       return;
     } finally {
@@ -48,11 +49,27 @@ function NuevaRecetaScreen1 ({ navigation }) {
     }
     const nombreDeReceta = nombre;
     setNombre('');
-    if(existeReceta) {
+    if(recetaExistente) {
+      const {
+        categoriaId,
+        usuarioId,
+        verificada,
+        comentarios,
+        createdAt,
+        updatedAt,
+        ...receta
+      } = recetaExistente;
+      receta.categoria = categoriaId;
+      receta.etiquetas = receta.etiquetas.map(e => e.descripcion);
+      receta.fotosPortada = receta.fotosPortada.map(f => f.imagen);
+      setRecetaContext(receta);
       navigation.navigate('ExisteReceta', {nombre: nombreDeReceta});
       return;
     }
-    setRecetaContext({...EMPTY_RECETA});
+    setRecetaContext({
+      ...EMPTY_RECETA,
+      action: RECETAS_ACCIONES.Crear,
+    });
     navigation.navigate('CrearReceta2', {nombre: nombreDeReceta});
   }
 

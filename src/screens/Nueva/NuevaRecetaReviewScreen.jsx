@@ -13,6 +13,7 @@ import * as recipesApi from '../../api/recipes';
 import { CarouselMultimedia } from '../../components/CarouselMultimedia';
 import * as Network from 'expo-network';
 import { deleteRecetaLocal, saveRecetaLocal } from '../../utils/utils';
+import { RECETAS_ACCIONES } from './RecetaExistenteScreen';
 
 function NuevaRecetaReviewScreen({ navigation }) {
   const { colors } = useTheme();
@@ -28,7 +29,7 @@ function NuevaRecetaReviewScreen({ navigation }) {
   const hideModal = () => setVisible(false);
   const containerStyle = {backgroundColor: colors.surface, padding: 20, margin: 20, borderRadius: 10};
 
-  const { mutate, isLoading } = useMutation(recipesApi.crearReceta, {
+  const { mutate, isLoading } = useMutation(selectApi, {
     onSuccess: () => {
       deleteRecetaLocal(); // Se borra la receta local, siempre
       navigation.navigate('RecetaEnviada');
@@ -40,6 +41,20 @@ function NuevaRecetaReviewScreen({ navigation }) {
       setVisible(false);
     },
   });
+
+  async function selectApi(recipe) {
+    const {action, ...recipeValues} = recipe;
+    return;
+    if(action === RECETAS_ACCIONES.Crear) {
+      return await recipesApi.crearReceta(recipeValues);
+    }
+    else if(action === RECETAS_ACCIONES.Editar) {
+      return await recipesApi.editarReceta(recipeValues);
+    }
+    else if(action === RECETAS_ACCIONES.Reemplazar) {
+      return await recipesApi.reemplazarReceta(recipeValues);
+    }
+  }
 
   useEffect(() => {
     setPorciones(Number(receta.porciones));

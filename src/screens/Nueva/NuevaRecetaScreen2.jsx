@@ -25,7 +25,7 @@ function NuevaRecetaScreen2({ navigation, route }) {
   );
   const [descripcion, setDescripcion] = useState(receta.descripcion);
   const [porciones, setPorciones] = useState(String(receta.porciones));
-  const [tiempo, setTiempo] = useState(receta.tiempo);
+  const [tiempo_coccion, setTiempo_Coccion] = useState(String(receta.tiempo_coccion));
   const [categoria, setCategoria] = useState(receta.categoria);
   const [etiquetas, setEtiquetas] = useState(receta.etiquetas);
   const [ingredientes, setIngredientes] = useState(receta.ingredientes);
@@ -44,17 +44,19 @@ function NuevaRecetaScreen2({ navigation, route }) {
   }
 
   function handleSiguientePress() {
-    setRecetaContext({
+    const recetaModificada = {
+      ...receta,
       nombre,
       descripcion,
       porciones: Number(porciones),
-      tiempo,
+      tiempo_coccion: Number(tiempo_coccion),
       categoria,
       etiquetas,
       ingredientes,
       pasosReceta: receta?.pasosReceta ?? [],
       fotosPortada,
-    });
+    };
+    setRecetaContext(recetaModificada);
     navigation.navigate('CrearReceta3');
   }
 
@@ -93,8 +95,8 @@ function NuevaRecetaScreen2({ navigation, route }) {
           mode="outlined"
           placeholder="45"
           keyboardType='decimal-pad'
-          value={tiempo}
-          onChangeText={setTiempo}
+          value={tiempo_coccion}
+          onChangeText={setTiempo_Coccion}
           left={<TextInput.Icon name="clock-outline" />}
         />
         <SingleDropdown

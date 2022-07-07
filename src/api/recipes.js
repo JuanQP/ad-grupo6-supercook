@@ -23,7 +23,7 @@ export async function getReceta(recetaId) {
 
 export async function checkearReceta(nombre) {
   const { data } = await axios.get(`/checkearReceta`, { params: { nombre } });
-  return data;
+  return data.receta;
 }
 
 const convertirMultimediaRecetaABase64 = async (receta) => {
@@ -70,6 +70,18 @@ const convertirMultimediaRecetaABase64 = async (receta) => {
 export async function crearReceta(receta) {
   const nuevaReceta64 = await convertirMultimediaRecetaABase64(receta);
   const { data } = await axios.post('/recetas', nuevaReceta64);
+  return data;
+}
+
+export async function editarReceta(receta) {
+  const nuevaReceta64 = await convertirMultimediaRecetaABase64(receta);
+  const { data } = await axios.patch(`/recetas/${receta.id}`, nuevaReceta64);
+  return data;
+}
+
+export async function reemplazarReceta(receta) {
+  const nuevaReceta64 = await convertirMultimediaRecetaABase64(receta);
+  const { data } = await axios.put(`/recetas/${receta.id}`, nuevaReceta64);
   return data;
 }
 

@@ -4,21 +4,32 @@ import { Text, Title, Button } from "react-native-paper";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useReceta } from '../../hooks/receta-context';
 
+export const RECETAS_ACCIONES = {
+  Crear: 1,
+  Reemplazar: 2,
+  Editar: 3,
+};
+
 function RecetaExistenteScreen({ navigation, route }) {
 
-  const { onChange: setRecetaContext } = useReceta();
+  const { value: recetaExistente, onChange: setRecetaContext } = useReceta();
 
   function handleReemplazarPress() {
     const { nombre } = route.params;
-    setRecetaContext({});
+    setRecetaContext({
+      ...recetaExistente,
+      action: RECETAS_ACCIONES.Reemplazar,
+    });
     navigation.navigate('CrearReceta2', { nombre });
   }
 
   function handleEditarPress() {
     const { nombre } = route.params;
-    // Acá debería ir alguna lógica que recupere la receta y setee correctamente el contexto
-    setRecetaContext({});
-    navigation.navigate('CrearReceta2', { nombre, editar: true });
+    setRecetaContext({
+      ...recetaExistente,
+      action: RECETAS_ACCIONES.Editar,
+    });
+    navigation.navigate('CrearReceta2', { nombre });
   }
 
   return (
