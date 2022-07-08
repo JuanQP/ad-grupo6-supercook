@@ -15,7 +15,7 @@ LogBox.ignoreLogs([
   /AxiosError/,
 ]);
 const { BACKEND_HOST } = Constants.manifest.extra;
-axios.defaults.baseURL = `http://${BACKEND_HOST}/api`;
+axios.defaults.baseURL = `${BACKEND_HOST}/api`;
 
 const queryClient = new QueryClient();
 
