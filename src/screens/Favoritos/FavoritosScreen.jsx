@@ -34,17 +34,18 @@ function FavoritosScreen({ navigation }) {
     navigation.navigate('Receta', { recetaId: recipe.id })
   }
 
-  // const { mutate, isLoading } = useMutation(userApi.patchUser, {
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries(['user']);
-  //   },
-  // });
   const queryClient = useQueryClient();
   const { mutate, isLoading } = useMutation(favoritesApi.agregarFavorito, {
     onSuccess: () => {
       queryClient.invalidateQueries(['favorites']);
     },
   });
+  // const queryClient = useQueryClient();
+  // const { mutate, isLoading } = useMutation(favoritesApi.agregarFavorito, {
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries(['favorites']);
+  //   },
+  // });
 
   function handleFavoritoPress(recipe) {
     mutate ({
