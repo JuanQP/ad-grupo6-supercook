@@ -39,10 +39,16 @@ function FavoritosScreen({ navigation }) {
   //     queryClient.invalidateQueries(['user']);
   //   },
   // });
+  const queryClient = useQueryClient();
+  const { mutate, isLoading } = useMutation(favoritesApi.agregarFavorito, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['favorites']);
+    },
+  });
 
   function handleFavoritoPress(recipe) {
     mutate ({
-      id: recipe.id, 
+      id: recipe.id,
       //esFavorito: !recipe.esFavorito
     });
   }
@@ -57,6 +63,14 @@ function FavoritosScreen({ navigation }) {
     //   </Text>
     // </View>
 
+  function handleFavoritoPress(recipe) {
+    mutate ({
+      id: recipe.id
+      //esFavorito: !recipe.esFavorito
+    })
+  }
+
+  return (
     <HomeLayout
       icon="account-circle-outline"
       title={`Hola ${usuario.nombre}`}

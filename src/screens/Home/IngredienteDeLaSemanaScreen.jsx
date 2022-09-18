@@ -24,9 +24,10 @@ export default function IngredienteDeLaSemanaScreen({ navigation }) {
     navigation.navigate('Receta', { recetaId: recipe.id })
   }
 
+  const queryClient = useQueryClient();
   const { mutate, isLoading } = useMutation(favoritesApi.agregarFavorito, { 
     onSuccess: () => {
-      queryClient.invalidateQueries(['recomendados']);
+      queryClient.invalidateQueries(['ingredienteDeLaSemana']);
     },
   });
 
