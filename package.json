@@ -35,7 +35,8 @@
     "react-native-web": "0.17.7",
     "react-query": "^3.39.0",
     "yup": "^0.32.11",
-    "expo-av": "~11.2.3"
+    "expo-av": "~11.2.3",
+    "expo-file-system": "~14.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
