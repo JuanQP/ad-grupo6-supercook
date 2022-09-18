@@ -37,12 +37,6 @@ function FavoritosScreen({ navigation }) {
     navigation.navigate('Receta', { recetaId: recipe.id })
   }
 
-  const queryClient = useQueryClient();
-  const { mutate, isLoading } = useMutation(favoritesApi.agregarFavorito, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['favorites']);
-    },
-  });
   // const queryClient = useQueryClient();
   // const { mutate, isLoading } = useMutation(favoritesApi.agregarFavorito, {
   //   onSuccess: () => {
@@ -56,16 +50,6 @@ function FavoritosScreen({ navigation }) {
       //esFavorito: !recipe.esFavorito
     });
   }
-
-  return (
-    // <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-    //   <Text style={{fontSize: 30}}>
-    //     En construcción
-    //   </Text>
-    //   <Text style={{fontSize: 30}}>
-    //     🚧
-    //   </Text>
-    // </View>
 
   function handleFavoritoPress(recipe) {
     mutate ({
