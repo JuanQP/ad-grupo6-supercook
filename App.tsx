@@ -1,20 +1,20 @@
-import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import Constants from 'expo-constants';
 import axios from 'axios';
-import App from './src/App';
-import { backgroundColor, primary, surface } from './src/styles/colors';
+import Constants from 'expo-constants';
+import { useFonts } from 'expo-font';
 import 'intl';
 import 'intl/locale-data/jsonp/en';
-import { useFonts } from 'expo-font';
+import * as React from 'react';
 import { LogBox } from 'react-native';
+import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import App from './src/App';
+import { backgroundColor, primary, surface } from './src/styles/colors';
 LogBox.ignoreLogs([
   /ViewPropTypes/,
   /AxiosError/,
 ]);
-const { BACKEND_HOST } = Constants.manifest.extra;
+const BACKEND_HOST: string = Constants.manifest?.extra?.BACKEND_HOST;
 axios.defaults.baseURL = `${BACKEND_HOST}/api`;
 
 const queryClient = new QueryClient();

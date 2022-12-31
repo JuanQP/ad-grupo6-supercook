@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { StyleSheet, View } from "react-native";
 import { Button, Caption, Divider, Modal, Paragraph, Portal, Text, TextInput, Title, useTheme } from 'react-native-paper';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import * as recipesApi from '../../api/recipes';
 
 
@@ -20,7 +20,7 @@ function Comentarios({ receta }) {
     }
   );
   const { mutate, isLoading } = useMutation(
-    recipesApi.crearComentario,
+    ({ recetaId, descripcion }) => recipesApi.crearComentario(recetaId, { descripcion }),
     {
       onSuccess: () => {
         setComentario('');
