@@ -1,14 +1,20 @@
 /* eslint-disable linebreak-style */
-import React from 'react';
-import { View, Dimensions } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useTheme, Button } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
+import React from 'react';
+import { Dimensions, View } from 'react-native';
+import { Button, useTheme } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { CarouselMultimedia } from './CarouselMultimedia';
 
 const PAGE_WIDTH = Dimensions.get('window').width;
 
-function CargaImagen({mediaType='Images', multimedia, onChangeMultimedia }) {
+interface Props {
+  mediaType: "Images" | "Videos" | "All";
+  multimedia: string[];
+  onChangeMultimedia: (multimedias: string[]) => void;
+}
+
+function CargaImagen({mediaType='Images', multimedia, onChangeMultimedia }: Props) {
   const { colors } = useTheme();
 
   const openGallery = async () => {
@@ -18,7 +24,7 @@ function CargaImagen({mediaType='Images', multimedia, onChangeMultimedia }) {
       aspect: [4, 3],
       quality: 0.3,
     });
-    if (!result.cancelled) {
+    if (!result.cancelled && result.uri) {
       const nuevaImagen = result.uri;
       onChangeMultimedia([
         ...multimedia,

@@ -1,11 +1,11 @@
-import { Formik } from 'formik';
+import { Formik, FormikHelpers } from 'formik';
 import React from 'react';
 import { View } from 'react-native';
 import {
   ActivityIndicator,
   Button,
   Caption,
-  IconButton, Modal, Portal, Text, TextInput, Title, useTheme,
+  IconButton, Modal, Portal, Text, TextInput, Title, useTheme
 } from 'react-native-paper';
 import * as yup from 'yup';
 import { modalStyle, transparentColor } from '../styles/colors';
@@ -14,7 +14,17 @@ const reviewSchema = yup.object({
   sobre_mi: yup.string().max(200).required(),
 });
 
-function ProfileDetails({ user, loading, onSubmit, onPressRecetasGuardadas }) {
+type UsuarioData = Pick<Usuario, "sobre_mi">
+type FormikActions = FormikHelpers<{sobre_mi: string}>
+
+interface Props {
+  user: UsuarioData;
+  loading: boolean;
+  onSubmit: (values: UsuarioData, actions: FormikActions) => void;
+  onPressRecetasGuardadas: () => void;
+}
+
+function ProfileDetails({ user, loading, onSubmit, onPressRecetasGuardadas }: Props) {
   const { colors } = useTheme();
   const [visible, setVisible] = React.useState(false);
   const showModal = () => setVisible(true);
@@ -23,23 +33,19 @@ function ProfileDetails({ user, loading, onSubmit, onPressRecetasGuardadas }) {
     sobre_mi: user.sobre_mi,
   };
 
-  function handleFormikSubmit(values, actions) {
+  function handleFormikSubmit(values: UsuarioData, actions: FormikActions) {
     hideModal();
     onSubmit(values, actions);
   }
 
-  function handleRecetasGuardadas() {
-
-  }
-
   return (
     <View style={{ flex: 1 }}>
-    <Button mode="contained" style= {{marginTop: 20, marginBottom: 10}} onPress= {onPressRecetasGuardadas}>
+    <Button mode="contained" style= {{marginTop: 20, marginBottom: 10}} onPress={onPressRecetasGuardadas}>
       Mis recetas guardadas
     </Button>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <Text>Sobre Mí</Text>
-        <IconButton color={colors.backdrop} icon="pencil-circle" onPress={showModal} />
+        <IconButton iconColor={colors.backdrop} icon="pencil-circle" onPress={showModal} />
         <ActivityIndicator animating={loading} />
       </View>
       <Text style={{ color: colors.primary }}>{user.sobre_mi}</Text>
@@ -69,7 +75,7 @@ function ProfileDetails({ user, loading, onSubmit, onPressRecetasGuardadas }) {
                       <TextInput
                         label=""
                         onBlur={handleBlur('sobre_mi')}
-                        error={touched.sobre_mi && errors.sobre_mi}
+                        error={!!touched.sobre_mi && !!errors.sobre_mi}
                         value={values.sobre_mi}
                         onChangeText={handleChange('sobre_mi')}
                         style={{ backgroundColor: transparentColor }}
@@ -88,7 +94,7 @@ function ProfileDetails({ user, loading, onSubmit, onPressRecetasGuardadas }) {
                       <Button
                         mode="contained"
                         disabled={!isValid}
-                        onPress={handleSubmit}
+                        onPress={() => handleSubmit()}
                       >
                         Guardar
                       </Button>

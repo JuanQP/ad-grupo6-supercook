@@ -5,7 +5,11 @@ import { nullImageColor } from "../styles/colors";
 
 const PAGE_WIDTH = Dimensions.get('window').width;
 
-export default function ImagePlaceholder({ texto }) {
+interface Props {
+  texto: string
+}
+
+export default function ImagePlaceholder({ texto }: Props) {
   return (
     <View style={styles.image}>
       <Text>{texto}</Text>

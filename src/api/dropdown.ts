@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 interface EtiquetasResponse {
-  data: Etiqueta[];
+  etiquetas: Etiqueta[];
 }
 
 export async function etiquetas() {

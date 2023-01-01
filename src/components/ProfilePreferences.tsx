@@ -4,16 +4,22 @@ import {
   ActivityIndicator,
   Button,
   Caption,
-  Chip, IconButton, Modal, Portal, Text, Title, useTheme,
+  Chip, IconButton, Modal, Portal, Text, Title, useTheme
 } from 'react-native-paper';
 import { useQuery } from 'react-query';
 import * as dropdownApi from '../api/dropdown';
 import { modalStyle } from '../styles/colors';
 import ChipPicker from './ChipPicker';
 
-function ProfilePreferences({ user, loading, onSubmit }) {
+interface Props {
+  user: Usuario & { preferencias: Etiqueta[] };
+  loading: boolean;
+  onSubmit: (preferencias: Etiqueta[]) => void;
+}
+
+function ProfilePreferences({ user, loading, onSubmit }: Props) {
   const { colors } = useTheme();
-  const [userPreferences, setUserPreferences] = React.useState([]);
+  const [userPreferences, setUserPreferences] = React.useState<Etiqueta[]>([]);
   const { data } = useQuery('etiquetas', dropdownApi.etiquetas, {
     placeholderData: {
       etiquetas: [],
@@ -26,7 +32,7 @@ function ProfilePreferences({ user, loading, onSubmit }) {
   };
   const hideModal = () => setVisible(false);
 
-  function handlePreferencesChange(newPreferences) {
+  function handlePreferencesChange(newPreferences: Etiqueta[]) {
     setUserPreferences(newPreferences);
   }
 
@@ -40,7 +46,7 @@ function ProfilePreferences({ user, loading, onSubmit }) {
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <Text>Preferencias</Text>
         <IconButton
-          color={colors.backdrop}
+          iconColor={colors.backdrop}
           icon="pencil-circle"
           onPress={showModal}
         />
@@ -61,7 +67,7 @@ function ProfilePreferences({ user, loading, onSubmit }) {
               <Caption>Seleccione las preferencias que desea agregar</Caption>
             </View>
             <ChipPicker
-              items={data.etiquetas}
+              items={data?.etiquetas ?? []}
               selectedItems={userPreferences}
               labelKey="descripcion"
               onChange={handlePreferencesChange}

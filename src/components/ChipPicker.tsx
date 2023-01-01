@@ -2,10 +2,17 @@ import React from 'react';
 import { View } from 'react-native';
 import { Chip } from 'react-native-paper';
 
-function ChipPicker({
+interface Props<T extends { id: number }> {
+  items: T[];
+  labelKey: keyof T;
+  selectedItems: T [];
+  onChange: (items: T[]) => void;
+}
+
+function ChipPicker<T extends { id: number }>({
   items, selectedItems, labelKey, onChange,
-}) {
-  function handleItemPress(pressedItem) {
+}: Props<T>) {
+  function handleItemPress(pressedItem: T) {
     const wasSelectedBefore = selectedItems.some((i) => i.id === pressedItem.id);
     if (wasSelectedBefore) {
       onChange(selectedItems.filter((i) => i.id !== pressedItem.id));
@@ -27,7 +34,7 @@ function ChipPicker({
           onPress={() => handleItemPress(i)}
           style={{ margin: 1 }}
         >
-          {i[labelKey]}
+          {String(i[labelKey])}
         </Chip>
       ))}
     </View>

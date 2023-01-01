@@ -2,7 +2,12 @@ import React from "react";
 import { View } from "react-native";
 import { Badge, IconButton, Text, useTheme } from "react-native-paper";
 
-export default function Paso({ paso, onEditPress }) {
+interface Props {
+  paso: Pick<Paso, "numero_paso" | "descripcion_paso">;
+  onEditPress: (numeroPaso: number) => void;
+}
+
+export default function Paso({ paso, onEditPress }: Props) {
   const { colors } = useTheme();
   return (
     <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -16,7 +21,7 @@ export default function Paso({ paso, onEditPress }) {
       </View>
       <IconButton
         icon="pencil"
-        style={{backgroundColor: colors.disabled, marginLeft: 'auto'}}
+        style={{backgroundColor: colors.onSurfaceDisabled, marginLeft: 'auto'}}
         size={20}
         onPress={() => onEditPress(paso.numero_paso-1)}
       />

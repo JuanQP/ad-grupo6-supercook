@@ -1,18 +1,30 @@
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import React from 'react';
+import { StyleProp, TextStyle } from 'react-native';
 import { TextInput, useTheme } from 'react-native-paper';
+
+interface Props {
+  label: string;
+  mode: "date" | "time";
+  value?: Date;
+  style: StyleProp<TextStyle>;
+  placeholder: string;
+  onChangeDate: (date: Date | undefined) => void;
+}
 
 function FechaPicker({
   label, mode, value, style, placeholder, onChangeDate,
-}) {
+}: Props) {
+
   const { colors } = useTheme();
+
   function handleCalendarClick() {
     DateTimePickerAndroid.open({
       mode,
-      onChange: (event, date) => {
+      onChange: (_, date) => {
         onChangeDate(date);
       },
-      value,
+      value: value ?? new Date(),
       maximumDate: new Date(),
     });
   }
@@ -27,7 +39,7 @@ function FechaPicker({
       value={value?.toDateString() || ''}
       left={(
         <TextInput.Icon
-          name="calendar"
+          icon="calendar"
           color={colors.primary}
           onPress={handleCalendarClick}
         />

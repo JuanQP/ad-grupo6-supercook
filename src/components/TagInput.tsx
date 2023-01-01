@@ -2,7 +2,14 @@ import React, { useState } from 'react';
 import { View } from "react-native";
 import { Caption, Chip, TextInput, useTheme } from 'react-native-paper';
 
-function TagInput({ label, mode, tags, onTagsChange }) {
+interface Props {
+  label: string;
+  mode?: "flat" | "outlined";
+  tags: string[];
+  onTagsChange: (tags: string[]) => void;
+}
+
+function TagInput({ label, mode, tags, onTagsChange }: Props) {
   const { colors } = useTheme();
   const [etiqueta, setEtiqueta] = useState('');
 
@@ -12,7 +19,7 @@ function TagInput({ label, mode, tags, onTagsChange }) {
     setEtiqueta('');
   }
 
-  function handleRemove(index) {
+  function handleRemove(index: number) {
     onTagsChange(tags.filter((_, i) => i !== index));
   }
 
@@ -30,7 +37,7 @@ function TagInput({ label, mode, tags, onTagsChange }) {
       <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 5}}>
         {tags.length === 0 ?
           (
-            <View style={{borderRadius: 4, borderWidth: 1, borderColor: colors.disabled, width: '100%', alignItems: 'center'}}>
+            <View style={{borderRadius: 4, borderWidth: 1, borderColor: colors.surfaceDisabled, width: '100%', alignItems: 'center'}}>
               <Caption>
                 Acá van aparecer las etiquetas que agregues...
               </Caption>

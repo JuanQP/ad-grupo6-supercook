@@ -1,13 +1,18 @@
 import React from 'react';
 import { ImageBackground, StyleSheet, View } from 'react-native';
 import {
-  Avatar, Button, Caption, Text, Title, useTheme,
+  Avatar, Button, Caption, Text, Title, useTheme
 } from 'react-native-paper';
 import {
-  avatarPlaceholder, profileBackground, shadowColor, surface,
+  avatarPlaceholder, profileBackground, shadowColor, surface
 } from '../styles/colors';
 
-function ProfileHeader({ user, onLogOutPress }) {
+interface Props {
+  user: Pick<Usuario, "img_perfil" | "nombre" | "apellido"> & { recetas: Receta[] };
+  onLogOutPress: () => void;
+}
+
+function ProfileHeader({ user, onLogOutPress }: Props) {
 
   const { colors } = useTheme();
   return (

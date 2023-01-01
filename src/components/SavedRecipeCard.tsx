@@ -1,14 +1,19 @@
 import React from 'react';
 import {
-  Image, StyleSheet, TouchableWithoutFeedback, View,
+  Image, StyleSheet, TouchableWithoutFeedback, View
 } from 'react-native';
 import {
-  Avatar, Caption, IconButton, Title,
-  useTheme,
+  Avatar, Caption, IconButton, Title
 } from 'react-native-paper';
 import { nullImageColor, trashCanColor } from '../styles/colors';
 
-function SavedRecipeCard({ recipe, onPress, onBorrarGuardadaPress }) {
+interface Props {
+  recipe: LocalRecipe,
+  onPress: (recipe: LocalRecipe) => void;
+  onBorrarGuardadaPress: (id: number) => void;
+}
+
+function SavedRecipeCard({ recipe, onPress, onBorrarGuardadaPress }: Props) {
 
   function handleImagePressed() {
     onPress(recipe);
@@ -31,7 +36,7 @@ function SavedRecipeCard({ recipe, onPress, onBorrarGuardadaPress }) {
       <Title numberOfLines={1}>{recipe.nombre}</Title>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Avatar.Image size={24} theme={{ colors: { primary: nullImageColor } }} />
+          <Avatar.Text label='' size={24} theme={{ colors: { primary: nullImageColor } }} />
           <Caption style={{ marginLeft: 5 }}>
             By
             {' '}
@@ -39,7 +44,7 @@ function SavedRecipeCard({ recipe, onPress, onBorrarGuardadaPress }) {
           </Caption>
         </View>
         <IconButton
-          color={trashCanColor}
+          iconColor={trashCanColor}
           icon="trash-can-outline"
           onPress={handleBorrarGuardadaPress}
         />

@@ -2,14 +2,14 @@ import React from 'react';
 import { StyleSheet, View } from "react-native";
 import { Button, useTheme } from "react-native-paper";
 
-export const BUTTON_VALUES = {
-  Nombre: 'BusquedaNombre',
-  Categorias: 'BusquedaTipo',
-  Ingredientes: 'BusquedaIngrediente',
-  Usuarios: 'BusquedaUsuario',
-};
+type ButtonValue = "BusquedaNombre" | "BusquedaTipo" | "BusquedaIngrediente" | "BusquedaUsuario"
 
-function FilterButtonGroup({ selected, onPress }) {
+interface Props {
+  selected: ButtonValue;
+  onPress: (selected: ButtonValue) => void;
+}
+
+function FilterButtonGroup({ selected, onPress }: Props) {
 
   const { colors } = useTheme();
 
@@ -18,32 +18,32 @@ function FilterButtonGroup({ selected, onPress }) {
       <Button
         compact
         labelStyle={{fontSize: 12}}
-        onPress={() => onPress(BUTTON_VALUES.Nombre)}
-        mode={selected === BUTTON_VALUES.Nombre ? 'contained' : 'outlined'}
+        onPress={() => onPress("BusquedaNombre")}
+        mode={selected === "BusquedaNombre" ? 'contained' : 'outlined'}
       >
         Nombre
       </Button>
       <Button
         compact
         labelStyle={{fontSize: 12}}
-        onPress={() => onPress(BUTTON_VALUES.Categorias)}
-        mode={selected === BUTTON_VALUES.Categorias ? 'contained' : 'outlined'}
+        onPress={() => onPress("BusquedaTipo")}
+        mode={selected === "BusquedaTipo" ? 'contained' : 'outlined'}
       >
         Categorías
       </Button>
       <Button
         compact
         labelStyle={{fontSize: 12}}
-        onPress={() => onPress(BUTTON_VALUES.Ingredientes)}
-        mode={selected === BUTTON_VALUES.Ingredientes ? 'contained' : 'outlined'}
+        onPress={() => onPress("BusquedaIngrediente")}
+        mode={selected === "BusquedaIngrediente" ? 'contained' : 'outlined'}
       >
         Ingredientes
       </Button>
       <Button
         compact
         labelStyle={{fontSize: 12}}
-        onPress={() => onPress(BUTTON_VALUES.Usuarios)}
-        mode={selected === BUTTON_VALUES.Usuarios ? 'contained' : 'outlined'}
+        onPress={() => onPress("BusquedaUsuario")}
+        mode={selected === "BusquedaUsuario" ? 'contained' : 'outlined'}
       >
         Usuarios
       </Button>

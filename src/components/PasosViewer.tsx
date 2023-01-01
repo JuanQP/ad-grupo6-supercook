@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import { View } from "react-native";
 import { Badge, IconButton, Text, useTheme } from "react-native-paper";
-import { Alert } from "react-native-web";
 import { CarouselMultimedia } from "./CarouselMultimedia";
 
-export default function PasosViewer({ pasosReceta }) {
+interface Props {
+  pasosReceta: Pick<Paso, "numero_paso" | "pasosMultimedia" | "descripcion_paso">[];
+}
+
+export default function PasosViewer({ pasosReceta }: Props) {
   const { colors } = useTheme();
   const [index, setIndex] = useState(0);
 
   function handleSiguientePress() {
     if (index === pasosReceta.length - 1) return;
-    Alert.alert(JSON.stringify(pasosReceta))
     setIndex(index + 1);
   }
 
@@ -19,7 +21,7 @@ export default function PasosViewer({ pasosReceta }) {
     setIndex(index - 1);
   }
 
-  function dataMultimedia(pasosMultimedia) {
+  function dataMultimedia(pasosMultimedia: PasoMultimedia[]) {
     return pasosMultimedia?.map(item => item.img_multimedia);
   }
 
@@ -41,14 +43,14 @@ export default function PasosViewer({ pasosReceta }) {
       <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 'auto' }}>
         <IconButton
           icon="arrow-left"
-          color={colors.primary}
+          iconColor={colors.onSurface}
           size={40}
           disabled={index === 0}
           onPress={handleAnteriorPress}
         />
         <IconButton
           icon="arrow-right"
-          color={colors.primary}
+          iconColor={colors.onSurface}
           size={40}
           disabled={index === pasosReceta.length - 1}
           onPress={handleSiguientePress}

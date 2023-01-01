@@ -46,6 +46,7 @@
     "@types/node": "^18.11.18",
     "@types/react": "~18.0.14",
     "@types/react-native": "~0.70.6",
+    "@types/react-native-snap-carousel": "^3.8.5",
     "typescript": "^4.6.3"
   },
   "rnpm": {

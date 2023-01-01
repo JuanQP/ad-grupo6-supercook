@@ -1,40 +1,38 @@
 import React, { useRef, useState } from 'react';
-import { View } from "react-native";
-import { Caption, IconButton, Text, Title, TextInput } from 'react-native-paper';
+import { TextInput as TextInputType, View } from "react-native";
+import { Caption, IconButton, Text, TextInput, Title } from 'react-native-paper';
 import { formatNumber } from '../utils/utils';
-import SingleDropdown from './SingleDropdown';
 
-const UNIDADES = [
-  {value: 1, label: "u"},
-  {value: 2, label: "gr"},
-]
+interface Props {
+  mode: "flat" | "outlined" | undefined;
+  ingredientes: Omit<Ingrediente, "id">[];
+  onIngredientesChange: (ingredientes: Omit<Ingrediente, "id">[]) => void;
+}
 
-function IngredientesInput({ mode, ingredientes, onIngredientesChange }) {
+function IngredientesInput({ mode, ingredientes, onIngredientesChange }: Props) {
 
   const [descripcion, setDescripcion] = useState('');
   const [cantidad, setCantidad] = useState('');
   const [unidad, setUnidad] = useState('');
-  const itemInput = useRef(null);
-  const cantidadInput = useRef(null);
-  const unidadInput = useRef(null);
+  const itemInput = useRef<TextInputType>(null);
+  const cantidadInput = useRef<TextInputType>(null);
+  const unidadInput = useRef<TextInputType>(null);
 
   function handleSubmit() {
     if(descripcion === '' || cantidad === '' || unidad === null) return;
     const nuevoIngrediente = {
       descripcion,
-      cantidad,
+      cantidad: Number(cantidad),
       unidad
-      //unidadId: unidad,
-      //unidad: UNIDADES.find(u => u.value === unidad).label,
     };
     onIngredientesChange([...ingredientes, nuevoIngrediente]);
     setDescripcion('');
     setCantidad('');
     setUnidad('');
-    itemInput.current.focus();
+    itemInput.current?.focus();
   }
 
-  function handleRemove(index) {
+  function handleRemove(index: number) {
     onIngredientesChange(ingredientes.filter((_, i) => i !== index));
   }
 
@@ -73,7 +71,7 @@ function IngredientesInput({ mode, ingredientes, onIngredientesChange }) {
           blurOnSubmit={true}
           returnKeyType="next"
           placeholder="Arroz Blanco"
-          onSubmitEditing={() => cantidadInput.current.focus()}
+          onSubmitEditing={() => cantidadInput.current?.focus()}
           onChangeText={setDescripcion}
         />
         <TextInput
@@ -93,16 +91,8 @@ function IngredientesInput({ mode, ingredientes, onIngredientesChange }) {
           value={unidad}
           ref={unidadInput}
           placeholder="Unidad"
-          //keyboardType="decimal-pad"
           onChangeText={setUnidad}
         />
-                {/* <SingleDropdown
-          label="Unidad"
-          mode={mode}
-          list={UNIDADES}
-          value={unidad}
-          setValue={setUnidad}
-        /> */}
         <IconButton
           icon="plus-box-outline"
           onPress={handleSubmit}

@@ -1,4 +1,4 @@
-import { Video } from 'expo-av';
+import { ResizeMode, Video } from 'expo-av';
 import React from 'react';
 import { Dimensions, ImageBackground, StyleSheet, View } from "react-native";
 import { IconButton, useTheme } from 'react-native-paper';
@@ -8,21 +8,28 @@ import ImagePlaceholder from './ImagePlaceholder';
 
 const PAGE_WIDTH = Dimensions.get('window').width;
 
+interface Props {
+  data: string[];
+  editable?: boolean;
+  textoVacio?: string;
+  onChangeMultimedia?: (multimedias: string[]) => void;
+}
+
 export function CarouselMultimedia({
   data,
   editable = false,
   textoVacio = "No hay contenido para mostrar",
   onChangeMultimedia,
-}) {
+}: Props) {
 
   const { colors } = useTheme();
 
-  function handleRemoveMultimedia(index) {
+  function handleRemoveMultimedia(index: number) {
     const nuevoMultimedia = data.filter((_, i) => i !== index);
-    onChangeMultimedia(nuevoMultimedia);
+    onChangeMultimedia?.(nuevoMultimedia);
   }
 
-  function renderCarouselItem({ item, index }) {
+  function renderCarouselItem({ item, index }: { item: string, index: number }) {
     const isVideo = !!item?.match(/\.mp4$/i);
 
     if(isVideo) {
@@ -32,12 +39,12 @@ export function CarouselMultimedia({
             style={styles.image}
             source={{ uri: item }}
             useNativeControls
-            resizeMode="cover"
+            resizeMode={ResizeMode.COVER}
             isLooping
           />
           {editable && <IconButton
             style={{...styles.floating, backgroundColor: colors.surface, elevation: 4, marginLeft: 'auto'}}
-            color={colors.text}
+            iconColor={colors.onSurface}
             icon="video-off-outline"
             size={20}
             onPress={() => handleRemoveMultimedia(index)}
@@ -53,7 +60,7 @@ export function CarouselMultimedia({
       >
         {editable && <IconButton
           style={{backgroundColor: colors.surface, elevation: 4, marginLeft: 'auto'}}
-          color={colors.text}
+          iconColor={colors.onSurface}
           icon="image-off-outline"
           size={20}
           onPress={() => handleRemoveMultimedia(index)}

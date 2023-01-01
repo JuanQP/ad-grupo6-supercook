@@ -1,14 +1,26 @@
 import React from 'react';
 import {
-  Image, StyleSheet, TouchableWithoutFeedback, View,
+  Image, StyleSheet, TouchableWithoutFeedback, View
 } from 'react-native';
 import {
   Avatar, Caption, IconButton, Title,
-  useTheme,
+  useTheme
 } from 'react-native-paper';
 import { nullImageColor, starColor } from '../styles/colors';
 
-function RecipeCard({ recipe, onPress, onFavoritoPress }) {
+export type RecipeCardData = Pick<Receta, "nombre"> & {
+  esFavorita: boolean;
+  usuario: { nombre: string };
+  fotosPortada: { imagen: string }[];
+}
+
+interface Props<T> {
+  recipe: T;
+  onPress: (recipe: T) => void;
+  onFavoritoPress: (recipe: T) => void;
+}
+
+function RecipeCard<T extends RecipeCardData>({ recipe, onPress, onFavoritoPress }: Props<T>) {
   const { colors } = useTheme();
   function handleImagePressed() {
     onPress(recipe);
@@ -23,7 +35,7 @@ function RecipeCard({ recipe, onPress, onFavoritoPress }) {
   return (
     <View style={{ flexDirection: 'column', marginHorizontal: 10, width: 280}}>
       <TouchableWithoutFeedback onPress={handleImagePressed}>
-        <Image 
+        <Image
           style={styles.imageContent}
           source={imagenUrl ? {uri: imagenUrl} : undefined}
         />
@@ -31,7 +43,7 @@ function RecipeCard({ recipe, onPress, onFavoritoPress }) {
       <Title numberOfLines={1}>{recipe.nombre}</Title>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Avatar.Image size={24} theme={{ colors: { primary: nullImageColor } }} />
+          <Avatar.Text label='' size={24} theme={{ colors: { primary: nullImageColor } }} />
           <Caption style={{ marginLeft: 5 }}>
             By
             {' '}
@@ -39,7 +51,7 @@ function RecipeCard({ recipe, onPress, onFavoritoPress }) {
           </Caption>
         </View>
         <IconButton
-          color={recipe.esFavorita ? starColor : colors.disabled}
+          iconColor={recipe.esFavorita ? starColor : colors.onSurfaceDisabled}
           icon="star"
           onPress={handleFavoritaPress}
         />

@@ -1,11 +1,19 @@
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Text } from 'react-native-paper';
-import RecipeCard from './RecipeCard';
+import RecipeCard, { RecipeCardData } from './RecipeCard';
 
-function RecipeSideScroller({
+interface Props<T extends RecipeCardData> {
+  title: string;
+  items: T[];
+  onVerTodosPress: () => void;
+  onItemPress: (item: T) => void;
+  onFavoritoPress: (item: T) => void;
+}
+
+function RecipeSideScroller<T extends RecipeCardData & { id: number }>({
   title, items, onVerTodosPress, onItemPress, onFavoritoPress
-}) {
+}: Props<T>) {
   return (
     <View>
       <View style={styles.sideScrollerTitle}>
