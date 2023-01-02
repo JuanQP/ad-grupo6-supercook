@@ -1,8 +1,11 @@
 import axios from 'axios';
 
-type GetUserResponse = Usuario & {
-  preferencias: Etiqueta[];
-  recetas: Receta[];
+type GetUserResponse = {
+  usuario: (Usuario & {
+    id: number;
+    preferencias: Etiqueta[];
+    recetas: Receta[];
+  });
 }
 
 type EmailResponse = {
@@ -21,6 +24,12 @@ type SignUpResponse = {
 type PatchUserResponse = Usuario & {
   preferencias: Etiqueta[];
 }
+
+type PatchUserData = Partial<Omit<Usuario, "fechaNacimiento"> & {
+  id: number;
+  fechaNacimiento: Date;
+  preferenciaIds?: number[];
+}>
 
 export async function getUser() {
   const response = await axios.get<GetUserResponse>('/yo');
@@ -47,7 +56,7 @@ export async function signup({ email, alias }: Pick<Usuario, "email" | "alias">)
   return data;
 }
 
-export async function patchUser(values: Partial<Usuario>) {
+export async function patchUser(values: PatchUserData) {
   const data = await axios.patch<PatchUserResponse>('/yo', values);
   return data;
 }

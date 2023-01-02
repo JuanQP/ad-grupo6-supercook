@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import DropDown from "react-native-paper-dropdown";
 
-type DropdownItem = {
+export type DropdownItem = {
   value: number;
   label: string;
 }

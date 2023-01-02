@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as FileSystem from 'expo-file-system';
 
-type RecetaSort = 0 | 1 | 2
+type RecetaSort = undefined | 1 | 2
 
 type FullDetailedReceta = Receta & {
   usuario: Pick<Usuario, "nombre" | "apellido" | "img_perfil">;
@@ -19,38 +19,46 @@ type GetRecetaResponse = {
 }
 
 type CheckearRecetaResponse = {
-  receta: Omit<FullDetailedReceta, "usuario">;
+  receta: (Omit<FullDetailedReceta, "usuario"> & {
+    categoriaId: number;
+    usuarioId: number;
+    createdAt: string;
+    updatedAt: string;
+    etiquetas: Etiqueta[];
+  });
 }
 
 type RecetasResponse = {
-  recetas: Receta & {
+  recetas: (Receta & {
     usuario: Pick<Usuario, "nombre" | "apellido">;
     fotosPortada: Pick<RecetaImagen, "imagen">[];
     etiquetas: Pick<Etiqueta, "descripcion">;
     esFavorita: boolean;
-  };
+  })[];
 }
 
 type RecetasUltimasResponse = {
-  recetas: Receta & {
+  recetas: (Receta & {
     usuario: Pick<Usuario, "nombre">;
     fotosPortada: Pick<RecetaImagen, "imagen">[];
     esFavorita: boolean;
-  };
+  })[];
 }
 
 type RecetasSemanaResponse = {
-  recetas: Receta & {
+  recetas: (Receta & {
     usuario: Pick<Usuario, "nombre">;
     fotosPortada: Pick<RecetaImagen, "imagen">[];
     esFavorita: boolean;
     ingredientes: Pick<Ingrediente, "descripcion">[];
-  };
+  })[];
 }
 
-type RecetaData = Receta & {
+type RecetaData = Omit<Receta, "id" | "fecha" | "verificada"> & {
   fotosPortada: string[];
-  pasosReceta: Paso[];
+  pasosReceta: (Pick<Paso, "numero_paso" | "descripcion_paso"> & {
+    pasosMultimedia: Omit<PasoMultimedia, "pasoId" | "tipo_multimedia">[];
+  })[];
 }
 
 type RecetaPorNombreResponse = {
@@ -136,13 +144,13 @@ export async function crearReceta(receta: RecetaData) {
   return data;
 }
 
-export async function editarReceta(receta: RecetaData) {
+export async function editarReceta(receta: RecetaData & WithId) {
   const nuevaReceta64 = await convertirMultimediaRecetaABase64(receta);
   const { data } = await axios.patch<string>(`/recetas/${receta.id}`, nuevaReceta64);
   return data;
 }
 
-export async function reemplazarReceta(receta: RecetaData) {
+export async function reemplazarReceta(receta: RecetaData & WithId) {
   const nuevaReceta64 = await convertirMultimediaRecetaABase64(receta);
   const { data } = await axios.put<string>(`/recetas/${receta.id}`, nuevaReceta64);
   return data;

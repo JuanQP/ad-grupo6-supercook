@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ContextReceta } from '../hooks/receta-context';
 
 const LOCALDB_KEY = '@db';
 const LOCAL_RECIPE_KEY = '@recipe';
@@ -24,7 +25,7 @@ export async function saveLocalRecipes(recipes: LocalRecipe[]) {
   await AsyncStorage.setItem(LOCALDB_KEY, serializedLocalDB);
 }
 
-export async function addLocalRecipe(recipe: Recipe, ratio: number) {
+export async function addLocalRecipe(recipe: Omit<Recipe, "ratio" | "porcionesOriginales">, ratio: number) {
   const recipes = await getLocalRecipes();
   if(recipes.length >= 5) {
     throw new Error('No se puede agregar la receta: Ya tenés 5 recetas guardadas');
@@ -49,16 +50,26 @@ export async function deleteLocalRecipe(recipeId: number) {
 
 }
 
-export async function getRecetaLocal(): Promise<LocalRecipe | null> {
+export async function getRecetaLocal(): Promise<ContextReceta | null> {
   const serializedRecipe = await AsyncStorage.getItem(LOCAL_RECIPE_KEY);
   return serializedRecipe ? JSON.parse(serializedRecipe) : null;
 }
 
-export async function saveRecetaLocal(recipe: LocalRecipe) {
+export async function saveRecetaLocal(recipe: ContextReceta) {
   const serializedRecipe = JSON.stringify(recipe);
   await AsyncStorage.setItem(LOCAL_RECIPE_KEY, serializedRecipe);
 }
 
 export async function deleteRecetaLocal() {
   await AsyncStorage.removeItem(LOCAL_RECIPE_KEY);
+}
+
+type RecetaConIngredientes = Pick<Receta, "porciones"> & { ingredientes: Omit<Ingrediente, "id">[] }
+
+export function updateWithRatio(receta: RecetaConIngredientes, ratio: number) {
+  const newPorciones = receta.porciones * ratio;
+  const newIngredientes = receta.ingredientes.map(
+    i => ({ ...i, cantidad: i.cantidad * ratio })
+  );
+  return { newPorciones, newIngredientes };
 }

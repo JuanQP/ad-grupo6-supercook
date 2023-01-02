@@ -14,7 +14,7 @@ const reviewSchema = yup.object({
   sobre_mi: yup.string().max(200).required(),
 });
 
-type UsuarioData = Pick<Usuario, "sobre_mi">
+export type UsuarioData = Pick<Usuario, "sobre_mi">
 type FormikActions = FormikHelpers<{sobre_mi: string}>
 
 interface Props {

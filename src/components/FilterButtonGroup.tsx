@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from "react-native";
 import { Button, useTheme } from "react-native-paper";
 
-type ButtonValue = "BusquedaNombre" | "BusquedaTipo" | "BusquedaIngrediente" | "BusquedaUsuario"
+export type ButtonValue = "BusquedaNombre" | "BusquedaTipo" | "BusquedaIngrediente" | "BusquedaUsuario"
 
 interface Props {
   selected: ButtonValue;

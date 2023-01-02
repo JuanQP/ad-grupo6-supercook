@@ -6,7 +6,7 @@ import { IconSource } from 'react-native-paper/lib/typescript/components/Icon';
 import { surface } from '../styles/colors';
 
 interface Props {
-  children: JSX.Element[];
+  children: JSX.Element[] | JSX.Element;
   icon: IconSource;
   title: string;
   padding: number;

@@ -93,5 +93,11 @@ type PasoMultimedia = {
 type RecetaFavorita = Receta & {
   esFavorita: boolean;
   usuario: Pick<Usuario, "nombre">;
-  fotosPortada: RecetaImagen;
+  fotosPortada: RecetaImagen[];
 }
+
+type WithId = {
+  id: number;
+}
+
+type RecetaAction = "Crear" | "Editar" | "Reemplazar"

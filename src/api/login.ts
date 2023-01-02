@@ -5,7 +5,7 @@ interface LoginCredentials {
   password: string;
 }
 
-interface LoginResponse {
+export interface LoginResponse {
   usuario: {
     nombre: string;
     email: string;

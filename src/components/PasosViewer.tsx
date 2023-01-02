@@ -4,7 +4,9 @@ import { Badge, IconButton, Text, useTheme } from "react-native-paper";
 import { CarouselMultimedia } from "./CarouselMultimedia";
 
 interface Props {
-  pasosReceta: Pick<Paso, "numero_paso" | "pasosMultimedia" | "descripcion_paso">[];
+  pasosReceta: (Pick<Paso, "numero_paso" | "descripcion_paso"> & {
+    pasosMultimedia: Pick<PasoMultimedia, "img_multimedia">[];
+  })[];
 }
 
 export default function PasosViewer({ pasosReceta }: Props) {
@@ -21,7 +23,7 @@ export default function PasosViewer({ pasosReceta }: Props) {
     setIndex(index - 1);
   }
 
-  function dataMultimedia(pasosMultimedia: PasoMultimedia[]) {
+  function dataMultimedia(pasosMultimedia: Pick<PasoMultimedia, "img_multimedia">[]) {
     return pasosMultimedia?.map(item => item.img_multimedia);
   }
 

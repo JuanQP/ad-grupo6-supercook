@@ -8,16 +8,16 @@ import {
 } from 'react-native-paper';
 import { nullImageColor, starColor } from '../styles/colors';
 
-export type RecipeCardData = Pick<Receta, "nombre"> & {
+export type RecipeCardData = (Pick<Receta, "id" | "nombre"> & {
   esFavorita: boolean;
   usuario: { nombre: string };
   fotosPortada: { imagen: string }[];
-}
+})
 
 interface Props<T> {
   recipe: T;
   onPress: (recipe: T) => void;
-  onFavoritoPress: (recipe: T) => void;
+  onFavoritoPress?: (recipe: T) => void;
 }
 
 function RecipeCard<T extends RecipeCardData>({ recipe, onPress, onFavoritoPress }: Props<T>) {
@@ -27,7 +27,7 @@ function RecipeCard<T extends RecipeCardData>({ recipe, onPress, onFavoritoPress
   }
 
   function handleFavoritaPress() {
-    onFavoritoPress(recipe);
+    onFavoritoPress?.(recipe);
   }
 
   const imagenUrl = recipe?.fotosPortada?.[0]?.imagen;

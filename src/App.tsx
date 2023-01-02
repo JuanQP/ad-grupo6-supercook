@@ -1,5 +1,6 @@
-import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from 'react';
+import AppNavigator from './screens/AppNavigator';
 import LoginScreen from './screens/Login/LoginScreen';
 import Recupero1Screen from './screens/recupero/Recupero1Screen';
 import Recupero2Screen from './screens/recupero/Recupero2Screen';
@@ -9,9 +10,9 @@ import Registracion1Screen from './screens/registracion/Registracion1Screen';
 import Registracion2Screen from './screens/registracion/Registracion2Screen';
 import Registracion3Screen from './screens/registracion/Registracion3Screen';
 import Registracion4Screen from './screens/registracion/Registracion4Screen';
-import AppNavigator from './screens/AppNavigator';
+import { RootStackParamList } from './types/navigation';
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
   return (
